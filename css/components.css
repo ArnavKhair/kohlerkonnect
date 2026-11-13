@@ -454,7 +454,7 @@
   border-radius: 7px;
   border: 2px solid #fff;
   background: var(--c-control-inactive);
-  box-shadow: 0 0 0 4px #00000033;
+  box-shadow: 0 0 0 2px #00000073, 0 2px 6px #00000059; /* stays visible on light photos */
   transition: background-color 160ms ease-out;
 }
 
@@ -462,7 +462,7 @@
   flex: none;
   width: 14px;
   height: 2px;
-  background: #ffffffaa;
+  background: var(--c-room-maintenance);
 }
 
 .callout__label {

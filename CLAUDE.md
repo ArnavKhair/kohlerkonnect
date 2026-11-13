@@ -174,7 +174,7 @@ switcher, device tiles, device page with photo callouts and stepper, routines), 
 (five areas with living visuals, Today / Over time charts and interpretation), **Account**
 (start over, component gallery). Bottom nav: Devices / Health / Account.
 
-Open: the five product photo addresses in `js/data.js` are empty (icon fallback shows), and
-callout positions are provisional until the photos are in.
+The five product photos are linked from Kohler's image server (addresses in `js/data.js`,
+supplied by Arnav); callouts are placed per photo.
 
 The earlier Expo / React Native build is at git tag `ios-prototype`.

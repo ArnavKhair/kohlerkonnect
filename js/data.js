@@ -3,7 +3,9 @@
  * All values are local: there is no backend in this build.
  * `accent` and `tone` are colour token names; resolve them with KK.c(name) (see js/ui.js).
  * `icon` values are glyph names from js/icons.js.
- * A product's `quick` controls are drawn as callouts on its photo at `x` / `y` (percent of the photo).
+ * A product's `image` is the address of a photo on Kohler's image server (linked, not copied; empty shows
+ * the icon fallback). Its `quick` controls are drawn as callouts at `x` / `y`, in percent of the photo box
+ * on the device page (4:3, so the square photos lose 12.5% at the top and bottom).
  */
 (function () {
   'use strict';
@@ -41,7 +43,7 @@
   var products = {
     shower: {
       id: 'shower',
-      image: '', // address of a photo on Kohler's image server; empty shows the icon fallback
+      image: 'https://kohler.scene7.com/is/image/PAWEB/GBH_DataDrivenSQTemplate?$product_src=is{PAWEB/28214-ASC-CP_ISO_d2c0089977_rgb}&$PLPDesktop507$&fmt=webp',
       status: 'Ready · 39 °C',
       roomId: 'bathroom',
       name: 'Anthem+ Shower',
@@ -53,14 +55,14 @@
       max: 46,
       steps: [34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46],
       quick: [
-        { id: 'fill', label: 'PerfectFill', icon: 'water-outline', on: true, x: 30, y: 70 },
-        { id: 'sound', label: 'SoundTile', icon: 'volume-high-outline', on: false, x: 72, y: 26 },
-        { id: 'warm', label: 'Warm floor', icon: 'thermometer-outline', on: true, x: 62, y: 84 },
+        { id: 'fill', label: 'PerfectFill', icon: 'water-outline', on: true, x: 30, y: 73 },
+        { id: 'sound', label: 'SoundTile', icon: 'volume-high-outline', on: false, x: 80, y: 27 },
+        { id: 'warm', label: 'Warm floor', icon: 'thermometer-outline', on: true, x: 60, y: 87 },
       ],
     },
     tub: {
       id: 'tub',
-      image: '', // address of a photo on Kohler's image server; empty shows the icon fallback
+      image: 'https://kohler.scene7.com/is/image/PAWEB/GBH_DataDrivenSQTemplate?$product_src=is{PAWEB/25165-0_ISO_d2c0073581_rgb}&$PLPDesktop507$&fmt=webp',
       status: 'Idle',
       roomId: 'bathroom',
       name: 'Shore Bathtub',
@@ -72,14 +74,14 @@
       max: 44,
       steps: [35, 36, 37, 38, 39, 40, 41, 42, 43, 44],
       quick: [
-        { id: 'soak', label: 'Restore soak', icon: 'sparkles-outline', on: false, x: 34, y: 52 },
-        { id: 'heat', label: 'Warm floor', icon: 'thermometer-outline', on: true, x: 70, y: 84 },
-        { id: 'scent', label: 'Scent', icon: 'leaf-outline', on: false, x: 70, y: 24 },
+        { id: 'soak', label: 'Restore soak', icon: 'sparkles-outline', on: false, x: 40, y: 46 },
+        { id: 'heat', label: 'Warm floor', icon: 'thermometer-outline', on: true, x: 66, y: 91 },
+        { id: 'scent', label: 'Scent', icon: 'leaf-outline', on: false, x: 70, y: 25 },
       ],
     },
     vanity: {
       id: 'vanity',
-      image: '', // address of a photo on Kohler's image server; empty shows the icon fallback
+      image: 'https://kohler.scene7.com/is/image/PAWEB/GBH_DataDrivenSQTemplate?$product_src=is{PAWEB/32760-EMG_ISO_d2c0074427_rgb}&$PLPDesktop507$&fmt=webp',
       status: 'On · 70%',
       roomId: 'bathroom',
       name: 'Smart Wall · Vanity',
@@ -91,14 +93,14 @@
       max: 100,
       steps: [10, 25, 40, 55, 70, 85, 100],
       quick: [
-        { id: 'glow', label: 'Mirror glow', icon: 'bulb-outline', on: true, x: 50, y: 22 },
-        { id: 'seam', label: 'Circadian seam', icon: 'sunny-outline', on: true, x: 24, y: 50 },
-        { id: 'sense', label: 'Vanity Sense', icon: 'pulse-outline', on: false, x: 72, y: 66 },
+        { id: 'glow', label: 'Mirror glow', icon: 'bulb-outline', on: true, x: 34, y: 15 },
+        { id: 'seam', label: 'Circadian seam', icon: 'sunny-outline', on: true, x: 70, y: 34 },
+        { id: 'sense', label: 'Vanity Sense', icon: 'pulse-outline', on: false, x: 34, y: 60 },
       ],
     },
     toilet: {
       id: 'toilet',
-      image: '', // address of a photo on Kohler's image server; empty shows the icon fallback
+      image: 'https://kohler.scene7.com/is/image/PAWEB/GBH_SQTemplate?$product_src=is{PAWEB/5401-PA-HB1_ISO_d2c0020480_rgb}&$PDPDesktopSQ$&fmt=webp',
       status: 'Updating…',
       roomId: 'bathroom',
       name: 'PureWarmth Toilet',
@@ -110,13 +112,13 @@
       max: 3,
       steps: [0, 1, 2, 3],
       quick: [
-        { id: 'seat', label: 'Seat warmth', icon: 'thermometer-outline', on: true, x: 36, y: 46 },
-        { id: 'stand', label: 'Sit-to-stand', icon: 'accessibility-outline', on: false, x: 68, y: 70 },
+        { id: 'seat', label: 'Seat warmth', icon: 'thermometer-outline', on: true, x: 44, y: 36 },
+        { id: 'stand', label: 'Sit-to-stand', icon: 'accessibility-outline', on: false, x: 62, y: 70 },
       ],
     },
     faucet: {
       id: 'faucet',
-      image: '', // address of a photo on Kohler's image server; empty shows the icon fallback
+      image: 'https://kohler.scene7.com/is/image/PAWEB/GBH_DataDrivenSQTemplate?$product_src=is{PAWEB/77515-CP_ISO_d2c0033632_rgb}&$PLPDesktop507$&fmt=webp',
       status: 'Holding · 42 °C',
       roomId: 'kitchen',
       name: 'Smart Faucet',
@@ -128,8 +130,8 @@
       max: 60,
       steps: [20, 30, 40, 50, 60],
       quick: [
-        { id: 'save', label: 'Flow saver', icon: 'water-outline', on: true, x: 36, y: 34 },
-        { id: 'hot', label: 'Instant hot', icon: 'flame-outline', on: false, x: 66, y: 62 },
+        { id: 'save', label: 'Flow saver', icon: 'water-outline', on: true, x: 63, y: 58 },
+        { id: 'hot', label: 'Instant hot', icon: 'flame-outline', on: false, x: 38, y: 86 },
       ],
     },
   };

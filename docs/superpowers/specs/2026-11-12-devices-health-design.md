@@ -20,7 +20,7 @@
 - **Check on a device.** Smoothness of the horse and ripples on a phone; touch targets of the
   callouts once real photos are in.
 - **Risks.** Linked photos can move or be blocked (fallback covers it; photos need internet).
-  Callout positions are provisional until the five photo addresses are supplied.
+  The photos are light studio shots, so the photo areas are bright against the dark theme.
 
 ## What Arnav decided
 
@@ -70,7 +70,9 @@
 - The stepper on the device page is the compact 3-row version, so photo and controls fit.
 - The device-page footnote no longer repeats the room name.
 
-## Open
+## Photos
 
-- Five photo addresses from kohler.com (`products[*].image`), then callout positions per photo.
-- Kohler's site refuses automated page requests, so the addresses have to be copied by hand.
+Arnav supplied the five addresses (shower control, bathtub, vanity, toilet, kitchen faucet);
+they are in `products[*].image` and callouts are placed per photo. Kohler's site refuses
+automated page requests, so new addresses have to be copied by hand from kohler.com. The
+photos are square studio shots on a light background; the device page shows them at 4:3.
