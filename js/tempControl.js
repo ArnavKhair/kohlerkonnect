@@ -3,7 +3,7 @@
  * A column of values: drag up/down, tap a value, or use the arrow keys.
  * The value in the middle is the selected one; on release it snaps with a spring.
  *
- *   html:  KK.tempControl.html({ steps, value, accent, label })
+ *   html:  KK.tempControl.html({ steps, value, accent, label, compact })   compact = 3 rows tall
  *   wire:  KK.tempControl.mount(element, { steps, value, onChange })
  */
 (function () {
@@ -38,7 +38,7 @@
       })
       .join('');
     return (
-      '<div class="tempctl" role="slider" tabindex="0" aria-orientation="vertical"' +
+      '<div class="tempctl' + (opts.compact ? ' tempctl--compact' : '') + '" role="slider" tabindex="0" aria-orientation="vertical"' +
       ' aria-label="' + KK.esc(opts.label || 'Value') + '"' +
       ' aria-valuemin="' + opts.steps[0] + '" aria-valuemax="' + opts.steps[opts.steps.length - 1] + '"' +
       ' aria-valuenow="' + opts.steps[index] + '"' +

@@ -352,6 +352,154 @@
   color: var(--c-text);
 }
 
+/* Larger variant used as a page's local navigation (room switcher). */
+.segment--nav {
+  --tint: var(--c-primary);
+  padding: 5px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-surface-stroke);
+}
+
+.segment--nav .segment__btn {
+  padding: 12px 0;
+  border-radius: 13px;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+}
+
+.segment--nav .segment__btn[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--tint) 22%, transparent);
+  color: var(--c-text);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 55%, transparent);
+}
+
+/* ── Photo (product image with icon fallback) ──────────────────────── */
+.photo {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--tint) 26%, transparent), transparent 70%),
+    var(--c-surface-raised);
+}
+
+.photo__fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Small square version for list rows. */
+.photo--thumb {
+  flex: none;
+  width: var(--size, 44px);
+  height: var(--size, 44px);
+  border-radius: var(--radius, var(--r-sm));
+}
+
+/* ── Device tile ───────────────────────────────────────────────────── */
+.device-tile {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.device-tile__photo {
+  aspect-ratio: 4 / 3;
+}
+
+.device-tile__text {
+  padding: 12px 14px 14px;
+  min-width: 0;
+}
+
+.device-tile__name {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+/* ── Callout (feature marker on a photo) ───────────────────────────── */
+.callout {
+  --tint: var(--c-primary);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  margin-top: -16px;
+  margin-left: -7px; /* centres the 14px dot on the x / y point */
+  color: var(--c-text);
+}
+
+.callout--left {
+  flex-direction: row-reverse;
+  margin-left: 7px;
+  transform: translateX(-100%);
+}
+
+.callout__dot {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  border: 2px solid #fff;
+  background: var(--c-control-inactive);
+  box-shadow: 0 0 0 4px #00000033;
+  transition: background-color 160ms ease-out;
+}
+
+.callout__line {
+  flex: none;
+  width: 14px;
+  height: 2px;
+  background: #ffffffaa;
+}
+
+.callout__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--c-surface-stroke);
+  background: #141417e6;
+  color: var(--c-text-secondary);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out, transform 120ms ease-out;
+}
+
+.callout:active .callout__label {
+  transform: scale(0.96);
+}
+
+.callout[aria-pressed='true'] .callout__dot {
+  background: var(--tint);
+}
+
+.callout[aria-pressed='true'] .callout__label {
+  background: var(--tint);
+  border-color: var(--tint);
+  color: #fff;
+}
+
+/* Shorter stepper (3 rows) for pages that share the screen with other content. */
+.tempctl--compact {
+  height: 198px;
+}
+
 /* ── Tab bar ───────────────────────────────────────────────────────── */
 .tabbar {
   flex: none;

@@ -8,13 +8,16 @@ control.
 Scope (mock data and motion, no backend, nothing is saved):
 
 - **Onboarding** — Let's Konnect → Create account → Connect Kohler devices → Connect other devices
-- **Home → Room → Product** — room list, device list, product page (value stepper, quick controls), routines
-- **Health → Stat** — score cards, stat page with a 7/30/90-day chart, highlights, sources
+- **Devices** — room switcher at the top (Bathroom | Kitchen), devices as tiles; a device page with the
+  product photo, tappable feature callouts and the value stepper; routines
+- **Health** — five areas, each with a living visual driven by its score (flower, horse, water ripples,
+  water vessel, candle flame), then Today | Over time with charts and what they mean
 - **Account** — privacy, products, devices, services (plus start over and a component gallery)
 
 ## Run it
 
-Open `index.html` in a browser. That is all.
+Open `index.html` in a browser. That is all. (Product photos, once their addresses are filled in, load
+from Kohler's image server and need an internet connection; without one the app shows an icon instead.)
 
 To try it on a phone, serve the folder and open the address from the phone on the same network:
 
@@ -34,26 +37,34 @@ index.html            page shell: screen area, tab bar, script tags
 css/tokens.css        design tokens (colours, spacing, radius, motion)
 css/base.css          reset, type scale, app frame, enter animations
 css/components.css    card, button, chip, ring, bar chart, temperature control, top bar, tab bar
+css/visuals.css       motion and colour of the Health visuals
 css/screens.css       layout that belongs to one screen
 js/data.js            all mock data
 js/icons.js           the icon glyphs the app uses
 js/ui.js              helpers that return component HTML (button, chip, ring, bar chart, ...)
 js/tempControl.js     the drag-to-set value stepper
+js/healthVisuals.js   the five Health visuals, drawn from a 0..1 level
 js/router.js          #/path routing, back, tab bar, per-screen state
-js/screens/*.js       one file per area: onboarding, home, product, routines, health, account
+js/screens/*.js       one file per area: onboarding, devices, product, routines, health, account
 ```
 
 Routes: `#/onboarding`, `#/onboarding/account`, `#/onboarding/connect`, `#/onboarding/other`,
-`#/home`, `#/home/room/:id`, `#/home/product/:id`, `#/home/routines/:id`, `#/health`,
-`#/health/stat/:id`, `#/account`, `#/gallery`.
+`#/devices`, `#/devices/room/:id`, `#/devices/product/:id`, `#/devices/routines/:id`, `#/health`,
+`#/health/:area`, `#/account`, `#/gallery`. The older `#/home...` and `#/health/stat/:id` paths redirect.
+
+## Product photos
+
+Each product in `js/data.js` has an `image` field. Paste the address of a photo on Kohler's image server
+(on kohler.com: right-click the photo → Copy image address). The photo is linked, not copied into this
+repo. Each quick control has `x` / `y` (percent of the photo) for where its callout sits; adjust them
+to the photo.
 
 `CLAUDE.md` has the conventions for adding a screen, component or token.
 
 ## History
 
 This repo started as an Expo / React Native iOS prototype. That version is kept at the git tag
-`ios-prototype` (`git checkout ios-prototype`). The design note for the move to the web is in
-`docs/superpowers/specs/2026-11-12-html-port-design.md`.
+`ios-prototype` (`git checkout ios-prototype`). Design notes are in `docs/superpowers/specs/`.
 
 ## Credits
 

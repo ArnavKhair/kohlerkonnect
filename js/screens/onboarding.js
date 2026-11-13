@@ -1,4 +1,4 @@
-/* Onboarding flow: /onboarding → /account → /connect → /other → /home */
+/* Onboarding flow: /onboarding → /account → /connect → /other → /devices */
 (function () {
   'use strict';
   var KK = window.KK;
@@ -65,7 +65,7 @@
           var color = KK.c(on ? 'success' : 'energy');
           return (
             '<div class="enter-up" style="--d:' + i * 60 + 'ms"><div class="card device">' +
-              ui.tile({ icon: d.icon, color: primary, alpha: '1A' }) +
+              ui.photo({ src: (KK.data.products[d.product] || {}).image, icon: d.icon, color: primary, cls: 'photo--thumb', iconSize: 22 }) +
               '<div class="device__text"><div class="t-subheading">' + KK.esc(d.name) + '</div>' +
               '<div class="t-caption tone-secondary">' + KK.esc(d.room) + '</div></div>' +
               '<span class="pill t-label" style="color:' + color + ';border-color:' + color + ';background:' + KK.alpha(color, '1F') + '">' +
@@ -99,9 +99,9 @@
             '<p class="t-body tone-secondary center" style="margin-top:10px">Add an Apple Watch or another health device to enrich your Health insights. You can always do this later from Account.</p>' +
           '</div>' +
           '<div class="enter-up" style="--d:90ms"><div class="onb__actions">' +
-            // Both finish onboarding; "replace" so Back from Home does not return here.
-            ui.button({ label: 'Yes, connect later', block: true, href: '/home', replace: true }) +
-            ui.button({ label: 'Skip for now', variant: 'secondary', block: true, href: '/home', replace: true }) +
+            // Both finish onboarding; "replace" so Back from Devices does not return here.
+            ui.button({ label: 'Yes, connect later', block: true, href: '/devices', replace: true }) +
+            ui.button({ label: 'Skip for now', variant: 'secondary', block: true, href: '/devices', replace: true }) +
           '</div></div>' +
         '</div>'
       );

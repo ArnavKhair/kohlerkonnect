@@ -13,8 +13,12 @@
       .map(function (item) {
         // A badge with an ellipsis means "in progress" (amber); any other badge is a healthy state (green).
         var tone = item.badge && item.badge.indexOf('…') >= 0 ? 'energy' : 'success';
+        var product = item.product ? KK.data.products[item.product] : null;
+        var thumb = product
+          ? ui.photo({ src: product.image, icon: product.icon, color: KK.c(product.accent), cls: 'photo--thumb', iconSize: 18 })
+          : '';
         return (
-          '<div class="row account-item">' +
+          '<div class="row account-item"' + (product ? ' style="--size:36px;--radius:10px"' : '') + '>' + thumb +
             '<span class="t-body tone-secondary account-item__label">' + KK.esc(item.label) + '</span>' +
             '<span class="account-item__right">' + (item.badge ? badge(item.badge, KK.c(tone)) : '') +
             '<span class="t-body' + (item.badge ? ' tone-secondary' : '') + '">' + KK.esc(item.value) + '</span></span>' +
@@ -118,6 +122,31 @@
                 activeIndex: 4,
               }) +
             '</div>') +
+          block('Segmented switch',
+            '<div class="gallery__stack" id="gallery-segments">' +
+              ui.segment({ name: 'demo-nav', nav: true, label: 'Room', active: 'a', tint: KK.c('room-bathroom'), items: [{ id: 'a', label: 'Bathroom' }, { id: 'b', label: 'Kitchen' }] }) +
+              ui.segment({ name: 'demo', label: 'View', active: 'a', items: [{ id: 'a', label: 'Today' }, { id: 'b', label: 'Over time' }] }) +
+            '</div>') +
+          block('Device tile + feature callouts',
+            '<div class="gallery__pair">' +
+              ui.deviceTile(KK.data.products.shower) +
+              '<div class="gallery__stage">' +
+                ui.photo({ icon: 'water-outline', color: KK.c('room-bathroom'), cls: 'gallery__photo' }) +
+                '<div class="product__callouts" id="gallery-callouts">' +
+                  ui.callout({ id: 'on', label: 'On', icon: 'water-outline', on: true, x: 22, y: 30, tint: KK.c('room-bathroom') }) +
+                  ui.callout({ id: 'off', label: 'Off', on: false, x: 78, y: 72, tint: KK.c('room-bathroom') }) +
+                '</div>' +
+              '</div>' +
+            '</div>') +
+          block('Health visuals (low · mid · high)',
+            '<div class="gallery__visuals">' +
+              KK.data.health.map(function (a) {
+                return [0.15, 0.5, 0.9].map(function (level) {
+                  return '<div class="gallery__visual" style="--tint:' + KK.c(a.color) + '">' + KK.visual(a.visual, level) +
+                    '<span class="t-label tone-muted">' + a.visual + ' ' + level + '</span></div>';
+                }).join('');
+              }).join('') +
+            '</div>') +
           block('Card + badge',
             '<div class="card gallery__pad"><div class="row gallery__demo-row">' +
               ui.tile({ icon: 'home', color: primary, size: 40, iconSize: 20 }) +
@@ -129,6 +158,15 @@
     },
     mount: function (root) {
       KK.tempControl.mount(root.querySelector('.tempctl'), { steps: GALLERY_STEPS, value: 40 });
+      // Segments and callouts respond, so their states can be compared.
+      root.querySelector('#gallery-segments').addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-seg]');
+        if (btn) ui.setSegment(root, btn.getAttribute('data-seg'), btn.getAttribute('data-value'));
+      });
+      root.querySelector('#gallery-callouts').addEventListener('click', function (e) {
+        var callout = e.target.closest('.callout');
+        if (callout) callout.setAttribute('aria-pressed', callout.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      });
       // Chips in the gallery toggle so their two states can be compared.
       root.querySelector('.gallery__chips').addEventListener('click', function (e) {
         var chip = e.target.closest('.chip');

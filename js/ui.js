@@ -33,11 +33,6 @@
     return hex + aa;
   };
 
-  /** Colour for a stat tone ('success' | 'energy' | 'primary'). */
-  KK.toneColor = function (tone) {
-    return KK.c(tone === 'success' ? 'success' : tone === 'energy' ? 'energy' : 'primary');
-  };
-
   /** Light feedback where the browser supports it (Android); a no-op elsewhere. */
   KK.haptic = function (kind) {
     if (typeof navigator.vibrate !== 'function') return;
@@ -60,7 +55,7 @@
 
   /**
    * Button. opts: label, icon, variant ('primary' | 'secondary' | 'ghost'), tint, block,
-   * disabled, href (renders a link: '/home'), replace (link replaces history), cls, attrs.
+   * disabled, href (renders a link: '/devices'), replace (link replaces history), cls, attrs.
    */
   ui.button = function (opts) {
     var variant = opts.variant || 'primary';
@@ -169,6 +164,78 @@
       '<div class="barchart" role="img" aria-label="' + KK.esc('Bar chart: ' + summary) + '" style="--tint:' + (opts.color || KK.c('primary')) + '">' +
       '<div class="barchart__bars" style="height:' + (opts.height || 150) + 'px">' + bars + '</div>' +
       '<div class="barchart__labels" aria-hidden="true">' + labels + '</div></div>'
+    );
+  };
+
+  /**
+   * Segmented switch (room switcher, Today / Over time, chart range).
+   * opts: name, items [{id, label}], active (id), label (for screen readers), tint, nav (larger, tinted style).
+   * Buttons carry data-seg="<name>" and data-value="<id>"; move the selection with ui.setSegment.
+   */
+  ui.segment = function (opts) {
+    var buttons = opts.items
+      .map(function (item) {
+        return (
+          '<button type="button" class="segment__btn t-caption" data-seg="' + KK.esc(opts.name) + '" data-value="' + KK.esc(item.id) + '"' +
+          ' aria-pressed="' + (item.id === opts.active ? 'true' : 'false') + '">' + KK.esc(item.label) + '</button>'
+        );
+      })
+      .join('');
+    return (
+      '<div class="segment' + (opts.nav ? ' segment--nav' : '') + '" role="group" aria-label="' + KK.esc(opts.label || opts.name) + '"' +
+      (opts.tint ? ' style="--tint:' + opts.tint + '"' : '') + '>' + buttons + '</div>'
+    );
+  };
+
+  /** Mark `value` as the pressed button of the segment named `name` inside `root`. */
+  ui.setSegment = function (root, name, value) {
+    Array.prototype.forEach.call(root.querySelectorAll('[data-seg="' + name + '"]'), function (btn) {
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-value') === value ? 'true' : 'false');
+    });
+  };
+
+  /**
+   * Product photo with a built-in fallback (the device icon on a tinted panel).
+   * The fallback always renders; the image covers it once loaded and removes itself if it fails,
+   * so a missing address, no network or a moved image never shows a broken picture.
+   * opts: src, alt, icon, color, cls, iconSize.
+   */
+  ui.photo = function (opts) {
+    var color = opts.color || KK.c('primary');
+    return (
+      '<div class="photo' + (opts.cls ? ' ' + opts.cls : '') + '" style="--tint:' + color + '">' +
+      '<div class="photo__fallback">' + KK.icon(opts.icon || 'home-outline', opts.iconSize || 44, color) + '</div>' +
+      (opts.src
+        ? '<img class="photo__img" src="' + KK.esc(opts.src) + '" alt="' + KK.esc(opts.alt || '') + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">'
+        : '') +
+      '</div>'
+    );
+  };
+
+  /** Device tile for the Devices grid: photo, name, status line. Links to the device page. */
+  ui.deviceTile = function (product) {
+    var accent = KK.c(product.accent);
+    return (
+      '<a class="pressable device-tile card" href="#/devices/product/' + KK.esc(product.id) + '">' +
+      ui.photo({ src: product.image, alt: product.name, icon: product.icon, color: accent, cls: 'device-tile__photo' }) +
+      '<div class="device-tile__text"><div class="device-tile__name">' + KK.esc(product.name) + '</div>' +
+      '<div class="t-caption tone-secondary">' + KK.esc(product.status || '') + '</div></div>' +
+      '</a>'
+    );
+  };
+
+  /**
+   * Feature callout on a photo: a dot at x / y (percent) joined by a short line to a label.
+   * It is a toggle (aria-pressed). The label sits on whichever side has more room.
+   * opts: id, label, icon, on, x, y, tint.
+   */
+  ui.callout = function (opts) {
+    return (
+      '<button type="button" class="callout' + (opts.x > 50 ? ' callout--left' : '') + '" data-callout="' + KK.esc(opts.id) + '"' +
+      ' aria-pressed="' + (opts.on ? 'true' : 'false') + '" style="left:' + opts.x + '%;top:' + opts.y + '%;--tint:' + (opts.tint || KK.c('primary')) + '">' +
+      '<span class="callout__dot"></span><span class="callout__line"></span>' +
+      '<span class="callout__label">' + (opts.icon ? KK.icon(opts.icon, 14) : '') + '<span>' + KK.esc(opts.label) + '</span></span>' +
+      '</button>'
     );
   };
 

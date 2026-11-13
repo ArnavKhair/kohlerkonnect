@@ -1,10 +1,10 @@
 /*
- * Hash router. Paths mirror the old Expo Router paths: #/home/room/bathroom.
+ * Hash router. Paths mirror the old Expo Router paths: #/devices/room/bathroom.
  *
  * Register a screen:
- *   KK.route('/home/room/:id', {
- *     tab: 'home',                      // which tab is highlighted; omit to hide the tab bar
- *     render: function (ctx) {...},     // returns an HTML string, or { redirect: '/home' }
+ *   KK.route('/devices/room/:id', {
+ *     tab: 'devices',                      // which tab is highlighted; omit to hide the tab bar
+ *     render: function (ctx) {...},     // returns an HTML string, or { redirect: '/devices' }
  *     mount: function (root, ctx) {...} // optional: wire events after the HTML is in the page
  *   });
  *
@@ -12,7 +12,7 @@
  * stays in the back stack (like component state on a native stack): it survives going
  * forward and coming back, and is dropped once you navigate back past the screen.
  *
- * Navigate: <a href="#/home">, <a href="#/home" data-replace>, <button data-back="/home">,
+ * Navigate: <a href="#/devices">, <a href="#/devices" data-replace>, <button data-back="/devices">,
  * or KK.router.go(path) / .replace(path) / .back(fallbackPath).
  */
 (function () {
@@ -20,8 +20,8 @@
   var KK = (window.KK = window.KK || {});
 
   var routes = [];
-  var TAB_ROOTS = { home: '/home', health: '/health', account: '/account' };
-  var lastInTab = { home: '/home', health: '/health', account: '/account' };
+  var TAB_ROOTS = { devices: '/devices', health: '/health', account: '/account' };
+  var lastInTab = { devices: '/devices', health: '/health', account: '/account' };
   var entryState = {}; // history index -> screen state
   var entryScroll = {}; // history index -> scroll position
   var index = 0; // position of the current entry in this session's history
@@ -116,7 +116,7 @@
 
   function back(fallback) {
     if (index > 0) history.back();
-    else replace(fallback || '/home');
+    else replace(fallback || '/devices');
   }
 
   function onPopState(e) {

@@ -1,4 +1,4 @@
-/* Routines for a product: /home/routines/:id (current, recommended, create my own) */
+/* Routines for a product: /devices/routines/:id (current, recommended, create my own) */
 (function () {
   'use strict';
   var KK = window.KK;
@@ -39,11 +39,11 @@
     );
   }
 
-  KK.route('/home/routines/:id', {
-    tab: 'home',
+  KK.route('/devices/routines/:id', {
+    tab: 'devices',
     render: function (ctx) {
       var product = KK.data.products[ctx.params.id];
-      if (!product) return { redirect: '/home' };
+      if (!product) return { redirect: '/devices' };
 
       var state = ctx.state;
       if (!state.active) {
@@ -81,7 +81,7 @@
 
       return (
         '<section class="screen routines">' +
-          ui.topBar({ back: '/home/product/' + product.id, title: 'Routines · ' + product.name }) +
+          ui.topBar({ back: '/devices/product/' + product.id, title: 'Routines · ' + product.name }) +
           ui.sectionLabel('Current routines') +
           '<div class="routines__list">' + rows + '</div>' +
           (state.recommended ? recommendedHtml(accent) : '') +

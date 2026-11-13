@@ -31,6 +31,14 @@
   --c-room-energy: #f2a63c;
   --c-room-maintenance: #8b8b93;
 
+  /* Health areas and their visuals */
+  --c-health-mobility: #d9925f;
+  --c-health-gut: #2fb8a6;
+  --c-petal: #e58fa5;
+  --c-petal-light: #f6c6d2;
+  --c-flame-core: #ffe6a3;
+  --c-wax: #e9e2d0;
+
   /* Overlays / controls */
   --c-scrim: #000000aa;
   --c-control-fill: #2a2a30;

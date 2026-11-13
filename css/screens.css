@@ -75,38 +75,30 @@
   min-width: 0;
 }
 
-/* ── Home ──────────────────────────────────────────────────────────── */
-.home {
+/* ── Devices ───────────────────────────────────────────────────────── */
+.devices {
   padding-bottom: 96px; /* room for the floating button */
 }
 
-.home .page-header {
-  margin-bottom: 24px;
+.devices .page-header {
+  margin-bottom: 20px;
 }
 
-.home__list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.devices__body {
+  margin-top: 16px;
 }
 
-.room-card {
-  padding: 20px;
-}
-
-.room-card__top {
-  justify-content: space-between;
-}
-
-.room-card__name {
-  gap: 9px;
-}
-
-.room-card__body {
+.room-summary {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 22px;
+  gap: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.room-summary__text {
+  flex: 1;
+  min-width: 0;
 }
 
 .dial {
@@ -115,35 +107,41 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 92px;
-  height: 92px;
-  border-radius: 46px;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
   color: #fff;
 }
 
 .dial__value {
-  font-size: 30px;
-  line-height: 34px;
+  font-size: 22px;
+  line-height: 24px;
   font-weight: 600;
 }
 
 .dial__unit {
-  margin-top: 2px;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 11px;
+  line-height: 13px;
   color: #ffffffaa;
 }
 
-.room-card__rings {
-  gap: 22px;
-  align-items: flex-start;
-}
-
 .ring-stat {
+  flex: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
+  text-align: center;
+}
+
+.devices__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.devices__hint {
+  margin: 18px 0 0;
   text-align: center;
 }
 
@@ -173,59 +171,36 @@
   opacity: 0.9;
 }
 
-/* ── Room ──────────────────────────────────────────────────────────── */
-.room .section-label {
-  margin-bottom: 14px;
-}
-
-.room__list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.product-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px;
-}
-
-.product-row__text {
-  flex: 1;
-  min-width: 0;
-}
-
-.room__hint {
-  margin: 18px 0 0;
-  text-align: center;
-}
-
-/* ── Product ───────────────────────────────────────────────────────── */
-.product__overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 420px;
-  opacity: 0.1;
-  pointer-events: none;
-}
-
-.product > *:not(.product__overlay) {
+/* ── Device page ───────────────────────────────────────────────────── */
+.product__stage {
   position: relative;
 }
 
-.product__hero {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.product__photo {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--c-surface-stroke);
 }
 
-.product__hero-label {
-  margin: 0 0 6px;
+.product__callouts {
+  position: absolute;
+  inset: 0;
+}
+
+.product__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 2px 16px;
+}
+
+.product__control {
+  padding: 16px;
+}
+
+.product__control-label {
+  margin: 0;
   letter-spacing: 1.5px;
   text-align: center;
 }
@@ -235,21 +210,9 @@
   height: 52px;
 }
 
-.product .section-label {
-  margin: 4px 0 12px;
-}
-
-.product__quick {
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.product__footnote {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 18px;
+.product__hint {
+  margin: 16px 0 0;
+  text-align: center;
 }
 
 /* ── Routines ──────────────────────────────────────────────────────── */
@@ -377,105 +340,94 @@
 
 /* ── Health ────────────────────────────────────────────────────────── */
 .health .page-header {
-  margin-bottom: 20px;
-}
-
-.health .section-label {
-  margin: 22px 0 14px;
-}
-
-.health-hero {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px;
-}
-
-.health-hero__text {
-  flex: 1;
-  min-width: 0;
-}
-
-.health__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.stat-tile {
-  padding: 16px;
-}
-
-.stat-tile__head {
-  gap: 7px;
-}
-
-.stat-tile__value {
-  margin-top: 10px;
-}
-
-.stat-tile__unit {
-  font-size: 18px;
-  font-weight: 400;
-  color: var(--c-text-secondary);
-}
-
-.stat-tile__delta {
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.insight {
-  padding: 18px;
-}
-
-.insight p {
-  margin: 0;
-}
-
-.insight .btn {
-  margin-top: 14px;
-}
-
-/* ── Stat ──────────────────────────────────────────────────────────── */
-.stat__readout {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 20px;
-}
-
-.stat__readout-top {
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.stat__value {
-  line-height: 60px;
-}
-
-.stat__unit {
-  font-size: 26px;
-  font-weight: 400;
-  color: var(--c-text-secondary);
-}
-
-.stat__delta {
-  gap: 6px;
-  margin-top: 6px;
-}
-
-.stat .segment {
   margin-bottom: 16px;
 }
 
-.stat__chart {
-  padding: 16px;
+.health .section-label {
+  margin: 24px 0 12px;
+}
+
+.health-hero {
+  --tint: var(--c-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 18px 16px;
+  text-align: center;
+  background:
+    radial-gradient(90% 70% at 50% 34%, color-mix(in srgb, var(--tint) 20%, transparent), transparent 72%),
+    var(--c-surface);
+  border-color: color-mix(in srgb, var(--tint) 30%, var(--c-surface-stroke));
+  animation: kk-fade 260ms ease-out both;
+}
+
+.health-hero__visual {
+  width: 220px;
+  max-width: 100%;
+  aspect-ratio: 1;
+}
+
+.health-hero__read {
+  margin-top: 4px;
+}
+
+.health-hero__value {
+  font-size: 56px;
+  line-height: 60px;
+  font-weight: 300;
+}
+
+.health-hero__unit {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--c-text-secondary);
+}
+
+.health-hero__delta {
+  justify-content: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.health-hero__caption {
+  margin: 10px 0 0;
+}
+
+/* One row of area chips; scrolls sideways when it does not fit. */
+.health__chips {
+  display: flex;
+  gap: 8px;
+  margin: 14px calc(var(--pad, var(--sp-4)) * -1) 16px;
+  padding: 0 var(--pad, var(--sp-4));
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.health__chips::-webkit-scrollbar {
+  display: none;
+}
+
+.health__chips .chip {
+  flex: none;
+}
+
+.health__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.health-chart {
+  padding: 14px 16px 16px;
+}
+
+.health-chart__title {
+  margin-bottom: 6px;
 }
 
 .stat__minis {
   justify-content: space-between;
-  margin-top: 20px;
   padding: 0 6px;
 }
 
@@ -488,12 +440,12 @@
 
 .mini__value {
   font-size: 22px;
-  line-height: 34px;
+  line-height: 30px;
   font-weight: 700;
 }
 
 .mini__label {
-  margin-top: 4px;
+  margin-top: 2px;
   letter-spacing: 0.5px;
 }
 
@@ -504,23 +456,19 @@
   background: var(--c-surface-stroke);
 }
 
-.stat .section-label {
-  margin: 24px 0 12px;
-}
-
-.stat__highlights {
+.meaning {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.highlight {
+  align-items: flex-start;
   gap: 10px;
+  padding: 2px 2px 0;
 }
 
-.highlight__text {
-  flex: 1;
-  line-height: 20px;
+.meaning .icon {
+  margin-top: 1px;
+}
+
+.meaning__text {
+  margin: 4px 0 0;
 }
 
 .sources {
@@ -530,6 +478,18 @@
 .source-row {
   gap: 10px;
   padding: 12px;
+}
+
+.insight {
+  padding: 18px;
+}
+
+.insight p {
+  margin: 0;
+}
+
+.insight .btn {
+  margin-top: 14px;
 }
 
 /* ── Account ───────────────────────────────────────────────────────── */
@@ -657,6 +617,44 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+}
+
+.gallery__pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+}
+
+.gallery__stage {
+  position: relative;
+}
+
+.gallery__photo {
+  aspect-ratio: 1;
+  border-radius: var(--r-lg);
+}
+
+.gallery__visuals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.gallery__visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+  aspect-ratio: 1 / 1.2;
+}
+
+.gallery__visual .visual {
+  flex: 1;
+  min-height: 0;
 }
 
 .gallery__pad {

@@ -1,4 +1,7 @@
-/* Product page: /home/product/:id (value stepper, Set, quick controls) */
+/*
+ * Device page: /devices/product/:id
+ * Product photo with feature callouts (the quick controls), then the value stepper and Set.
+ */
 (function () {
   'use strict';
   var KK = window.KK;
@@ -8,11 +11,16 @@
     return (justSet ? KK.icon('checkmark', 18) : '') + '<span>' + (justSet ? 'Set ✓' : 'Set') + '</span>';
   }
 
-  KK.route('/home/product/:id', {
-    tab: 'home',
+  function featureSummary(product, state) {
+    var on = product.quick.filter(function (q) { return state.quick[q.id]; }).length;
+    return on + ' of ' + product.quick.length + ' features on';
+  }
+
+  KK.route('/devices/product/:id', {
+    tab: 'devices',
     render: function (ctx) {
       var product = KK.data.products[ctx.params.id];
-      if (!product) return { redirect: '/home' };
+      if (!product) return { redirect: '/devices' };
 
       var state = ctx.state;
       if (state.value == null) {
@@ -27,32 +35,35 @@
       var accent = KK.c(product.accent);
       var label = product.unit === '%' ? 'Brightness' : 'Set point';
 
-      var chips = product.quick
+      var callouts = product.quick
         .map(function (q) {
-          return ui.chip({ label: q.label, icon: q.icon, on: state.quick[q.id], tint: accent, attrs: { 'data-quick': q.id } });
+          return ui.callout({ id: q.id, label: q.label, icon: q.icon, on: state.quick[q.id], x: q.x, y: q.y, tint: accent });
         })
         .join('');
 
       return (
         '<section class="screen product">' +
-          '<div class="product__overlay" style="background:' + accent + '"></div>' +
           ui.topBar({
-            back: '/home/room/' + product.roomId,
+            back: '/devices/room/' + product.roomId,
             title: product.name,
-            accent: KK.c('text'),
             trailingHtml:
-              '<a class="icon-btn" href="#/home/routines/' + product.id + '" aria-label="Routines">' +
+              '<a class="icon-btn" href="#/devices/routines/' + product.id + '" aria-label="Routines">' +
               KK.icon('list-outline', 22, KK.c('text-secondary')) + '</a>',
           }) +
-          '<div class="product__hero enter-up">' +
-            '<p class="product__hero-label t-label tone-secondary">' + label.toUpperCase() + '</p>' +
-            KK.tempControl.html({ steps: product.steps, value: state.value, accent: accent, label: label + ' (' + product.unit + ')' }) +
+          '<div class="product__stage enter-up">' +
+            ui.photo({ src: product.image, alt: product.name, icon: product.icon, color: accent, cls: 'product__photo', iconSize: 96 }) +
+            '<div class="product__callouts" id="product-callouts">' + callouts + '</div>' +
+          '</div>' +
+          '<div class="product__meta">' +
+            '<span class="t-caption tone-secondary">' + KK.esc((room ? room.name + ' · ' : '') + (product.status || '')) + '</span>' +
+            '<span class="t-caption tone-muted" id="product-features">' + featureSummary(product, state) + '</span>' +
+          '</div>' +
+          '<div class="card product__control enter-up" style="--d:80ms">' +
+            '<p class="product__control-label t-label tone-secondary">' + label.toUpperCase() + ' · ' + KK.esc(product.unit) + '</p>' +
+            KK.tempControl.html({ steps: product.steps, value: state.value, accent: accent, label: label + ' (' + product.unit + ')', compact: true }) +
             '<button type="button" class="btn btn--block product__set" id="product-set" style="--tint:' + accent + '">' + setButtonInner(false) + '</button>' +
           '</div>' +
-          ui.sectionLabel('Quick controls') +
-          '<div class="row product__quick">' + chips + '</div>' +
-          '<div class="product__footnote">' + KK.icon('flash', 14, KK.c('energy')) +
-            '<span class="t-caption tone-muted">' + KK.esc((room ? room.name : '') + ' · ' + product.blurb) + '</span></div>' +
+          '<p class="product__hint t-caption tone-muted">Tap a feature on the photo to switch it on or off.</p>' +
         '</section>'
       );
     },
@@ -68,12 +79,14 @@
         },
       });
 
-      root.querySelector('.product__quick').addEventListener('click', function (e) {
-        var chip = e.target.closest('[data-quick]');
-        if (!chip) return;
-        var id = chip.getAttribute('data-quick');
+      var summary = root.querySelector('#product-features');
+      root.querySelector('#product-callouts').addEventListener('click', function (e) {
+        var callout = e.target.closest('[data-callout]');
+        if (!callout) return;
+        var id = callout.getAttribute('data-callout');
         state.quick[id] = !state.quick[id];
-        chip.setAttribute('aria-pressed', state.quick[id] ? 'true' : 'false');
+        callout.setAttribute('aria-pressed', state.quick[id] ? 'true' : 'false');
+        summary.textContent = featureSummary(product, state);
         KK.haptic('light');
       });
 
