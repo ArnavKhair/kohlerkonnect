@@ -1,0 +1,70 @@
+/*
+ * Kohler Konnect design tokens. Dark only.
+ * Derived from the Figma references (see CLAUDE.md). Change values here,
+ * never hard-code a colour, radius or spacing in a component or screen.
+ */
+:root {
+  /* Surfaces */
+  --c-background: #050507;
+  --c-surface: #141417;
+  --c-surface-raised: #1c1c21;
+  --c-surface-stroke: #2a2a30;
+
+  /* Ink */
+  --c-text: #ffffff;
+  --c-text-secondary: #9a9aa3;
+  --c-text-muted: #5e5e66;
+  --c-text-faint: #3a3a40;
+
+  /* Brand / accents */
+  --c-primary: #2e7be8;
+  --c-primary-soft: #2e7be822;
+  --c-energy: #f2a63c;
+  --c-energy-soft: #f2a63c22;
+  --c-success: #36c279;
+  --c-warning: #f2a63c;
+  --c-danger: #e5564f;
+
+  /* Room accents */
+  --c-room-bathroom: #3b82f6;
+  --c-room-kitchen: #22a06b;
+  --c-room-energy: #f2a63c;
+  --c-room-maintenance: #8b8b93;
+
+  /* Overlays / controls */
+  --c-scrim: #000000aa;
+  --c-control-fill: #2a2a30;
+  --c-control-inactive: #232328;
+  --c-ring-track: #26262b;
+
+  /* Spacing */
+  --sp-half: 2px;
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 16px;
+  --sp-4: 24px;
+  --sp-5: 32px;
+  --sp-6: 48px;
+  --sp-7: 64px;
+
+  /* Radius */
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+  --r-full: 999px;
+
+  /* Motion: CSS stand-ins for the three spring presets of the native build */
+  --ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-standard: cubic-bezier(0.2, 0.9, 0.3, 1.12);
+  --ease-snappy: cubic-bezier(0.2, 1.2, 0.35, 1);
+  --dur-gentle: 520ms;
+  --dur-standard: 460ms;
+  --dur-snappy: 320ms;
+
+  /* Layout */
+  --app-width: 393px;
+  --tabbar-height: 56px;
+
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}

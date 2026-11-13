@@ -1,0 +1,163 @@
+/* Reset, type scale and the app shell (frame, scrolling screen area, tab bar slot). */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #000;
+  color: var(--c-text);
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+}
+
+.icon {
+  display: block;
+  flex: none;
+}
+
+/* ── Shell ─────────────────────────────────────────────────────────── */
+.frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--app-width);
+  height: 100vh;
+  height: 100dvh;
+  margin: 0 auto;
+  background: var(--c-background);
+  overflow: hidden;
+  padding-top: env(safe-area-inset-top);
+}
+
+#app {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+#app::-webkit-scrollbar {
+  display: none;
+}
+
+/* Desktop: show the app as a phone-sized column. */
+@media (min-width: 520px) and (min-height: 600px) {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .frame {
+    height: min(852px, calc(100dvh - 32px));
+    border: 1px solid var(--c-surface-stroke);
+    border-radius: var(--r-xl);
+  }
+}
+
+/* ── Type scale ────────────────────────────────────────────────────── */
+.t-display { font-size: 56px; line-height: 62px; font-weight: 300; }
+.t-hero { font-size: 40px; line-height: 46px; font-weight: 600; }
+.t-title { font-size: 28px; line-height: 34px; font-weight: 700; }
+.t-heading { font-size: 20px; line-height: 27px; font-weight: 600; }
+.t-subheading { font-size: 17px; line-height: 24px; font-weight: 600; }
+.t-body { font-size: 17px; line-height: 24px; font-weight: 400; }
+.t-caption { font-size: 14px; line-height: 19px; font-weight: 500; }
+.t-label { font-size: 12px; line-height: 16px; font-weight: 600; }
+
+.tone-secondary { color: var(--c-text-secondary); }
+.tone-muted { color: var(--c-text-muted); }
+.center { text-align: center; }
+.caps { letter-spacing: 1px; text-transform: uppercase; }
+
+/* ── Enter animations ──────────────────────────────────────────────── */
+/* Same directions as the native build: "up" comes in from above, "down" from below. */
+@keyframes kk-fade-in-up {
+  from { opacity: 0; transform: translateY(-25px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes kk-fade-in-down {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes kk-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes kk-slide-in {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: none; }
+}
+
+.enter-up,
+.enter-down {
+  animation: kk-fade-in-up var(--dur-standard) var(--ease-standard) both;
+  animation-delay: var(--d, 0ms);
+}
+
+.enter-down {
+  animation-name: kk-fade-in-down;
+}
+
+.screen {
+  animation: kk-fade 200ms ease-out both;
+}
+
+.screen--slide {
+  animation: kk-slide-in 280ms var(--ease-gentle) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}

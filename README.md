@@ -1,41 +1,61 @@
-# Kohler Konnect — iOS prototype
+# Kohler Konnect — web prototype
 
-A native iOS app prototype built with **Expo (React Native + TypeScript + Expo Router)**.
-Dark-only, tuned to the Figma references: near-black surfaces, per-room accent colors,
-circular dials, amber energy rings, and a "pan to set" temperature control.
+A phone-first prototype built with **plain HTML, CSS and JavaScript**: no framework, no
+packages, no build step. Dark only, tuned to the Figma references: near-black surfaces,
+per-room accent colours, circular dials, amber energy rings and a "pan to set" temperature
+control.
 
-Scope for this build (mock data + motion, no backend):
+Scope (mock data and motion, no backend, nothing is saved):
+
 - **Onboarding** — Let's Konnect → Create account → Connect Kohler devices → Connect other devices
-- **Home → Room → Product** — room list, device list, quick-control product page (interactive temp stepper), routines
-- **Health → Stat** — score cards, stat page with animated chart (7/30/90 day), highlights, sources
-- **Account** — privacy, products, devices, services (+ start over, component gallery)
+- **Home → Room → Product** — room list, device list, product page (value stepper, quick controls), routines
+- **Health → Stat** — score cards, stat page with a 7/30/90-day chart, highlights, sources
+- **Account** — privacy, products, devices, services (plus start over and a component gallery)
 
-## Run on Windows (daily dev via Expo Go)
+## Run it
 
-```bash
-npm install
-npx expo start --tunnel     # scan the QR with Expo Go on the iPhone
-```
+Open `index.html` in a browser. That is all.
 
-Hot reloads when you save. Press `w` for a browser layout preview (motion/gestures only work on the phone).
-
-## Build the standalone app on the Mac
+To try it on a phone, serve the folder and open the address from the phone on the same network:
 
 ```bash
-git pull
-npm install
-npx expo prebuild --platform ios
-# In Xcode: open ios/<app>.xcworkspace → Signing & Capabilities → select "Personal Team"
-#          → confirm bundle id is com.arnav.konnect (must be unique)
-npx expo run:ios --device --configuration Release
+python -m http.server 8000
 ```
 
-Release mode bundles the JS, so the app runs on its own with no PC attached. First launch may need
-Settings → General → VPN & Device Management → Trust your Apple ID. Free signing expires after
-7 days; re-run to refresh.
+It can be hosted as-is on any static host (GitHub Pages: Settings → Pages → deploy from
+`main`, folder `/`). On a phone, "Add to Home Screen" opens it full screen.
 
-## Notes
-- `ios/` and `android/` are **not** committed — the Mac regenerates them via `expo prebuild`.
-- Bundle id: `com.arnav.konnect`.
-- Motion: `react-native-reanimated` + `react-native-gesture-handler` + `expo-haptics`.
-- Rings/charts: `react-native-svg` (bars are reanimated Views). Icons: `@expo/vector-icons`.
+On a desktop browser the app is shown as a phone-sized column.
+
+## Where things are
+
+```
+index.html            page shell: screen area, tab bar, script tags
+css/tokens.css        design tokens (colours, spacing, radius, motion)
+css/base.css          reset, type scale, app frame, enter animations
+css/components.css    card, button, chip, ring, bar chart, temperature control, top bar, tab bar
+css/screens.css       layout that belongs to one screen
+js/data.js            all mock data
+js/icons.js           the icon glyphs the app uses
+js/ui.js              helpers that return component HTML (button, chip, ring, bar chart, ...)
+js/tempControl.js     the drag-to-set value stepper
+js/router.js          #/path routing, back, tab bar, per-screen state
+js/screens/*.js       one file per area: onboarding, home, product, routines, health, account
+```
+
+Routes: `#/onboarding`, `#/onboarding/account`, `#/onboarding/connect`, `#/onboarding/other`,
+`#/home`, `#/home/room/:id`, `#/home/product/:id`, `#/home/routines/:id`, `#/health`,
+`#/health/stat/:id`, `#/account`, `#/gallery`.
+
+`CLAUDE.md` has the conventions for adding a screen, component or token.
+
+## History
+
+This repo started as an Expo / React Native iOS prototype. That version is kept at the git tag
+`ios-prototype` (`git checkout ios-prototype`). The design note for the move to the web is in
+`docs/superpowers/specs/2026-11-12-html-port-design.md`.
+
+## Credits
+
+Icons are from [Ionicons](https://ionic.io/ionicons) (MIT License, © Ionic). Only the glyphs in
+use are copied into `js/icons.js`.

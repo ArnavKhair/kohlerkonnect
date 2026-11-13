@@ -1,0 +1,384 @@
+/*
+ * Reusable components. Markup for these comes from the helpers in js/ui.js.
+ * A component takes its accent from the --tint custom property.
+ */
+
+/* ── Screen ────────────────────────────────────────────────────────── */
+.screen {
+  position: relative;
+  min-height: 100%;
+  padding: var(--pad, var(--sp-4));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Full-screen flows without a tab bar keep clear of the home indicator. */
+.screen--inset-bottom {
+  padding-bottom: calc(var(--pad, var(--sp-4)) + env(safe-area-inset-bottom));
+}
+
+/* ── Layout helpers ────────────────────────────────────────────────── */
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.pressable {
+  display: block;
+  width: 100%;
+  transition: transform 120ms ease-out, opacity 120ms ease-out;
+}
+
+.pressable:active {
+  transform: scale(0.985);
+  opacity: 0.9;
+}
+
+/* ── Card ──────────────────────────────────────────────────────────── */
+.card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-surface-stroke);
+  border-radius: var(--r-lg);
+}
+
+/* ── Icon tile (icon on a tinted square) ───────────────────────────── */
+.tile {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size, 44px);
+  height: var(--size, 44px);
+  border-radius: var(--radius, var(--r-md));
+}
+
+/* ── Round icon button (back, gear) ────────────────────────────────── */
+.icon-btn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-full);
+  background: var(--c-control-inactive);
+  transition: opacity 120ms ease-out;
+}
+
+.icon-btn:active {
+  opacity: 0.5;
+}
+
+/* ── Top bar ───────────────────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  margin-bottom: var(--sp-3);
+}
+
+.topbar__title {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+}
+
+.topbar__spacer {
+  flex: none;
+  width: 40px;
+}
+
+/* ── Onboarding step bar + hero mark ───────────────────────────────── */
+.stepbar {
+  margin-bottom: var(--sp-4);
+}
+
+.stepbar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+  min-height: 40px;
+}
+
+.stepbar__track {
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--c-control-inactive);
+  overflow: hidden;
+}
+
+.stepbar__fill {
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--c-primary);
+}
+
+.hero-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  border-radius: var(--r-full);
+}
+
+/* ── Button ────────────────────────────────────────────────────────── */
+.btn {
+  --tint: var(--c-primary);
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--tint);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: transform 120ms ease-out, opacity 120ms ease-out;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn--secondary {
+  background: var(--c-surface-raised);
+  color: var(--c-text);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--tint);
+  border: 1px solid var(--c-surface-stroke);
+}
+
+.btn--block {
+  display: flex;
+  width: 100%;
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* ── Chip (small toggle) ───────────────────────────────────────────── */
+.chip {
+  --tint: var(--c-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--c-surface-stroke);
+  background: var(--c-control-inactive);
+  color: var(--c-text-secondary);
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: 600;
+  transition: transform 120ms ease-out, background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out;
+}
+
+.chip:active {
+  transform: scale(0.97);
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--tint);
+  border-color: var(--tint);
+  color: #fff;
+}
+
+/* ── Pill / badge ──────────────────────────────────────────────────── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid;
+  border-radius: var(--r-full);
+}
+
+.pill__dot {
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 3px;
+  background: currentColor;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 3px 8px;
+  border: 1px solid;
+  border-radius: var(--r-full);
+}
+
+/* ── Ring ──────────────────────────────────────────────────────────── */
+.ring {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring > svg.ring__svg {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── Bar chart ─────────────────────────────────────────────────────── */
+@keyframes kk-bar-grow {
+  from { height: 0; }
+}
+
+.barchart__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.barchart__wrap {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.barchart__bar {
+  width: 100%;
+  border-radius: 5px;
+  background: var(--c-control-inactive);
+  animation: kk-bar-grow 650ms ease-out both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+
+.barchart__bar.is-active {
+  background: var(--tint, var(--c-primary));
+}
+
+.barchart__labels {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.barchart__label {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  color: var(--c-text-muted);
+}
+
+.barchart__label.is-active {
+  color: var(--c-text-secondary);
+}
+
+/* ── Temperature control ("pan to set" stepper) ────────────────────── */
+.tempctl {
+  --tint: var(--c-primary);
+  position: relative;
+  width: 100%;
+  height: 330px; /* 5 rows of 66px */
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  border-radius: var(--r-md);
+}
+
+.tempctl.is-dragging {
+  cursor: grabbing;
+}
+
+.tempctl__item {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 66px;
+  margin-top: -33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46px;
+  line-height: 52px;
+  font-weight: 300;
+  color: var(--c-text-secondary);
+  will-change: transform, opacity;
+}
+
+.tempctl__item.is-active {
+  color: var(--tint);
+}
+
+/* ── Segmented control ─────────────────────────────────────────────── */
+.segment {
+  display: flex;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--c-surface);
+}
+
+.segment__btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 9px;
+  text-align: center;
+  color: var(--c-text-secondary);
+  transition: background-color 160ms ease-out, color 160ms ease-out, opacity 120ms ease-out;
+}
+
+.segment__btn:active {
+  opacity: 0.7;
+}
+
+.segment__btn[aria-pressed='true'] {
+  background: var(--c-surface-raised);
+  color: var(--c-text);
+}
+
+/* ── Tab bar ───────────────────────────────────────────────────────── */
+.tabbar {
+  flex: none;
+  display: flex;
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-surface-stroke);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tabbar[hidden] {
+  display: none;
+}
+
+.tabbar__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: var(--tabbar-height);
+  color: var(--c-text-secondary);
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 600;
+}
+
+.tabbar__item[aria-current='page'] {
+  color: var(--c-primary);
+}

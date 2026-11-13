@@ -1,8 +1,11 @@
 # CLAUDE.md — Kohler Konnect (Figma → code integration guide)
 
-Rules and conventions for building this app, written for an AI agent integrating the
-Figma design (via the Figma MCP) into this Expo / React Native codebase. Read this before
-adding a screen, component, or token.
+Rules and conventions for building this app, written for an AI agent integrating the Figma
+design (via the Figma MCP) into this codebase. Read this before adding a screen, component
+or token.
+
+The app is **plain HTML + CSS + vanilla JavaScript**. No framework, no npm, no bundler, no
+build step: `index.html` must keep working when opened directly from disk (`file://`).
 
 > **Source of truth for design is Figma, not this repo.** The palette below was *derived*
 > from the Figma references — it is not a formal token export. When the design changes in
@@ -16,261 +19,145 @@ adding a screen, component, or token.
 
 ---
 
-## 1. Design System
+## 1. Hard rules
 
-### 1.1 Token definitions
+- **No build step, no dependencies.** No npm packages, no CDN links, no web fonts. Everything
+  the page needs is a file in this repo.
+- **Classic scripts only.** No `import` / `export` / `type="module"` and no `fetch` of local
+  files: both fail on `file://`. Every script is an IIFE that adds to the single global `KK`.
+- **Script order matters** and is set in `index.html`: `data → icons → ui → tempControl →
+  router → screens/*`. A new script file needs a `<script>` tag there.
+- **Dark only, phone first.** One column, max width `--app-width` (393px). Use flex/grid, not
+  fixed widths, except for intentionally fixed dials and rings.
+- **Escape text.** Anything that is not a literal in the source goes through `KK.esc()` before
+  it is put into an HTML string (user input such as the routine name especially).
 
-Tokens live in **one file**: `src/constants/theme.ts`. They are plain frozen objects
-(no runtime theming lib, no CSS-in-JS runtime, no variables). Dark-only.
+## 2. Design system
 
-```ts
-// src/constants/theme.ts
-export const Colors = {
-  background: '#050507',      // app background
-  surface: '#141417',         // card
-  surfaceRaised: '#1C1C21',   // elevated control / selected segment
-  surfaceStroke: '#2A2A30',   // 1px borders
-  text: '#FFFFFF',
-  textSecondary: '#9A9AA3',
-  textMuted: '#5E5E66',
-  primary: '#2E7BE8',         // brand blue
-  energy: '#F2A63C',          // amber energy ring
-  success: '#36C279',
-  warning: '#F2A63C',
-  danger: '#E5564F',
-  room: {                     // per-room accent system (from Figma)
-    bathroom: '#3B82F6',
-    kitchen: '#22A06B',
-    energy: '#F2A63C',
-    maintenance: '#8B8B93',
-  },
-  scrim: '#000000AA',
-  controlFill: '#2A2A30',
-  controlInactive: '#232328',
-  ringTrack: '#26262B',
-} as const;
+### 2.1 Tokens — `css/tokens.css`
 
-export const Spacing = { half: 2, one: 4, two: 8, three: 16, four: 24, five: 32, six: 48, seven: 64 } as const;
-export const Radius  = { sm: 12, md: 18, lg: 24, xl: 32, full: 999 } as const;
-export const Type    = {
-  display:    { fontSize: 56, lineHeight: 62, fontWeight: '300' },
-  hero:       { fontSize: 40, lineHeight: 46, fontWeight: '600' },
-  title:      { fontSize: 28, lineHeight: 34, fontWeight: '700' },
-  heading:    { fontSize: 20, lineHeight: 27, fontWeight: '600' },
-  subheading: { fontSize: 17, lineHeight: 24, fontWeight: '600' },
-  body:       { fontSize: 17, lineHeight: 24, fontWeight: '400' },
-  caption:    { fontSize: 14, lineHeight: 19, fontWeight: '500' },
-  label:      { fontSize: 12, lineHeight: 16, fontWeight: '600' },
-} as const;
-export const Spring = {  // tuned for 60fps on a 60Hz iPhone 15
-  gentle:   { damping: 20, stiffness: 120, mass: 0.9, restDisplacement: 0.001, restSpeed: 0.001 },
-  standard: { damping: 16, stiffness: 180, mass: 0.8, restDisplacement: 0.001, restSpeed: 0.001 },
-  snappy:   { damping: 15, stiffness: 260, mass: 0.7, restDisplacement: 0.001, restSpeed: 0.001 },
-} as const;
-```
+CSS custom properties on `:root`. The one place colours, spacing, radius and motion are defined.
+
+| Group | Names |
+|---|---|
+| Surfaces | `--c-background` `#050507`, `--c-surface` `#141417`, `--c-surface-raised` `#1c1c21`, `--c-surface-stroke` `#2a2a30` |
+| Ink | `--c-text` `#ffffff`, `--c-text-secondary` `#9a9aa3`, `--c-text-muted` `#5e5e66`, `--c-text-faint` `#3a3a40` |
+| Accents | `--c-primary` `#2e7be8`, `--c-energy` `#f2a63c`, `--c-success` `#36c279`, `--c-warning` `#f2a63c`, `--c-danger` `#e5564f` |
+| Rooms | `--c-room-bathroom` `#3b82f6`, `--c-room-kitchen` `#22a06b`, `--c-room-energy` `#f2a63c`, `--c-room-maintenance` `#8b8b93` |
+| Controls | `--c-control-fill`, `--c-control-inactive` `#232328`, `--c-ring-track` `#26262b`, `--c-scrim` |
+| Spacing | `--sp-half` 2, `--sp-1` 4, `--sp-2` 8, `--sp-3` 16, `--sp-4` 24, `--sp-5` 32, `--sp-6` 48, `--sp-7` 64 |
+| Radius | `--r-sm` 12, `--r-md` 18, `--r-lg` 24, `--r-xl` 32, `--r-full` 999 |
+| Motion | `--ease-gentle` / `--ease-standard` / `--ease-snappy` with `--dur-*` |
+
+Type scale = classes in `css/base.css` (system font; size / line-height / weight):
+`.t-display` 56/62/300, `.t-hero` 40/46/600, `.t-title` 28/34/700, `.t-heading` 20/27/600,
+`.t-subheading` 17/24/600, `.t-body` 17/24/400, `.t-caption` 14/19/500, `.t-label` 12/16/600.
+Tones: `.tone-secondary`, `.tone-muted`.
 
 **Rules**
-- Always pull color/spacing/radius/type from `@/constants/theme`. **Never** hard-code a hex in a screen when a token exists.
-- Add new tokens to this file (extend `Colors`/`Type`/etc.), not inline.
-- iOS uses the **system font**; `Type` only sets size/lineHeight/weight. Do not load custom fonts unless Figma specifies a brand face.
-- `Spring` presets are the only sanctioned animation configs; reference them, don't invent raw stiffness values.
+- Never hard-code a hex in a component or screen when a token exists. Add new tokens to
+  `tokens.css`.
+- In JavaScript, get a colour with `KK.c('primary')` / `KK.c('room-bathroom')` (reads the
+  token, so CSS stays the single source). Tinted backgrounds: `KK.alpha(color, '1F')`.
+- Data refers to colours by token name (`accent: 'room-bathroom'`, `tone: 'success'`).
+- Do not load custom fonts unless Figma specifies a brand face.
 
-### 1.2 Component library
+### 2.2 Components — `css/components.css` + `js/ui.js`
 
-Hand-rolled primitives in `src/components/`. No third-party UI kit, no Storybook, no `.mdx` docs.
+Hand-rolled. Each helper returns an HTML string; its look lives in `components.css`.
 
-| File | Exports | Purpose |
-|------|---------|---------|
-| `ui.tsx` | `Text`, `Icon`, `Card`, `Row`, `Button`, `Chip`, `SectionHeader`, `IconName` | Atomic building blocks |
-| `Ring.tsx` | `Ring` | SVG progress ring (energy/status) |
-| `BarChart.tsx` | `BarChart` | Animated bar chart (reanimated Views) |
-| `TemperatureControl.tsx` | `TemperatureControl` | "Pan to set" value stepper (signature interaction) |
-| `Screen.tsx` | `Screen`, `TopBar` | Safe-area + background shell, header bar |
-| `Onboard.tsx` | `StepBar`, `HeroMark` | Onboarding progress bar + hero mark |
+| Helper | Purpose |
+|---|---|
+| `ui.button({label, icon, variant, tint, block, disabled, href, replace, attrs})` | `primary` (filled with `tint`), `secondary` (raised surface), `ghost` (outlined). With `href` it is a link. |
+| `ui.chip({label, icon, on, tint, attrs})` | Small toggle; state is `aria-pressed`. |
+| `ui.tile({icon, color, size, radius, iconSize, alpha})` | Icon on a tinted square. |
+| `ui.ring({size, stroke, progress, color, innerHtml})` | SVG progress ring. |
+| `ui.barChart({data, height, color, activeIndex})` | Bars grow in via CSS. |
+| `ui.topBar({title, accent, back, trailingHtml})` | Header; `back` is the fallback route. |
+| `ui.stepBar({step, total, back})`, `ui.heroMark({icon, tint, size})` | Onboarding pieces. |
+| `ui.sectionLabel(text)` | Uppercase section label. |
+| `KK.tempControl.html(...)` + `.mount(el, {steps, value, onChange})` | Drag / tap / arrow-key value stepper (`js/tempControl.js`). |
+| `KK.icon(name, size, color)` | Inline SVG icon (`js/icons.js`). |
 
-The atomic `Text` and `Icon` are the ones to reach for:
-
-```tsx
-// src/components/ui.tsx
-export type IconName = keyof typeof Ionicons.glyphMap;
-
-export function Text({ variant = 'body', tone = 'primary', style, ...rest }: TextProps_) {
-  return <RNText style={[{ color: colorOf(tone) }, Type[variant], style]} {...rest} />;
-}
-
-export function Icon({ name, size = 22, color = Colors.text, style }: IconProps) {
-  return <Ionicons name={name} size={size} color={color} style={style} />;
-}
-```
+CSS-only pieces: `.card`, `.row`, `.pressable`, `.icon-btn`, `.pill`, `.badge`, `.segment`.
 
 **Rules**
-- Build new screens from these primitives. If a pattern repeats in ≥ 2 places, promote it to a component in `src/components/` (not into `src/app/`).
-- `Button` variants: `primary` (filled, `tint` color), `secondary` (raised surface), `ghost` (outlined). `Chip` is the small toggle (uses `on` + `tint`).
-- `Screen` wraps every screen. Pass `scroll` for scrolling content; pass `edges` to control safe-area (see §1.6).
-- Keep components presentational; keep state/logic in the screen.
+- Build screens from these. If a pattern repeats in two places, promote it to a helper in
+  `ui.js` with its styles in `components.css`; layout that belongs to one screen goes in
+  `css/screens.css`.
+- A component takes its accent from the `--tint` custom property.
+- Keep helpers presentational; state and event wiring live in the screen's `mount`.
+- `/gallery` shows every component. Add new ones there.
 
-### 1.3 Frameworks & libraries
+### 2.3 Icons — `js/icons.js`
 
-| Concern | Library | Version | Notes |
-|---------|---------|---------|-------|
-| Runtime | React Native | 0.88.1 | Expo SDK **58** |
-| React | react | 19.3.0 | **React Compiler enabled** (`reactCompiler: true`) |
-| Routing | `expo-router` | ~58.0.31 | File-based, typed routes |
-| Animation | `react-native-reanimated` | 4.7.1 | Worklets (reanimated 4 API) |
-| Gestures | `react-native-gesture-handler` | ~3.3.0 | New `Gesture`/`GestureDetector` API |
-| Haptics | `expo-haptics` | ~58.0.8 | iOS-only target |
-| SVG | `react-native-svg` | 15.16.0 | Rings only — included in Expo Go |
-| Icons | `@expo/vector-icons` | ^15 | Ionicons set |
-| Images | `expo-image` | ~58.0.18 | Preferred over RN `Image` |
-| Safe area | `react-native-safe-area-context` | ~5.11.1 | via `Screen` |
+Ionicons 7 glyphs (MIT), copied in as SVG markup; only the ones in use. `-outline` for
+quiet / secondary, solid for active / hero. To add one, copy the inner markup of the Ionicons
+SVG (viewBox `0 0 512 512`) into `GLYPHS`. An unknown name logs a console error.
 
-**Rules**
-- **Expo Go compatibility is a hard constraint** (daily dev loop is Expo Go). Before adding any native module, confirm it's in Expo Go (docs: *Third-party libraries supported in Expo Go*). If it isn't, prefer an Expo module or a pure-JS/reanimated alternative (see how `BarChart` avoids SVG animation, and `Ring` renders statically).
-- Add dependencies with **`npx expo install <pkg>`** (never `npm i`) so versions match SDK 58.
-- Reanimated 4 + React Compiler: worklets are detected automatically (the `'worklet'` directive is still used for gesture handlers). ESLint's `react-hooks/immutability` flags shared-value `.value` mutation — that is the intended reanimated API; see the disable comment in `TemperatureControl.tsx`.
+### 2.4 Screens and routing — `js/router.js`, `js/screens/*.js`
 
-### 1.4 Asset management
-
-Assets live in `assets/`:
-
-```
-assets/
-  expo.icon/icon.json + Assets/   # iOS icon (expo-icon)
-  images/icon.png, splash-icon.png, favicon.png
-  images/android-icon-*.png
-  images/tabIcons/*.png           # (template leftover — we use vector icons now)
+```js
+KK.route('/home/room/:id', {
+  tab: 'home',                       // omit for full-screen flows (no tab bar)
+  render: function (ctx) { ... },    // HTML string, or { redirect: '/home' }
+  mount: function (root, ctx) { ... } // optional: add event listeners
+});
 ```
 
-**Rules**
-- Reference by relative path in `app.json` (icons/splash) or via `require('@/assets/...')` in code.
-- Prefer **vector icons** (`Icon`) and **SVG shapes** (`Ring`) over raster images.
-- Use `expo-image` (`<Image source={...} />` from `expo-image`) for photos; no CDN in this project.
-- No image optimizer is configured — keep rasters small; avoid adding large assets.
+- `ctx = { path, params, state }`. Put a screen's changing values in `ctx.state`: it lives as
+  long as the screen is in the back stack and is dropped when the user goes back past it.
+- Navigate with `<a href="#/home">`, `<a href="#/home" data-replace>`,
+  `<button data-back="/fallback">`, or `KK.router.go / replace / back`.
+- The root element of a screen is `<section class="screen ...">`. Add `screen--inset-bottom`
+  when there is no tab bar, and `style="--pad:28px"` to change the padding.
+- Update the page in `mount` by changing the affected elements, not by re-rendering the whole
+  screen (keeps focus and avoids replaying enter animations).
+- Mock data is centralised in `js/data.js`; do not scatter arrays in screens.
 
-### 1.5 Icon system
+### 2.5 Motion
 
-- Source: **Ionicons** via `@expo/vector-icons`, wrapped by the `Icon` component.
-- Naming: Ionicons glyph names, e.g. `home`, `water-outline`, `sparkles-outline`, `pulse`, `settings-outline`, `chevron-back`, `flash`. **Verify a name exists** — invalid names are a TS error (the `IconName` type = `keyof typeof Ionicons.glyphMap`).
-- Convention in this app: use `-outline` for quiet/secondary, solid for active/hero.
-- Import the type for typed props: `import { Icon, type IconName } from '@/components/ui'`.
+- Enter: wrap in `<div class="enter-up" style="--d:60ms">` (from above) or `.enter-down`;
+  stagger with `--d`.
+- Prefer transform / opacity. Use the `--ease-*` / `--dur-*` tokens.
+- `prefers-reduced-motion` is honoured globally in `base.css`; JS animation must check it too
+  (see `tempControl.js`).
+- `KK.haptic('light' | 'success')` vibrates where the browser allows it (not on iOS). Never
+  rely on it: every press also needs a visible pressed state.
 
-```tsx
-<Icon name="flash" size={22} color={Colors.energy} />
-```
-
-**Rule:** when a Figma frame shows an icon, map it to the closest Ionicons glyph; only fall back to an asset (`expo-image`) if no glyph fits the style.
-
-### 1.6 Styling approach
-
-- **`StyleSheet.create` per file**, composing token values from `@/constants/theme`. No CSS Modules, no styled-components, no Tailwind/Nativewind.
-- The **only** CSS in the repo is `src/global.css` (web font fallback vars) — irrelevant to the iOS build.
-- Dark-only: colors are fixed from `Colors`; there is no light/dark switch.
-- No responsive breakpoints (single iPhone width). Use flex layouts, not fixed widths, except for intentionally fixed dials/rings.
-- Safe area: `Screen` uses `SafeAreaView`. For screens **with the tab bar** pass `edges={['top','left','right']}` (omit bottom so the tab bar owns the home-indicator inset). For full-screen flows (onboarding, stat, gallery) use the default `['top','bottom']`.
-
-### 1.7 Project structure
-
-```
-kohlerkonnect/
-  app.json                 # identity, bundle id, plugins  (see below)
-  tsconfig.json            # "@/*" -> "./src/*", strict, typed routes
-  AGENTS.md                # Expo workflow rules (complements this file)
-  src/
-    app/                   # ── ROUTES ONLY (Expo Router; one screen per file) ──
-      _layout.tsx          # root Stack (index, onboarding, (tabs), gallery) + ThemeProvider
-      index.tsx            # redirect -> /onboarding
-      gallery.tsx          # hidden component gallery
-      onboarding/          # flow: index, account, connect, other  (+_layout)
-      (tabs)/              # tab group
-        _layout.tsx        # Tabs: home / health / account
-        home/              # index, room/[id], product/[id], routines/[id]  (+_layout Stack)
-        health/            # index, stat/[id]  (+_layout Stack)
-        account/           # index  (+_layout Stack)
-    components/            # primitives + composite components (§1.2)
-    constants/theme.ts     # design tokens (§1.1)
-    data/mock.ts           # mock data (rooms, products, stats, routines, account)
-    css.d.ts               # `declare module '*.css'`
-    global.css             # web font vars (native build ignores)
-  assets/                  # icons + images (§1.4)
-```
-
-**Rules**
-- **Routes = files under `src/app/`.** Everything else (components, hooks, utils, data) lives under `src/` but **not** in `src/app/`. A file that isn't a screen must not go in `src/app/`.
-- Navigation with `expo-router`: `router.push/back/replace`, `Link`, `useLocalSearchParams<{ id: string }>()` (type the param). Typed routes are on — invalid `href` strings are errors.
-- Route groups `(…)` don't add a path segment; tab folders are `home`/`health`/`account`.
-- Dynamic routes use `[id].tsx`; index the lookup param as `{ id: string }`.
-- Mock data is centralized in `src/data/mock.ts` — add entities there, don't scatter arrays in screens.
-
----
-
-## 2. Figma → code integration workflow (the rules)
-
-### 2.1 Map Figma concepts to this system
+## 3. Figma → code mapping
 
 | Figma element | Use |
-|---------------|-----|
-| Color swatch | → `Colors.*` token (add one if genuinely new); apply via `Text tone` / component `tint` / inline `color` |
-| Type style (size/weight) | → nearest `Type` preset; only add a new preset if it's used ≥ 2 places |
-| Spacing / padding | → `Spacing.*` |
-| Corner radius | → `Radius.*` |
-| Card / container | → `Card` (or `Card` with a `tint` background `${accent}1F` for tinted cards) |
-| Button | → `Button` (`primary`/`secondary`/`ghost`, `tint`, `icon`, `block`) |
-| Small toggle | → `Chip` (`on`, `tint`) |
-| Circular progress | → `Ring` (`progress`, `color`, `stroke`) |
-| Bar/line chart | → `BarChart` (`data`, `color`, `activeIndex`) — bars are reanimated Views, **not** SVG paths |
-| Big value selector / dial | → `TemperatureControl` (steps + value + `onChange`) |
-| Screen frame | → a route file in `src/app/`, wrapped in `Screen` (+ `TopBar`) |
-| Bottom tab | → a screen in `src/app/(tabs)/` |
-| Icon | → `Icon` (Ionicons glyph) |
-| Per-room color | → `Colors.room.<id>` |
+|---|---|
+| Colour swatch | token in `tokens.css`; `KK.c()` in JS |
+| Type style | nearest `.t-*` class; add a class only if used in two places |
+| Spacing / padding | `--sp-*` |
+| Corner radius | `--r-*` |
+| Card / container | `.card` (tinted: background `KK.alpha(accent, '1F')`) |
+| Button | `ui.button` |
+| Small toggle | `ui.chip` |
+| Circular progress | `ui.ring` |
+| Bar chart | `ui.barChart` |
+| Big value selector / dial | `KK.tempControl` |
+| Screen frame | a `KK.route` in `js/screens/` |
+| Bottom tab | a route with `tab:` set; tab items are in `index.html` |
+| Icon | `KK.icon` (closest Ionicons glyph) |
+| Per-room colour | `--c-room-<id>` |
 
-### 2.2 How to build a new screen (checklist)
+### New screen checklist
 
-1. Confirm the route location from the sitemap (which tab / which stack). Add the file under the right `src/app/…` folder; if it's a new stack screen, add it to that folder's `_layout.tsx` `<Stack>`.
-2. Wrap in `<Screen edges={…} scroll={…}>`; add `<TopBar back title=…>` if it's a drill-down.
-3. Compose from `ui.tsx` primitives + `Ring`/`BarChart`/`TemperatureControl` as needed.
-4. Add data to `src/data/mock.ts` (typed); reference by id.
-5. Motion: `FadeInUp`/`FadeInDown` `.springify()` for enters, `withSpring`/`useSharedValue` for stateful animation, `Spring.*` presets, `expo-haptics` on confirm.
-6. Hooks **before** any early `return` (rules-of-hooks).
-7. `npx tsc --noEmit` + `npx eslint "src/**/*.{ts,tsx}"` must be clean; `npx expo export --platform ios` should bundle.
-
-### 2.3 Motion conventions
-
-- Enters: `<Animated.View entering={FadeInUp.springify()}>`, stagger siblings with `.delay(n)`.
-- Shared values: `useSharedValue`, animate with `withSpring(v, Spring.standard)`.
-- Worklet handlers (gestures): include the `'worklet'` directive; JS callbacks go through `runOnJS(fn)(args)`.
-- `react-hooks/immutability` on `.value` mutation is expected — keep the file-level disable where shared values are mutated.
-- Target 60fps (iPhone 15 is 60Hz, not ProMotion). Prefer transform/opacity; avoid animating layout.
-- Charts: stagger via a real `setTimeout` in the effect (reanimated's `withTiming` has no `delay` config in this build) — see `BarChart.tsx`.
-
-### 2.4 Guardrails / gotchas
-
-- **Do not** create or edit `ios/` / `android/` — they're gitignored and regenerated by `expo prebuild` on the Mac.
-- All native config goes in `app.json` (bundle id `com.arnav.konnect`, `userInterfaceStyle: "dark"`, plugins). After changing native config, the Mac must re-run `prebuild`.
-- `package.json` `name` is still `"scaffold"` (harmless) and `scripts.lint` = `expo lint` had a version mismatch — use `npx eslint` directly.
-- Figma MCP is configured in the environment (`opencode.json`, parent of the repo), not in this repo.
-
----
-
-## 3. Commands
-
-```bash
-npm install                     # install deps (once)
-npx expo install <pkg>          # add a dependency (SDK-version-resolved) — ALWAYS use this
-npx expo start --tunnel         # dev server for Expo Go (daily loop)
-npx tsc --noEmit                # typecheck (must be clean)
-npx eslint "src/**/*.{ts,tsx}"  # lint (must be clean)
-npx expo export --platform ios  # validate the JS bundle compiles
-npx expo prebuild --platform ios# generate ios/ on the Mac (do NOT on Windows)
-```
-
----
+1. Confirm the route from the sitemap (which tab, which stack) and register it with `KK.route`.
+2. Root `<section class="screen">`; `ui.topBar({ back: '/parent', title })` for a drill-down.
+3. Compose from `ui.*` helpers; add data to `js/data.js`.
+4. Screen-only layout goes in `css/screens.css` under a class named after the screen.
+5. Check it: open `index.html`, walk to the screen, use Back, reload on the screen's URL,
+   look at the browser console (it must be clean), and try 375px and 430px widths.
 
 ## 4. Current state
 
-Implemented (mock data, no backend): **Onboarding**, **Home → Room → Product** (interactive temp
-stepper + quick controls + routines), **Health → Stat** (animated 7/30/90-day chart, highlights,
-sources), **Account** (+ start-over, component gallery). Bottom nav: Home / Health / Account.
+Implemented (mock data, no backend, nothing persisted): **Onboarding**, **Home → Room →
+Product** (value stepper, quick controls, routines), **Health → Stat** (7/30/90-day chart,
+highlights, sources), **Account** (start over, component gallery). Bottom nav: Home / Health /
+Account.
 
-Next: refine per Arnav's on-device feedback (colors, spacing, copy, weak screens), then add
-remaining sitemap screens (Kitchen product set, full Routines creator) one vertical slice at a time.
+The earlier Expo / React Native build is at git tag `ios-prototype`.

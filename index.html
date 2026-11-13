@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#050507">
+    <meta name="color-scheme" content="dark">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Kohler Konnect</title>
+    <link rel="icon" href="assets/images/favicon.png">
+    <link rel="apple-touch-icon" href="assets/images/icon.png">
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/screens.css">
+  </head>
+  <body>
+    <div class="frame">
+      <main id="app"></main>
+
+      <nav class="tabbar" id="tabbar" aria-label="Main" hidden>
+        <a class="tabbar__item" href="#/home" data-tab="home">
+          <span data-icon="home"></span>
+          <span>Home</span>
+        </a>
+        <a class="tabbar__item" href="#/health" data-tab="health">
+          <span data-icon="pulse"></span>
+          <span>Health</span>
+        </a>
+        <a class="tabbar__item" href="#/account" data-tab="account">
+          <span data-icon="person"></span>
+          <span>Account</span>
+        </a>
+      </nav>
+    </div>
+
+    <noscript>Kohler Konnect needs JavaScript to run.</noscript>
+
+    <!-- Plain scripts, in dependency order. No build step: open this file directly or serve the folder. -->
+    <script src="js/data.js"></script>
+    <script src="js/icons.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/tempControl.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/screens/onboarding.js"></script>
+    <script src="js/screens/home.js"></script>
+    <script src="js/screens/product.js"></script>
+    <script src="js/screens/routines.js"></script>
+    <script src="js/screens/health.js"></script>
+    <script src="js/screens/account.js"></script>
+  </body>
+</html>
