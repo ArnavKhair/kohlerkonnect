@@ -40,7 +40,7 @@
         '<div class="onb">' +
           ui.stepBar({ step: 2, total: 4, back: '/onboarding' }) +
           '<div class="onb__hero enter-up">' +
-            ui.heroMark({ icon: 'person-circle', size: 96 }) +
+            ui.heroMark({ icon: 'user-circle', size: 96 }) +
             '<h1 class="t-31" style="margin-top:16px">Create your account</h1>' +
             '<p class="t-16 tone-secondary" style="margin-top:10px">Sign in with Apple or Google, or continue as a guest to explore the prototype.</p>' +
           '</div>' +
@@ -80,7 +80,7 @@
         '<p class="t-16 tone-secondary connect__copy">We found these near your network. Everything is shown as ready for this prototype.</p>' +
         '<div class="connect__list">' + devices + '</div>' +
         '<div class="onb__actions" style="gap:12px">' +
-          ui.button({ label: 'Scan for more', icon: 'scan-outline', variant: 'secondary', block: true }) +
+          ui.button({ label: 'Scan for more', icon: 'viewfinder-circle', variant: 'secondary', block: true }) +
           ui.button({ label: 'Continue', block: true, href: '/onboarding/other' }) +
         '</div>'
       );
@@ -94,7 +94,7 @@
         '<div class="onb">' +
           ui.stepBar({ step: 4, total: 4, back: '/onboarding/connect' }) +
           '<div class="onb__hero enter-up">' +
-            ui.heroMark({ icon: 'watch-outline', size: 116 }) +
+            ui.heroMark({ icon: 'clock', size: 116 }) +
             '<h1 class="t-31 center" style="margin-top:20px">Connect other devices?</h1>' +
             '<p class="t-16 tone-secondary center" style="margin-top:10px">Add an Apple Watch or another health device to enrich your Health insights. You can always do this later from Account.</p>' +
           '</div>' +

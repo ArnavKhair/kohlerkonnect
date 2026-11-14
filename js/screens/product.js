@@ -8,7 +8,7 @@
   var ui = KK.ui;
 
   function setButtonInner(justSet) {
-    return (justSet ? KK.icon('checkmark', 18) : '') + '<span>' + (justSet ? 'Set ✓' : 'Set') + '</span>';
+    return (justSet ? KK.icon('check', 18) : '') + '<span>' + (justSet ? 'Set ✓' : 'Set') + '</span>';
   }
 
   function featureSummary(product, state) {
@@ -48,7 +48,7 @@
             title: product.name,
             trailingHtml:
               '<a class="icon-btn" href="#/devices/routines/' + product.id + '" aria-label="Routines">' +
-              KK.icon('list-outline', 22, KK.c('text-secondary')) + '</a>',
+              KK.icon('list-bullet', 22, KK.c('text-secondary')) + '</a>',
           }) +
           '<div class="product__stage enter-up">' +
             ui.photo({ src: product.image, alt: product.name, icon: product.icon, color: accent, cls: 'product__photo', iconSize: 96 }) +

@@ -23,12 +23,12 @@
       energy: 0.82, // 0..1 progress
       energyLabel: '16h 35m',
       status: 'Everyday',
-      statusIcon: 'water-outline',
+      statusIcon: 'beaker',
     },
     {
       id: 'kitchen',
       name: 'Kitchen',
-      icon: 'restaurant-outline',
+      icon: 'wrench-screwdriver',
       accent: 'room-kitchen',
       headline: 'Holding',
       value: 42,
@@ -36,7 +36,7 @@
       energy: 0.5,
       energyLabel: '08h 10m',
       status: 'Holding',
-      statusIcon: 'flame-outline',
+      statusIcon: 'fire',
     },
   ];
 
@@ -48,16 +48,16 @@
       roomId: 'bathroom',
       name: 'Anthem+ Shower',
       blurb: 'Bathroom · Quick controls',
-      icon: 'water-outline',
+      icon: 'beaker',
       accent: 'room-bathroom',
       unit: '°C',
       min: 34,
       max: 46,
       steps: [34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46],
       quick: [
-        { id: 'fill', label: 'PerfectFill', icon: 'water-outline', on: true, x: 30, y: 73 },
-        { id: 'sound', label: 'SoundTile', icon: 'volume-high-outline', on: false, x: 80, y: 27 },
-        { id: 'warm', label: 'Warm floor', icon: 'thermometer-outline', on: true, x: 60, y: 87 },
+        { id: 'fill', label: 'PerfectFill', icon: 'beaker', on: true, x: 30, y: 73 },
+        { id: 'sound', label: 'SoundTile', icon: 'speaker-wave', on: false, x: 80, y: 27 },
+        { id: 'warm', label: 'Warm floor', icon: 'fire', on: true, x: 60, y: 87 },
       ],
     },
     tub: {
@@ -67,16 +67,16 @@
       roomId: 'bathroom',
       name: 'Shore Bathtub',
       blurb: 'Bathroom · Soak & recovery',
-      icon: 'sparkles-outline',
+      icon: 'sparkles',
       accent: 'room-bathroom',
       unit: '°C',
       min: 35,
       max: 44,
       steps: [35, 36, 37, 38, 39, 40, 41, 42, 43, 44],
       quick: [
-        { id: 'soak', label: 'Restore soak', icon: 'sparkles-outline', on: false, x: 40, y: 46 },
-        { id: 'heat', label: 'Warm floor', icon: 'thermometer-outline', on: true, x: 66, y: 91 },
-        { id: 'scent', label: 'Scent', icon: 'leaf-outline', on: false, x: 70, y: 25 },
+        { id: 'soak', label: 'Restore soak', icon: 'sparkles', on: false, x: 40, y: 46 },
+        { id: 'heat', label: 'Warm floor', icon: 'fire', on: true, x: 66, y: 91 },
+        { id: 'scent', label: 'Scent', icon: 'cloud', on: false, x: 70, y: 25 },
       ],
     },
     vanity: {
@@ -86,16 +86,16 @@
       roomId: 'bathroom',
       name: 'Smart Wall · Vanity',
       blurb: 'Bathroom · Light & sense',
-      icon: 'bulb-outline',
+      icon: 'light-bulb',
       accent: 'room-bathroom',
       unit: '%',
       min: 10,
       max: 100,
       steps: [10, 25, 40, 55, 70, 85, 100],
       quick: [
-        { id: 'glow', label: 'Mirror glow', icon: 'bulb-outline', on: true, x: 34, y: 15 },
-        { id: 'seam', label: 'Circadian seam', icon: 'sunny-outline', on: true, x: 70, y: 34 },
-        { id: 'sense', label: 'Vanity Sense', icon: 'pulse-outline', on: false, x: 34, y: 60 },
+        { id: 'glow', label: 'Mirror glow', icon: 'light-bulb', on: true, x: 34, y: 15 },
+        { id: 'seam', label: 'Circadian seam', icon: 'sun', on: true, x: 70, y: 34 },
+        { id: 'sense', label: 'Vanity Sense', icon: 'signal', on: false, x: 34, y: 60 },
       ],
     },
     toilet: {
@@ -105,15 +105,15 @@
       roomId: 'bathroom',
       name: 'PureWarmth Toilet',
       blurb: 'Bathroom · Comfort',
-      icon: 'home-outline',
+      icon: 'home',
       accent: 'room-bathroom',
       unit: '°',
       min: 0,
       max: 3,
       steps: [0, 1, 2, 3],
       quick: [
-        { id: 'seat', label: 'Seat warmth', icon: 'thermometer-outline', on: true, x: 44, y: 36 },
-        { id: 'stand', label: 'Sit-to-stand', icon: 'accessibility-outline', on: false, x: 62, y: 70 },
+        { id: 'seat', label: 'Seat warmth', icon: 'fire', on: true, x: 44, y: 36 },
+        { id: 'stand', label: 'Sit-to-stand', icon: 'arrow-up-circle', on: false, x: 62, y: 70 },
       ],
     },
     faucet: {
@@ -123,15 +123,15 @@
       roomId: 'kitchen',
       name: 'Smart Faucet',
       blurb: 'Kitchen · Water',
-      icon: 'restaurant-outline',
+      icon: 'wrench-screwdriver',
       accent: 'room-kitchen',
       unit: '°C',
       min: 20,
       max: 60,
       steps: [20, 30, 40, 50, 60],
       quick: [
-        { id: 'save', label: 'Flow saver', icon: 'water-outline', on: true, x: 63, y: 58 },
-        { id: 'hot', label: 'Instant hot', icon: 'flame-outline', on: false, x: 38, y: 86 },
+        { id: 'save', label: 'Flow saver', icon: 'beaker', on: true, x: 63, y: 58 },
+        { id: 'hot', label: 'Instant hot', icon: 'fire', on: false, x: 38, y: 86 },
       ],
     },
   };
@@ -149,10 +149,10 @@
 
   /* Building blocks offered by the "Create my own" routine card. */
   var routineSteps = [
-    { id: 'warm', label: 'Warm floor', icon: 'thermometer-outline' },
-    { id: 'light', label: 'Mirror glow', icon: 'bulb-outline' },
-    { id: 'shower', label: '40° shower', icon: 'water-outline' },
-    { id: 'seat', label: 'Seat warm', icon: 'flame-outline' },
+    { id: 'warm', label: 'Warm floor', icon: 'fire' },
+    { id: 'light', label: 'Mirror glow', icon: 'light-bulb' },
+    { id: 'shower', label: '40° shower', icon: 'beaker' },
+    { id: 'seat', label: 'Seat warm', icon: 'fire' },
   ];
 
   /*
@@ -171,7 +171,7 @@
       color: 'success',
       delta: 'Up 4 this month',
       source: 'Vanity Sense',
-      icon: 'pulse-outline',
+      icon: 'heart',
       series: [62, 66, 61, 70, 74, 72, 78],
       todayNote: 'Resting heart rate drift is easing — a good sign your body is recovering.',
       trendNote: 'Paired with a calmer evening; your 21:00 Restore soak tracks with this trend.',
@@ -187,7 +187,7 @@
       color: 'health-mobility',
       delta: 'Up 2 this month',
       source: 'Shower wall radar',
-      icon: 'accessibility-outline',
+      icon: 'user',
       series: [82, 84, 80, 86, 85, 87, 88],
       todayNote: 'No near-miss events this month.',
       trendNote: 'Night path lights reduced night bathroom visits.',
@@ -203,7 +203,7 @@
       color: 'health-gut',
       delta: 'Up 5 this month',
       source: 'Dekoda',
-      icon: 'leaf-outline',
+      icon: 'sparkles',
       series: [61, 64, 60, 66, 65, 68, 69],
       todayNote: 'Readings have been regular for nine days in a row.',
       trendNote: 'Your steadiest weeks line up with better hydration.',
@@ -219,7 +219,7 @@
       color: 'primary',
       delta: 'Steady this month',
       source: 'Vanity Sense + Dekoda',
-      icon: 'water-outline',
+      icon: 'beaker',
       series: [70, 66, 68, 61, 65, 60, 64],
       todayNote: 'Skin hydration dipped mid-week and is recovering.',
       trendNote: 'A warmer pre-shower can improve morning readings.',
@@ -236,7 +236,7 @@
       lowerIsBetter: true,
       delta: 'Down 6 this month',
       source: 'Vanity Sense (HRV)',
-      icon: 'flash-outline',
+      icon: 'bolt',
       series: [48, 45, 40, 44, 38, 35, 31],
       todayNote: 'HRV trending up — a strong indicator of lower stress.',
       trendNote: 'Calmest on days the evening restore routine ran.',
@@ -248,7 +248,7 @@
     {
       id: 'privacy',
       title: 'Privacy',
-      icon: 'shield-checkmark-outline',
+      icon: 'shield-check',
       items: [
         { label: 'Sensing', value: 'On', badge: 'Active' },
         { label: 'Cameras', value: 'None — touch sensors only' },
@@ -258,7 +258,7 @@
     {
       id: 'products',
       title: 'Kohler products',
-      icon: 'home-outline',
+      icon: 'home',
       items: [
         { label: 'Anthem+ Shower', value: 'Connected', product: 'shower' },
         { label: 'Shore Bathtub', value: 'Connected', product: 'tub' },
@@ -268,7 +268,7 @@
     {
       id: 'devices',
       title: 'Connected devices',
-      icon: 'phone-portrait-outline',
+      icon: 'device-phone-mobile',
       items: [
         { label: 'Apple Watch', value: 'Paired' },
         { label: 'iPhone 15', value: 'Paired' },
@@ -278,7 +278,7 @@
     {
       id: 'services',
       title: 'Other services from Kohler',
-      icon: 'sparkles-outline',
+      icon: 'sparkles',
       items: [
         { label: 'Kohler bathroom design', value: 'Available' },
         { label: 'Kohler Kare', value: 'Member' },
@@ -289,11 +289,11 @@
 
   /* Devices listed on the onboarding "Connect" step. */
   var onboardingDevices = [
-    { icon: 'water-outline', name: 'Anthem+ Shower', product: 'shower', room: 'Bathroom', state: 'connected' },
-    { icon: 'sparkles-outline', name: 'Shore Bathtub', product: 'tub', room: 'Bathroom', state: 'connected' },
-    { icon: 'home-outline', name: 'Smart Wall · Mirror', product: 'vanity', room: 'Bathroom', state: 'connected' },
-    { icon: 'thermometer-outline', name: 'PureWarmth Toilet', product: 'toilet', room: 'Bathroom', state: 'updating' },
-    { icon: 'restaurant-outline', name: 'Smart Faucet', product: 'faucet', room: 'Kitchen', state: 'connected' },
+    { icon: 'beaker', name: 'Anthem+ Shower', product: 'shower', room: 'Bathroom', state: 'connected' },
+    { icon: 'sparkles', name: 'Shore Bathtub', product: 'tub', room: 'Bathroom', state: 'connected' },
+    { icon: 'home', name: 'Smart Wall · Mirror', product: 'vanity', room: 'Bathroom', state: 'connected' },
+    { icon: 'fire', name: 'PureWarmth Toilet', product: 'toilet', room: 'Bathroom', state: 'updating' },
+    { icon: 'wrench-screwdriver', name: 'Smart Faucet', product: 'faucet', room: 'Kitchen', state: 'connected' },
   ];
 
   KK.data = {

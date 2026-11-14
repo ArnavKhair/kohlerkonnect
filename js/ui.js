@@ -90,7 +90,7 @@
   ui.backButton = function (fallback, color) {
     return (
       '<button type="button" class="icon-btn" data-back="' + KK.esc(fallback) + '" aria-label="Back">' +
-      KK.icon('chevron-back', 22, color || KK.c('text')) + '</button>'
+      KK.icon('chevron-left', 22, color || KK.c('text')) + '</button>'
     );
   };
 
@@ -204,7 +204,7 @@
     var color = opts.color || KK.c('primary');
     return (
       '<div class="photo' + (opts.cls ? ' ' + opts.cls : '') + '" style="--tint:' + color + '">' +
-      '<div class="photo__fallback">' + KK.icon(opts.icon || 'home-outline', opts.iconSize || 44, color) + '</div>' +
+      '<div class="photo__fallback">' + KK.icon(opts.icon || 'home', opts.iconSize || 44, color) + '</div>' +
       (opts.src
         ? '<img class="photo__img" src="' + KK.esc(opts.src) + '" alt="' + KK.esc(opts.alt || '') + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">'
         : '') +

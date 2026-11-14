@@ -56,7 +56,7 @@
 
   function meaning(text, color) {
     return (
-      '<div class="meaning">' + KK.icon('checkmark-circle', 18, color) +
+      '<div class="meaning">' + KK.icon('check-circle', 18, color) +
       '<div><div class="t-13 tone-secondary caps">What this means</div><p class="t-16 meaning__text">' + KK.esc(text) + '</p></div></div>'
     );
   }
@@ -72,7 +72,7 @@
           '<div class="t-13 tone-secondary caps">' + KK.esc(area.name) + '</div>' +
           '<div class="health-hero__value" style="color:' + color + '">' + area.value +
             (area.unit ? '<span class="health-hero__unit"> ' + KK.esc(area.unit) + '</span>' : '') + '</div>' +
-          '<div class="row health-hero__delta">' + KK.icon(moving ? 'trending-up' : 'remove', 14, color) +
+          '<div class="row health-hero__delta">' + KK.icon(moving ? 'arrow-trending-up' : 'minus', 14, color) +
             '<span class="t-16" style="color:' + color + '">' + KK.esc(area.delta) + '</span></div>' +
         '</div>' +
         '<p class="health-hero__caption t-16 tone-secondary">' + KK.esc(area.visualCaption) + '</p>' +
@@ -105,7 +105,7 @@
   function detailHtml(area, state) {
     var sources = area.sources
       .map(function (s) {
-        return '<div class="row source-row">' + KK.icon('layers-outline', 16, KK.c('text-secondary')) + '<span class="t-16 tone-secondary">' + KK.esc(s) + '</span></div>';
+        return '<div class="row source-row">' + KK.icon('square-3-stack-3d', 16, KK.c('text-secondary')) + '<span class="t-16 tone-secondary">' + KK.esc(s) + '</span></div>';
       })
       .join('');
     return (
@@ -135,7 +135,7 @@
       '<section class="screen health">' +
         '<header class="page-header">' +
           '<div><div class="t-13 tone-secondary">YOUR HEALTH</div><h1 class="t-31">Today</h1></div>' +
-          KK.icon('shield-checkmark-outline', 24, KK.c('text-secondary')) +
+          KK.icon('shield-check', 24, KK.c('text-secondary')) +
         '</header>' +
         '<div id="health-hero">' + heroHtml(area) + '</div>' +
         '<div class="health__chips" id="health-chips" role="group" aria-label="Health area">' + chips + '</div>' +
@@ -143,7 +143,7 @@
         ui.sectionLabel('Daily insight') +
         '<div class="card insight">' +
           '<p class="t-16 tone-secondary">Your recovery is trending up. A calm evening — Restore soak and a warm floor — matches your best mornings.</p>' +
-          ui.button({ label: 'Try Restore tonight', icon: 'sparkles-outline', tint: KK.c('success') }) +
+          ui.button({ label: 'Try Restore tonight', icon: 'sparkles', tint: KK.c('success') }) +
         '</div>' +
       '</section>'
     );

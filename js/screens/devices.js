@@ -35,7 +35,7 @@
         '<div class="dial" style="background:' + accent + '"><span class="dial__value">' + room.value + '</span><span class="dial__unit">' + KK.esc(room.unit) + '</span></div>' +
         '<div class="room-summary__text"><div class="t-20">' + KK.esc(room.headline) + '</div>' +
         '<div class="t-16 tone-secondary">' + ids.length + ' device' + (ids.length === 1 ? '' : 's') + '</div></div>' +
-        ringStat(room.energyLabel, 'flash', room.energy, KK.c('energy')) +
+        ringStat(room.energyLabel, 'bolt', room.energy, KK.c('energy')) +
         ringStat(room.status, room.statusIcon, 1, KK.c('text')) +
       '</div>' +
       '<div class="devices__grid">' + tiles + '</div>'
@@ -50,7 +50,7 @@
       '<section class="screen devices">' +
         '<header class="page-header">' +
           '<div><div class="t-13 tone-secondary">YOUR HOME</div><h1 class="t-31">Devices</h1></div>' +
-          '<a class="icon-btn gear" href="#/account" aria-label="Account">' + KK.icon('settings-outline', 22, KK.c('text-secondary')) + '</a>' +
+          '<a class="icon-btn gear" href="#/account" aria-label="Account">' + KK.icon('cog-6-tooth', 22, KK.c('text-secondary')) + '</a>' +
         '</header>' +
         '<div id="room-switch">' +
           ui.segment({
@@ -64,7 +64,7 @@
         '</div>' +
         '<div id="room-body" class="devices__body">' + roomHtml(room) + '</div>' +
         '<p class="devices__hint t-16 tone-muted">Tap a device to open its controls and routines.</p>' +
-        '<button type="button" class="fab" id="device-add" aria-label="Add a device">' + KK.icon('add', 26) + '</button>' +
+        '<button type="button" class="fab" id="device-add" aria-label="Add a device">' + KK.icon('plus', 26) + '</button>' +
       '</section>'
     );
   }

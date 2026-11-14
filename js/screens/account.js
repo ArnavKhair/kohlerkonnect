@@ -43,12 +43,12 @@
           '<div class="enter-up"><div class="card profile">' +
             '<div class="avatar t-20">AK</div>' +
             '<div class="profile__text"><div class="t-20">Arnav</div><div class="t-16 tone-secondary">Personal account · Kohler Konnect</div></div>' +
-            KK.icon('chevron-forward', 20, KK.c('text-muted')) +
+            KK.icon('chevron-right', 20, KK.c('text-muted')) +
           '</div></div>' +
           '<div class="account__list">' + KK.data.accountSections.map(section).join('') + '</div>' +
           '<div class="account__foot">' +
-            '<a class="foot-btn" href="#/onboarding" data-replace>' + KK.icon('refresh', 18) + 'Start over</a>' +
-            '<a class="foot-btn" href="#/gallery">' + KK.icon('apps-outline', 18) + 'Component gallery</a>' +
+            '<a class="foot-btn" href="#/onboarding" data-replace>' + KK.icon('arrow-path', 18) + 'Start over</a>' +
+            '<a class="foot-btn" href="#/gallery">' + KK.icon('squares-2x2', 18) + 'Component gallery</a>' +
           '</div>' +
         '</section>'
       );
@@ -86,7 +86,7 @@
               ui.button({ label: 'Secondary', variant: 'secondary', block: true }) +
               ui.button({ label: 'Ghost', variant: 'ghost', block: true }) +
               '<div class="action-pair">' +
-                ui.button({ label: 'With icon', icon: 'add', tint: KK.c('success') }) +
+                ui.button({ label: 'With icon', icon: 'plus', tint: KK.c('success') }) +
                 ui.button({ label: 'Disabled', variant: 'secondary', disabled: true }) +
               '</div>' +
             '</div>') +
@@ -94,14 +94,14 @@
             '<div class="row gallery__chips">' +
               ui.chip({ label: 'On', on: true, tint: primary }) +
               ui.chip({ label: 'Off' }) +
-              ui.chip({ label: 'Success', icon: 'checkmark', on: true, tint: KK.c('success') }) +
+              ui.chip({ label: 'Success', icon: 'check', on: true, tint: KK.c('success') }) +
             '</div>') +
           block('Rings',
             '<div class="row gallery__rings">' +
-              galleryRing(0.85, 'energy', 'flash', '85%') +
-              galleryRing(0.5, 'primary', 'water', '50%') +
-              galleryRing(1, 'success', 'checkmark', '100%') +
-              galleryRing(0.25, 'danger', 'warning', '25%') +
+              galleryRing(0.85, 'energy', 'bolt', '85%') +
+              galleryRing(0.5, 'primary', 'beaker', '50%') +
+              galleryRing(1, 'success', 'check', '100%') +
+              galleryRing(0.25, 'danger', 'exclamation-triangle', '25%') +
             '</div>') +
           block('Temperature control (drag)',
             '<div class="card">' + KK.tempControl.html({ steps: GALLERY_STEPS, value: 40, accent: primary, label: 'Temperature' }) + '</div>') +
@@ -131,9 +131,9 @@
             '<div class="gallery__pair">' +
               ui.deviceTile(KK.data.products.shower) +
               '<div class="gallery__stage">' +
-                ui.photo({ icon: 'water-outline', color: KK.c('room-bathroom'), cls: 'gallery__photo' }) +
+                ui.photo({ icon: 'beaker', color: KK.c('room-bathroom'), cls: 'gallery__photo' }) +
                 '<div class="product__callouts" id="gallery-callouts">' +
-                  ui.callout({ id: 'on', label: 'On', icon: 'water-outline', on: true, x: 22, y: 30, tint: KK.c('room-bathroom') }) +
+                  ui.callout({ id: 'on', label: 'On', icon: 'beaker', on: true, x: 22, y: 30, tint: KK.c('room-bathroom') }) +
                   ui.callout({ id: 'off', label: 'Off', on: false, x: 78, y: 72, tint: KK.c('room-bathroom') }) +
                 '</div>' +
               '</div>' +

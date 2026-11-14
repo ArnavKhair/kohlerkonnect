@@ -25,7 +25,7 @@
   /** The bottom of the creator card: either the Preview button or the preview itself. */
   function creatorFootHtml(state, accent) {
     if (!state.previewing) {
-      return ui.button({ label: 'Preview routine', icon: 'eye-outline', variant: 'secondary', block: true, attrs: { 'data-action': 'preview' } });
+      return ui.button({ label: 'Preview routine', icon: 'eye', variant: 'secondary', block: true, attrs: { 'data-action': 'preview' } });
     }
     var n = chosenCount(state);
     return (
@@ -64,7 +64,7 @@
           return (
             '<div class="enter-up" style="--d:' + i * 55 + 'ms">' +
               '<button type="button" class="routine-row" data-routine="' + r.id + '" aria-pressed="' + (state.active[r.id] ? 'true' : 'false') + '" style="--tint:' + accent + '">' +
-                '<span class="routine-row__swatch">' + KK.icon('checkmark', 16) + '</span>' +
+                '<span class="routine-row__swatch">' + KK.icon('check', 16) + '</span>' +
                 '<span class="routine-row__body"><span class="t-20" style="display:block">' + KK.esc(r.name) + '</span>' +
                 '<span class="t-16 tone-secondary" style="display:block">' + KK.esc(r.when + ' · ' + r.desc) + '</span></span>' +
               '</button>' +
