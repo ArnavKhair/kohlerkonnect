@@ -157,7 +157,7 @@
     app = document.getElementById('app');
     tabbar = document.getElementById('tabbar');
     Array.prototype.forEach.call(tabbar.querySelectorAll('[data-icon]'), function (slot) {
-      slot.outerHTML = KK.icon(slot.getAttribute('data-icon'), 24);
+      slot.outerHTML = KK.icon(slot.getAttribute('data-icon'), 20);
     });
     index = history.state && typeof history.state.kk === 'number' ? history.state.kk : 0;
     history.replaceState({ kk: index }, '', location.href);

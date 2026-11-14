@@ -503,9 +503,13 @@
 .tabbar {
   flex: none;
   display: flex;
-  background: var(--c-surface);
-  border-top: 1px solid var(--c-surface-stroke);
-  padding-bottom: env(safe-area-inset-bottom);
+  gap: 6px;
+  margin: 6px 14px;
+  margin-bottom: calc(14px + env(safe-area-inset-bottom));
+  padding: 5px;
+  background: var(--c-primary);      /* DS global nav bar = blue-70 (Figma 217:7662) */
+  border-radius: var(--r-full);      /* floating pill */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .tabbar[hidden] {
@@ -518,14 +522,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  height: var(--tabbar-height);
-  color: var(--c-text-secondary);
-  font-size: 11px;
-  line-height: 13px;
-  font-weight: 600;
+  gap: 5px;                          /* DS toggle gap */
+  padding: 5px 8px;
+  border-radius: var(--r-full);
+  color: var(--blue-10);            /* light on the blue bar (DS #f4f8ff) */
+  font-size: 13px;                   /* kept at the app's label step for a compact bar */
+  line-height: 16px;
+  font-weight: 500;
 }
 
 .tabbar__item[aria-current='page'] {
-  color: var(--c-primary);
+  background: var(--blue-10);        /* DS active pill = #f4f8ff */
+  color: var(--c-primary);           /* DS active text/icon = blue-70 */
 }
