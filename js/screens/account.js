@@ -5,7 +5,7 @@
   var ui = KK.ui;
 
   function badge(label, color) {
-    return '<span class="badge t-label" style="color:' + color + ';background:' + KK.alpha(color, '1F') + ';border-color:' + KK.alpha(color, '44') + '">' + KK.esc(label) + '</span>';
+    return '<span class="badge t-13" style="color:' + color + ';background:' + KK.alpha(color, '1F') + ';border-color:' + KK.alpha(color, '44') + '">' + KK.esc(label) + '</span>';
   }
 
   function section(s, i) {
@@ -19,9 +19,9 @@
           : '';
         return (
           '<div class="row account-item"' + (product ? ' style="--size:36px;--radius:10px"' : '') + '>' + thumb +
-            '<span class="t-body tone-secondary account-item__label">' + KK.esc(item.label) + '</span>' +
+            '<span class="t-16 tone-secondary account-item__label">' + KK.esc(item.label) + '</span>' +
             '<span class="account-item__right">' + (item.badge ? badge(item.badge, KK.c(tone)) : '') +
-            '<span class="t-body' + (item.badge ? ' tone-secondary' : '') + '">' + KK.esc(item.value) + '</span></span>' +
+            '<span class="t-16' + (item.badge ? ' tone-secondary' : '') + '">' + KK.esc(item.value) + '</span></span>' +
           '</div>'
         );
       })
@@ -29,7 +29,7 @@
     return (
       '<div class="enter-up" style="--d:' + (40 + i * 60) + 'ms"><div class="card account-section">' +
         '<div class="row account-section__header">' + ui.tile({ icon: s.icon, color: KK.c('primary'), size: 38, iconSize: 20, alpha: '1A' }) +
-        '<h2 class="t-subheading" style="margin:0">' + KK.esc(s.title) + '</h2></div>' + items +
+        '<h2 class="t-20" style="margin:0">' + KK.esc(s.title) + '</h2></div>' + items +
       '</div></div>'
     );
   }
@@ -41,8 +41,8 @@
         '<section class="screen account">' +
           ui.topBar({ title: 'Account' }) +
           '<div class="enter-up"><div class="card profile">' +
-            '<div class="avatar t-subheading">AK</div>' +
-            '<div class="profile__text"><div class="t-subheading">Arnav</div><div class="t-caption tone-secondary">Personal account · Kohler Konnect</div></div>' +
+            '<div class="avatar t-20">AK</div>' +
+            '<div class="profile__text"><div class="t-20">Arnav</div><div class="t-16 tone-secondary">Personal account · Kohler Konnect</div></div>' +
             KK.icon('chevron-forward', 20, KK.c('text-muted')) +
           '</div></div>' +
           '<div class="account__list">' + KK.data.accountSections.map(section).join('') + '</div>' +
@@ -63,7 +63,7 @@
   function galleryRing(progress, token, icon, label) {
     var color = KK.c(token);
     return '<div class="gallery__ring">' + ui.ring({ size: 64, stroke: 6, progress: progress, color: color, innerHtml: KK.icon(icon, 22, color) }) +
-      '<span class="t-caption tone-secondary">' + label + '</span></div>';
+      '<span class="t-16 tone-secondary">' + label + '</span></div>';
   }
 
   var GALLERY_STEPS = [34, 36, 38, 40, 42, 44];
@@ -75,11 +75,11 @@
         '<section class="screen screen--inset-bottom gallery">' +
           ui.topBar({ back: '/account', title: 'Component gallery' }) +
           block('Type',
-            '<div class="t-display" style="margin-bottom:4px">Display</div>' +
-            '<div class="t-title">Title — a heading</div>' +
-            '<div class="t-subheading">Subheading</div>' +
-            '<div class="t-body tone-secondary">Body text in the secondary tone.</div>' +
-            '<div class="t-caption tone-muted">Caption / muted text.</div>') +
+            '<div class="t-61" style="margin-bottom:4px">Display</div>' +
+            '<div class="t-31">Title — a heading</div>' +
+            '<div class="t-20">Subheading</div>' +
+            '<div class="t-16 tone-secondary">Body text in the secondary tone.</div>' +
+            '<div class="t-16 tone-muted">Caption / muted text.</div>') +
           block('Buttons',
             '<div class="gallery__stack">' +
               ui.button({ label: 'Primary', block: true, attrs: { 'data-back': '/account' } }) +
@@ -143,15 +143,15 @@
               KK.data.health.map(function (a) {
                 return [0.15, 0.5, 0.9].map(function (level) {
                   return '<div class="gallery__visual" style="--tint:' + KK.c(a.color) + '">' + KK.visual(a.visual, level) +
-                    '<span class="t-label tone-muted">' + a.visual + ' ' + level + '</span></div>';
+                    '<span class="t-13 tone-muted">' + a.visual + ' ' + level + '</span></div>';
                 }).join('');
               }).join('') +
             '</div>') +
           block('Card + badge',
             '<div class="card gallery__pad"><div class="row gallery__demo-row">' +
               ui.tile({ icon: 'home', color: primary, size: 40, iconSize: 20 }) +
-              '<span class="t-subheading">Sample card</span>' +
-              '<span class="t-label" style="color:' + KK.c('success') + '">Active</span>' +
+              '<span class="t-20">Sample card</span>' +
+              '<span class="t-13" style="color:' + KK.c('success') + '">Active</span>' +
             '</div></div>') +
         '</section>'
       );

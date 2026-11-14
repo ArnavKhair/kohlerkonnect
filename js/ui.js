@@ -111,7 +111,7 @@
     return (
       '<div class="stepbar"><div class="stepbar__row">' +
       (opts.back ? ui.backButton(opts.back) : '<div class="topbar__spacer"></div>') +
-      '<span class="t-label tone-secondary">' + opts.step + ' of ' + opts.total + '</span></div>' +
+      '<span class="t-13 tone-secondary">' + opts.step + ' of ' + opts.total + '</span></div>' +
       '<div class="stepbar__track" role="progressbar" aria-valuemin="0" aria-valuemax="' + opts.total + '" aria-valuenow="' + opts.step + '">' +
       '<div class="stepbar__fill" style="width:' + (opts.step / opts.total) * 100 + '%"></div></div></div>'
     );
@@ -176,7 +176,7 @@
     var buttons = opts.items
       .map(function (item) {
         return (
-          '<button type="button" class="segment__btn t-caption" data-seg="' + KK.esc(opts.name) + '" data-value="' + KK.esc(item.id) + '"' +
+          '<button type="button" class="segment__btn t-16" data-seg="' + KK.esc(opts.name) + '" data-value="' + KK.esc(item.id) + '"' +
           ' aria-pressed="' + (item.id === opts.active ? 'true' : 'false') + '">' + KK.esc(item.label) + '</button>'
         );
       })
@@ -219,7 +219,7 @@
       '<a class="pressable device-tile card" href="#/devices/product/' + KK.esc(product.id) + '">' +
       ui.photo({ src: product.image, alt: product.name, icon: product.icon, color: accent, cls: 'device-tile__photo' }) +
       '<div class="device-tile__text"><div class="device-tile__name">' + KK.esc(product.name) + '</div>' +
-      '<div class="t-caption tone-secondary">' + KK.esc(product.status || '') + '</div></div>' +
+      '<div class="t-16 tone-secondary">' + KK.esc(product.status || '') + '</div></div>' +
       '</a>'
     );
   };
@@ -241,6 +241,6 @@
 
   /** Uppercase section label. */
   ui.sectionLabel = function (text) {
-    return '<h2 class="section-label t-label tone-secondary">' + KK.esc(text) + '</h2>';
+    return '<h2 class="section-label t-13 tone-secondary">' + KK.esc(text) + '</h2>';
   };
 })();

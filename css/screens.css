@@ -7,7 +7,7 @@
   justify-content: space-between;
 }
 
-.page-header .t-title {
+.page-header .t-31 {
   margin: 2px 0 0;
 }
 
@@ -32,8 +32,8 @@
   align-items: center;
 }
 
-.onb__hero .t-title,
-.onb__hero .t-body {
+.onb__hero .t-31,
+.onb__hero .t-16 {
   margin: 0;
 }
 
@@ -261,7 +261,7 @@
   min-width: 0;
 }
 
-.routine-row[aria-pressed='false'] .t-subheading {
+.routine-row[aria-pressed='false'] .t-20 {
   opacity: 0.6;
 }
 
@@ -665,6 +665,6 @@
   gap: 12px;
 }
 
-.gallery__demo-row .t-subheading {
+.gallery__demo-row .t-20 {
   flex: 1;
 }

@@ -1,10 +1,10 @@
 /*
- * Kohler Konnect design tokens. Dark only.
- * Derived from the Figma references (see CLAUDE.md). Change values here,
- * never hard-code a colour, radius or spacing in a component or screen.
+ * Kohler Konnect design tokens. Mirrors the Design System page in Figma (see CLAUDE.md).
+ * The two ramps are the only place a UI colour is written as a hex. Everything else points
+ * at a ramp step. Change values here, never hard-code a colour, radius or spacing elsewhere.
  */
 :root {
-  /* ── Kohler Blue scale (Figma "App style") ── */
+  /* ── Kohler Blue (Figma "App style", 217:7532) ── */
   --blue-100: #102243;
   --blue-90:  #1f3765;
   --blue-80:  #324f87;
@@ -16,7 +16,7 @@
   --blue-20:  #dbe7ff;
   --blue-10:  #f4f8ff;
 
-  /* ── Greyscale (Figma "App style") ── */
+  /* ── Greyscale (Figma "App style", 217:7546) ── */
   --grey-100: #41464e;
   --grey-90:  #565b65;
   --grey-80:  #6b717c;
@@ -28,79 +28,117 @@
   --grey-20:  #f8faff;
   --grey-10:  #fefeff;
 
-  /* Surfaces — kept near-black (reference frames render near-black) */
-  --c-background: #050507;
-  --c-surface: #141417;
-  --c-surface-raised: #1c1c21;
-  --c-surface-stroke: #2a2a30;
+  /* ── Surfaces ── */
+  --c-background: var(--grey-100); /* the page (Figma frame reference) */
+  --c-backdrop: var(--blue-100);   /* behind the phone frame on a desktop */
+  --c-surface: var(--blue-10);     /* cards */
+  --c-photo: var(--grey-10);       /* panel behind a product photo (studio white) */
+  --c-stage: var(--blue-100);      /* navy feature panel (health visual) */
 
-  /* Ink — the Greyscale ramp, brightest→dimmest on dark */
-  --c-text: #fefeff;          /* grey-10  (was #ffffff)   */
-  --c-text-secondary: #c9ced6;/* grey-40  (was #9a9aa3)   */
-  --c-text-muted: #999ea9;    /* grey-60  (was #5e5e66)   */
-  --c-text-faint: #828792;    /* grey-70  (was #3a3a40)   */
+  /* ── Brand fill: always Blue 70 with light ink on it ── */
+  --c-primary: var(--blue-70);
+  --c-primary-strong: var(--blue-80);
+  --c-on-primary: var(--grey-10);
 
-  /* Brand / accent — Kohler Blue (primary = Blue/70) */
-  --c-primary: #4a6ba9;        /* blue-70  (was a saturated indigo) */
-  --c-primary-strong: #324f87; /* blue-80  (hover/pressed) NEW */
-  --c-primary-soft: #4a6ba922; /* 13% alpha on blue-70 */
-
-  /* Functional status colours — not in the DS; kept */
-  --c-energy: #f2a63c;
-  --c-energy-soft: #f2a63c22;
+  /* ── State marks: dots, rings and icons only, never text ── */
   --c-success: #36c279;
   --c-warning: #f2a63c;
   --c-danger: #e5564f;
 
-  /* Room accents — re-themed to the Kohler Blue scale (distinct steps so rooms stay distinguishable) */
-  --c-room-bathroom: #4a6ba9;       /* blue-70 */
-  --c-room-kitchen: #6789cb;        /* blue-60 */
-  --c-room-energy: #87aaed;         /* blue-50 */
-  --c-room-maintenance: #324f87;    /* blue-80 */
+  /* ── Health illustrations keep their natural colours ── */
+  --c-visual-petal: #e58fa5;
+  --c-visual-petal-light: #f6c6d2;
+  --c-visual-leaf: #36c279;
+  --c-visual-eye: #f2a63c;
+  --c-visual-horse: #d9925f;
+  --c-visual-ripples: #2fb8a6;
+  --c-visual-vessel: var(--blue-50);
+  --c-visual-flame: #f2a63c;
+  --c-visual-flame-core: #ffe6a3;
+  --c-visual-wax: #e9e2d0;
 
-  /* Health areas and their visuals */
-  --c-health-mobility: #d9925f;
-  --c-health-gut: #2fb8a6;
-  --c-petal: #e58fa5;
-  --c-petal-light: #f6c6d2;
-  --c-flame-core: #ffe6a3;
-  --c-wax: #e9e2d0;
+  /* ── Spacing: 5px base (Figma components use 5 / 15 / 20) ── */
+  --sp-1: 5px;
+  --sp-2: 10px;
+  --sp-3: 15px;
+  --sp-4: 20px;
+  --sp-5: 30px;
+  --sp-6: 40px;
+  --sp-7: 60px;
 
-  /* Overlays / controls */
-  --c-scrim: #000000aa;
-  --c-control-fill: #2a2a30;
-  --c-control-inactive: #232328;
-  --c-ring-track: #26262b;
+  /* ── Radius: 10 or a full pill; 5 for small marks ── */
+  --r-sm: 5px;
+  --r-md: 10px;
+  --r-full: 9999px;
+  --r-frame: 30px; /* desktop phone outline only */
 
-  /* Spacing */
-  --sp-half: 2px;
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 16px;
-  --sp-4: 24px;
-  --sp-5: 32px;
-  --sp-6: 48px;
-  --sp-7: 64px;
-
-  /* Radius */
-  --r-sm: 12px;
-  --r-card: 10px;   /* DS Card radius (Figma 217:7603) */
-  --r-md: 18px;
-  --r-lg: 24px;
-  --r-xl: 32px;
-  --r-full: 999px;
-
-  /* Motion: CSS stand-ins for the three spring presets of the native build */
+  /* ── Motion ── */
   --ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-standard: cubic-bezier(0.2, 0.9, 0.3, 1.12);
   --ease-snappy: cubic-bezier(0.2, 1.2, 0.35, 1);
-  --dur-gentle: 520ms;
-  --dur-standard: 460ms;
+  --dur-press: 120ms;    /* pressed feedback */
+  --dur-state: 160ms;    /* on / off colour changes */
+  --dur-fade: 200ms;     /* a screen or panel appearing */
   --dur-snappy: 320ms;
+  --dur-standard: 460ms;
+  --dur-gentle: 520ms;
+  --stagger: 60ms;       /* delay between items entering one after another */
 
-  /* Layout */
+  /* ── Layout ── */
   --app-width: 393px;
-  --tabbar-height: 56px;
 
   --font: 'Albert Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/*
+ * Ink. Two contexts: on the dark page / stage, and on a light card. A surface class sets the
+ * context, so text tones, icons (currentColor), dividers and quiet fills follow without JS.
+ */
+:root,
+.on-dark,
+.stage {
+  --c-text: var(--grey-10);
+  --c-text-secondary: var(--grey-40);
+  --c-text-muted: var(--grey-50);
+  --c-accent-ink: var(--blue-30); /* accent-coloured text and icons */
+  --c-stroke: var(--grey-80);     /* dividers, outlines */
+  --c-control: var(--grey-90);    /* tracks, idle bars, quiet fills */
+  --c-quiet: var(--blue-10);      /* secondary button / chip fill */
+  --c-on-quiet: var(--blue-70);
+}
+
+.card,
+.on-light {
+  --c-text: var(--blue-100);
+  --c-text-secondary: var(--blue-80);
+  --c-text-muted: var(--grey-80);
+  --c-accent-ink: var(--blue-70);
+  --c-stroke: var(--blue-20);
+  --c-control: var(--blue-20);
+  --c-quiet: var(--blue-20);
+  --c-on-quiet: var(--blue-80);
+}
+
+/*
+ * TRANSITIONAL: names the not-yet-converted screens still use. Removed at the end of the
+ * design-system pass.
+ */
+:root {
+  --c-surface-raised: var(--c-quiet);
+  --c-surface-stroke: var(--c-stroke);
+  --c-control-inactive: var(--c-control);
+  --c-ring-track: var(--c-control);
+  --c-energy: var(--c-warning);
+  --c-room-bathroom: var(--c-primary);
+  --c-room-kitchen: var(--c-primary);
+  --c-room-maintenance: var(--c-primary);
+  --c-health-mobility: var(--c-visual-horse);
+  --c-health-gut: var(--c-visual-ripples);
+  --c-petal: var(--c-visual-petal);
+  --c-petal-light: var(--c-visual-petal-light);
+  --c-flame-core: var(--c-visual-flame-core);
+  --c-wax: var(--c-visual-wax);
+  --r-card: var(--r-md);
+  --r-lg: var(--r-md);
+  --r-xl: var(--r-frame);
 }

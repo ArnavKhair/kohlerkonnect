@@ -55,15 +55,15 @@
             '<div class="product__callouts" id="product-callouts">' + callouts + '</div>' +
           '</div>' +
           '<div class="product__meta">' +
-            '<span class="t-caption tone-secondary">' + KK.esc((room ? room.name + ' · ' : '') + (product.status || '')) + '</span>' +
-            '<span class="t-caption tone-muted" id="product-features">' + featureSummary(product, state) + '</span>' +
+            '<span class="t-16 tone-secondary">' + KK.esc((room ? room.name + ' · ' : '') + (product.status || '')) + '</span>' +
+            '<span class="t-16 tone-muted" id="product-features">' + featureSummary(product, state) + '</span>' +
           '</div>' +
           '<div class="card product__control enter-up" style="--d:80ms">' +
-            '<p class="product__control-label t-label tone-secondary">' + label.toUpperCase() + ' · ' + KK.esc(product.unit) + '</p>' +
+            '<p class="product__control-label t-13 tone-secondary">' + label.toUpperCase() + ' · ' + KK.esc(product.unit) + '</p>' +
             KK.tempControl.html({ steps: product.steps, value: state.value, accent: accent, label: label + ' (' + product.unit + ')', compact: true }) +
             '<button type="button" class="btn btn--block product__set" id="product-set" style="--tint:' + accent + '">' + setButtonInner(false) + '</button>' +
           '</div>' +
-          '<p class="product__hint t-caption tone-muted">Tap a feature on the photo to switch it on or off.</p>' +
+          '<p class="product__hint t-16 tone-muted">Tap a feature on the photo to switch it on or off.</p>' +
         '</section>'
       );
     },

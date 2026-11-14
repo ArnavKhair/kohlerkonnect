@@ -51,13 +51,13 @@
   }
 
   function mini(label, value) {
-    return '<div class="mini"><span class="mini__value">' + value + '</span><span class="mini__label t-label tone-secondary">' + label + '</span></div>';
+    return '<div class="mini"><span class="mini__value">' + value + '</span><span class="mini__label t-13 tone-secondary">' + label + '</span></div>';
   }
 
   function meaning(text, color) {
     return (
       '<div class="meaning">' + KK.icon('checkmark-circle', 18, color) +
-      '<div><div class="t-label tone-secondary caps">What this means</div><p class="t-body meaning__text">' + KK.esc(text) + '</p></div></div>'
+      '<div><div class="t-13 tone-secondary caps">What this means</div><p class="t-16 meaning__text">' + KK.esc(text) + '</p></div></div>'
     );
   }
 
@@ -69,13 +69,13 @@
       '<div class="health-hero card" style="--tint:' + color + '">' +
         '<div class="health-hero__visual" role="img" aria-label="' + KK.esc(area.visualCaption) + '">' + KK.visual(area.visual, levelOf(area)) + '</div>' +
         '<div class="health-hero__read">' +
-          '<div class="t-label tone-secondary caps">' + KK.esc(area.name) + '</div>' +
+          '<div class="t-13 tone-secondary caps">' + KK.esc(area.name) + '</div>' +
           '<div class="health-hero__value" style="color:' + color + '">' + area.value +
             (area.unit ? '<span class="health-hero__unit"> ' + KK.esc(area.unit) + '</span>' : '') + '</div>' +
           '<div class="row health-hero__delta">' + KK.icon(moving ? 'trending-up' : 'remove', 14, color) +
-            '<span class="t-caption" style="color:' + color + '">' + KK.esc(area.delta) + '</span></div>' +
+            '<span class="t-16" style="color:' + color + '">' + KK.esc(area.delta) + '</span></div>' +
         '</div>' +
-        '<p class="health-hero__caption t-caption tone-secondary">' + KK.esc(area.visualCaption) + '</p>' +
+        '<p class="health-hero__caption t-16 tone-secondary">' + KK.esc(area.visualCaption) + '</p>' +
       '</div>'
     );
   }
@@ -84,7 +84,7 @@
     var color = KK.c(area.color);
     if (state.tab === 'today') {
       return (
-        '<div class="card health-chart"><div class="t-label tone-secondary health-chart__title">This week</div>' + chart(area.series, WEEK, color) + '</div>' +
+        '<div class="card health-chart"><div class="t-13 tone-secondary health-chart__title">This week</div>' + chart(area.series, WEEK, color) + '</div>' +
         '<div class="row stat__minis">' +
           mini('Today', area.series[area.series.length - 1]) + '<div class="mini-divider"></div>' +
           mini('7-day avg', average(area.series)) + '<div class="mini-divider"></div>' +
@@ -96,7 +96,7 @@
     var range = LONG[state.range];
     return (
       ui.segment({ name: 'range', label: 'Range', active: state.range, items: [{ id: '30D', label: '30 days' }, { id: '90D', label: '90 days' }] }) +
-      '<div class="card health-chart"><div class="t-label tone-secondary health-chart__title">' + range.title + '</div>' +
+      '<div class="card health-chart"><div class="t-13 tone-secondary health-chart__title">' + range.title + '</div>' +
         chart(expandSeries(area.series, range.count), range.labels, color) + '</div>' +
       meaning(area.trendNote, color)
     );
@@ -105,7 +105,7 @@
   function detailHtml(area, state) {
     var sources = area.sources
       .map(function (s) {
-        return '<div class="row source-row">' + KK.icon('layers-outline', 16, KK.c('text-secondary')) + '<span class="t-caption tone-secondary">' + KK.esc(s) + '</span></div>';
+        return '<div class="row source-row">' + KK.icon('layers-outline', 16, KK.c('text-secondary')) + '<span class="t-16 tone-secondary">' + KK.esc(s) + '</span></div>';
       })
       .join('');
     return (
@@ -134,7 +134,7 @@
     return (
       '<section class="screen health">' +
         '<header class="page-header">' +
-          '<div><div class="t-label tone-secondary">YOUR HEALTH</div><h1 class="t-title">Today</h1></div>' +
+          '<div><div class="t-13 tone-secondary">YOUR HEALTH</div><h1 class="t-31">Today</h1></div>' +
           KK.icon('shield-checkmark-outline', 24, KK.c('text-secondary')) +
         '</header>' +
         '<div id="health-hero">' + heroHtml(area) + '</div>' +
@@ -142,7 +142,7 @@
         '<div id="health-detail" class="health__detail">' + detailHtml(area, state) + '</div>' +
         ui.sectionLabel('Daily insight') +
         '<div class="card insight">' +
-          '<p class="t-body tone-secondary">Your recovery is trending up. A calm evening — Restore soak and a warm floor — matches your best mornings.</p>' +
+          '<p class="t-16 tone-secondary">Your recovery is trending up. A calm evening — Restore soak and a warm floor — matches your best mornings.</p>' +
           ui.button({ label: 'Try Restore tonight', icon: 'sparkles-outline', tint: KK.c('success') }) +
         '</div>' +
       '</section>'

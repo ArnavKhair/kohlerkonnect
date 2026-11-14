@@ -15,7 +15,7 @@
     return (
       '<div class="ring-stat">' +
         ui.ring({ size: 44, stroke: 4, progress: progress, color: color, innerHtml: KK.icon(icon, 18, color) }) +
-        '<span class="t-label tone-secondary">' + KK.esc(label) + '</span>' +
+        '<span class="t-13 tone-secondary">' + KK.esc(label) + '</span>' +
       '</div>'
     );
   }
@@ -33,8 +33,8 @@
     return (
       '<div class="card room-summary enter-up">' +
         '<div class="dial" style="background:' + accent + '"><span class="dial__value">' + room.value + '</span><span class="dial__unit">' + KK.esc(room.unit) + '</span></div>' +
-        '<div class="room-summary__text"><div class="t-subheading">' + KK.esc(room.headline) + '</div>' +
-        '<div class="t-caption tone-secondary">' + ids.length + ' device' + (ids.length === 1 ? '' : 's') + '</div></div>' +
+        '<div class="room-summary__text"><div class="t-20">' + KK.esc(room.headline) + '</div>' +
+        '<div class="t-16 tone-secondary">' + ids.length + ' device' + (ids.length === 1 ? '' : 's') + '</div></div>' +
         ringStat(room.energyLabel, 'flash', room.energy, KK.c('energy')) +
         ringStat(room.status, room.statusIcon, 1, KK.c('text')) +
       '</div>' +
@@ -49,7 +49,7 @@
     return (
       '<section class="screen devices">' +
         '<header class="page-header">' +
-          '<div><div class="t-label tone-secondary">YOUR HOME</div><h1 class="t-title">Devices</h1></div>' +
+          '<div><div class="t-13 tone-secondary">YOUR HOME</div><h1 class="t-31">Devices</h1></div>' +
           '<a class="icon-btn gear" href="#/account" aria-label="Account">' + KK.icon('settings-outline', 22, KK.c('text-secondary')) + '</a>' +
         '</header>' +
         '<div id="room-switch">' +
@@ -63,7 +63,7 @@
           }) +
         '</div>' +
         '<div id="room-body" class="devices__body">' + roomHtml(room) + '</div>' +
-        '<p class="devices__hint t-caption tone-muted">Tap a device to open its controls and routines.</p>' +
+        '<p class="devices__hint t-16 tone-muted">Tap a device to open its controls and routines.</p>' +
         '<button type="button" class="fab" id="device-add" aria-label="Add a device">' + KK.icon('add', 26) + '</button>' +
       '</section>'
     );
