@@ -28,7 +28,7 @@
     return colorCache[token];
   };
 
-  /** Append a two-digit hex alpha to a 6-digit hex colour: KK.alpha('#2e7be8', '1F'). */
+  /** Append a two-digit hex alpha to a 6-digit hex colour: KK.alpha('#4a6ba9', '1F'). */
   KK.alpha = function (hex, aa) {
     return hex + aa;
   };

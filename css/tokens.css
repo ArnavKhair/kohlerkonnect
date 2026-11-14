@@ -4,32 +4,59 @@
  * never hard-code a colour, radius or spacing in a component or screen.
  */
 :root {
-  /* Surfaces */
+  /* ── Kohler Blue scale (Figma "App style") ── */
+  --blue-100: #102243;
+  --blue-90:  #1f3765;
+  --blue-80:  #324f87;
+  --blue-70:  #4a6ba9;
+  --blue-60:  #6789cb;
+  --blue-50:  #87aaed;
+  --blue-40:  #a6c3f9;
+  --blue-30:  #c3d7ff;
+  --blue-20:  #dbe7ff;
+  --blue-10:  #f4f8ff;
+
+  /* ── Greyscale (Figma "App style") ── */
+  --grey-100: #41464e;
+  --grey-90:  #565b65;
+  --grey-80:  #6b717c;
+  --grey-70:  #828792;
+  --grey-60:  #999ea9;
+  --grey-50:  #b1b6c0;
+  --grey-40:  #c9ced6;
+  --grey-30:  #e3e6ed;
+  --grey-20:  #f8faff;
+  --grey-10:  #fefeff;
+
+  /* Surfaces — kept near-black (reference frames render near-black) */
   --c-background: #050507;
   --c-surface: #141417;
   --c-surface-raised: #1c1c21;
   --c-surface-stroke: #2a2a30;
 
-  /* Ink */
-  --c-text: #ffffff;
-  --c-text-secondary: #9a9aa3;
-  --c-text-muted: #5e5e66;
-  --c-text-faint: #3a3a40;
+  /* Ink — the Greyscale ramp, brightest→dimmest on dark */
+  --c-text: #fefeff;          /* grey-10  (was #ffffff)   */
+  --c-text-secondary: #c9ced6;/* grey-40  (was #9a9aa3)   */
+  --c-text-muted: #999ea9;    /* grey-60  (was #5e5e66)   */
+  --c-text-faint: #828792;    /* grey-70  (was #3a3a40)   */
 
-  /* Brand / accents */
-  --c-primary: #2e7be8;
-  --c-primary-soft: #2e7be822;
+  /* Brand / accent — Kohler Blue (primary = Blue/70) */
+  --c-primary: #4a6ba9;        /* blue-70  (was a saturated indigo) */
+  --c-primary-strong: #324f87; /* blue-80  (hover/pressed) NEW */
+  --c-primary-soft: #4a6ba922; /* 13% alpha on blue-70 */
+
+  /* Functional status colours — not in the DS; kept */
   --c-energy: #f2a63c;
   --c-energy-soft: #f2a63c22;
   --c-success: #36c279;
   --c-warning: #f2a63c;
   --c-danger: #e5564f;
 
-  /* Room accents */
-  --c-room-bathroom: #3b82f6;
-  --c-room-kitchen: #22a06b;
-  --c-room-energy: #f2a63c;
-  --c-room-maintenance: #8b8b93;
+  /* Room accents — re-themed to the Kohler Blue scale (distinct steps so rooms stay distinguishable) */
+  --c-room-bathroom: #4a6ba9;       /* blue-70 */
+  --c-room-kitchen: #6789cb;        /* blue-60 */
+  --c-room-energy: #87aaed;         /* blue-50 */
+  --c-room-maintenance: #324f87;    /* blue-80 */
 
   /* Health areas and their visuals */
   --c-health-mobility: #d9925f;
