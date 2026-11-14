@@ -7,15 +7,19 @@ or token.
 The app is **plain HTML + CSS + vanilla JavaScript**. No framework, no npm, no bundler, no
 build step: `index.html` must keep working when opened directly from disk (`file://`).
 
-> **Source of truth for design is Figma, not this repo.** The palette below was *derived*
-> from the Figma references — it is not a formal token export. When the design changes in
-> Figma, re-derive the tokens here; don't trust stale values.
+> **Source of truth for design is Figma, not this repo.** The tokens below mirror the
+> **Design System** page in Figma (Kohler Blue + Greyscale scales, a 1.25 type scale, brand
+> components, and the icon set). When the design changes in Figma, re-derive the tokens here;
+> don't trust stale values.
 
 - Figma file: `https://www.figma.com/design/Bt9qI3UQGIfY2YCmC43VTr/UX-Design-App-and-Web-App`
 - `fileKey` = `Bt9qI3UQGIfY2YCmC43VTr`
 - Sitemap (structure): page `App Sitemap and inspo` → section **`Sitemap like fr fr`** (node `139:341`)
 - Reference frames (visuals): `1:92` Quick Adjust, `1:323` Thermostat, `1:1215` Home list
-- Design System page (`51:294`) holds **reference screenshots only** — not a formal token library.
+- **Design System** page (`51:294`) — the formal source, with two sections:
+  - **Styles** (`217:7512`): Kohler Blue scale (`217:7532`), Greyscale scale (`217:7546`)
+  - **Components** (`217:7556`): Button (`217:7563`), Card (`217:7603`), Global nav / tab bar (`217:7662`; toggle default/active `217:7611`/`217:7613`)
+- **Icons** page (`217:2`) — the icon set used throughout the app.
 
 ---
 
@@ -42,19 +46,25 @@ CSS custom properties on `:root`. The one place colours, spacing, radius and mot
 
 | Group | Names |
 |---|---|
-| Surfaces | `--c-background` `#050507`, `--c-surface` `#141417`, `--c-surface-raised` `#1c1c21`, `--c-surface-stroke` `#2a2a30` |
-| Ink | `--c-text` `#ffffff`, `--c-text-secondary` `#9a9aa3`, `--c-text-muted` `#5e5e66`, `--c-text-faint` `#3a3a40` |
-| Accents | `--c-primary` `#2e7be8`, `--c-energy` `#f2a63c`, `--c-success` `#36c279`, `--c-warning` `#f2a63c`, `--c-danger` `#e5564f` |
-| Rooms | `--c-room-bathroom` `#3b82f6`, `--c-room-kitchen` `#22a06b`, `--c-room-energy` `#f2a63c`, `--c-room-maintenance` `#8b8b93` |
+| Kohler Blue scale | `--blue-100` `#102243` … `--blue-70` `#4a6ba9` … `--blue-10` `#f4f8ff` (10 steps, 100→10) |
+| Greyscale | `--grey-100` `#41464e` … `--grey-70` `#828792` … `--grey-10` `#fefeff` (10 steps, 100→10) |
+| Surfaces (near-black) | `--c-background` `#050507`, `--c-surface` `#141417`, `--c-surface-raised` `#1c1c21`, `--c-surface-stroke` `#2a2a30` |
+| Ink (Greyscale ramp) | `--c-text` `#fefeff`, `--c-text-secondary` `#c9ced6`, `--c-text-muted` `#999ea9`, `--c-text-faint` `#828792` |
+| Brand accent (Kohler Blue) | `--c-primary` `#4a6ba9` (blue-70), `--c-primary-strong` `#324f87` (blue-80), `--c-primary-soft` |
+| Functional (not in DS; kept) | `--c-energy` `#f2a63c`, `--c-success` `#36c279`, `--c-warning` `#f2a63c`, `--c-danger` `#e5564f` |
+| Rooms (Kohler Blue steps) | `--c-room-bathroom` `#4a6ba9` (70), `--c-room-kitchen` `#6789cb` (60), `--c-room-energy` `#87aaed` (50), `--c-room-maintenance` `#324f87` (80) |
 | Health | `--c-health-mobility` `#d9925f`, `--c-health-gut` `#2fb8a6`, `--c-petal`, `--c-petal-light`, `--c-flame-core`, `--c-wax` |
 | Controls | `--c-control-fill`, `--c-control-inactive` `#232328`, `--c-ring-track` `#26262b`, `--c-scrim` |
 | Spacing | `--sp-half` 2, `--sp-1` 4, `--sp-2` 8, `--sp-3` 16, `--sp-4` 24, `--sp-5` 32, `--sp-6` 48, `--sp-7` 64 |
-| Radius | `--r-sm` 12, `--r-md` 18, `--r-lg` 24, `--r-xl` 32, `--r-full` 999 |
+| Radius | `--r-sm` 12, `--r-card` 10 (DS Card), `--r-md` 18, `--r-lg` 24, `--r-xl` 32, `--r-full` 999 |
 | Motion | `--ease-gentle` / `--ease-standard` / `--ease-snappy` with `--dur-*` |
 
-Type scale = classes in `css/base.css` (system font; size / line-height / weight):
-`.t-display` 56/62/300, `.t-hero` 40/46/600, `.t-title` 28/34/700, `.t-heading` 20/27/600,
-`.t-subheading` 17/24/600, `.t-body` 17/24/400, `.t-caption` 14/19/500, `.t-label` 12/16/600.
+**Font** (self-hosted, offline): `--font` = `'Albert Sans', 'Inter', system fallbacks`.
+Variable woff2 in `fonts/`, declared in `css/fonts.css` (linked first in `index.html`).
+
+**Type scale** = classes in `css/base.css` (1.25 ratio; size / line-height / weight), body base 16px:
+`.t-display` 61/71/300, `.t-hero` 49/57/600, `.t-title` 39/46/700, `.t-heading` 31/38/600,
+`.t-subheading` 25/32/600, `.t-body` 20/28/400, `.t-caption` 16/22/500, `.t-label` 13/17/600.
 Tones: `.tone-secondary`, `.tone-muted`.
 
 **Rules**
@@ -63,7 +73,8 @@ Tones: `.tone-secondary`, `.tone-muted`.
 - In JavaScript, get a colour with `KK.c('primary')` / `KK.c('room-bathroom')` (reads the
   token, so CSS stays the single source). Tinted backgrounds: `KK.alpha(color, '1F')`.
 - Data refers to colours by token name (`accent: 'room-bathroom'`, `color: 'health-gut'`).
-- Do not load custom fonts unless Figma specifies a brand face.
+- Fonts are self-hosted (`fonts/` + `css/fonts.css`): Albert Sans primary, Inter fallback.
+  Never add a CDN / web-font link — it breaks `file://`.
 
 ### 2.2 Components — `css/components.css` + `js/ui.js`
 
@@ -99,9 +110,12 @@ CSS-only pieces: `.card`, `.row`, `.pressable`, `.icon-btn`, `.pill`, `.badge`, 
 
 ### 2.3 Icons — `js/icons.js`
 
-Ionicons 7 glyphs (MIT), copied in as SVG markup; only the ones in use. `-outline` for
-quiet / secondary, solid for active / hero. To add one, copy the inner markup of the Ionicons
-SVG (viewBox `0 0 512 512`) into `GLYPHS`. An unknown name logs a console error.
+**Phosphor** glyphs (MIT), inlined as SVG markup; ~40 in use, keyed by name. Phosphor is a
+256×256 fill-based grid (not 24px stroke): `-outline`-style names use the *regular* weight,
+solid names use the *fill* weight. `KK.icon(name, size, color)` keeps its signature; only the
+glyph data + viewBox changed. To add one, copy the inner markup of the Phosphor SVG
+(viewBox `0 0 256 256`) into `GLYPHS` under the same name you reference. An unknown name logs
+a console error. Substitutes: `shower` stands in for a smart faucet; `wheelchair` for sit-to-stand.
 
 ### 2.4 Screens and routing — `js/router.js`, `js/screens/*.js`
 
@@ -155,7 +169,7 @@ KK.route('/devices/room/:id', {
 | Health illustration | `KK.visual` |
 | Screen frame | a `KK.route` in `js/screens/` |
 | Bottom tab | a route with `tab:` set; tab items are in `index.html` |
-| Icon | `KK.icon` (closest Ionicons glyph) |
+| Icon | `KK.icon` (Phosphor glyph) |
 | Per-room colour | `--c-room-<id>` |
 
 ### New screen checklist
