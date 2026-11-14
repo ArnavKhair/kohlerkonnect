@@ -61,7 +61,7 @@
     var variant = opts.variant || 'primary';
     var cls = 'btn' + (variant !== 'primary' ? ' btn--' + variant : '') + (opts.block ? ' btn--block' : '') + (opts.cls ? ' ' + opts.cls : '');
     var style = opts.tint ? ' style="--tint:' + opts.tint + '"' : '';
-    var inner = (opts.icon ? KK.icon(opts.icon, 18) : '') + '<span>' + KK.esc(opts.label) + '</span>';
+    var inner = (opts.icon ? KK.icon(opts.icon, 20) : '') + '<span>' + KK.esc(opts.label) + '</span>';
     if (opts.href) {
       return '<a class="' + cls + '"' + style + ' href="#' + opts.href + '"' + (opts.replace ? ' data-replace' : '') + attrs(opts.attrs) + '>' + inner + '</a>';
     }

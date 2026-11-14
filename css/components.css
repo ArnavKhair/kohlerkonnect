@@ -131,17 +131,16 @@
 .btn {
   --tint: var(--c-primary);
   display: inline-flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 54px;
-  padding: 0 var(--sp-4);
-  border-radius: var(--r-md);
+  gap: 5px;
+  padding: 15px;
+  border-radius: var(--r-full);
   background: var(--tint);
-  color: #fff;
-  font-size: 17px;
-  font-weight: 600;
+  color: var(--c-text);
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 500;
   white-space: nowrap;
   transition: transform 120ms ease-out, opacity 120ms ease-out;
 }
