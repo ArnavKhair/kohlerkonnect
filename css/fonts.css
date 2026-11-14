@@ -1,0 +1,22 @@
+/* ============================================================================
+   Self-hosted fonts (offline-safe, works from file://)
+   Primary:  Albert Sans   (Kohler Konnect design system)
+   Fallback: Inter
+   Both variable (full weight range 100-900), SIL OFL licensed.
+   Source: @fontsource-variable.
+   ========================================================================== */
+@font-face {
+  font-family: 'Albert Sans';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/albert-sans.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/inter.woff2') format('woff2');
+}
