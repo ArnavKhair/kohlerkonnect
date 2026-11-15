@@ -1,14 +1,14 @@
 # Kohler Konnect — web prototype
 
 A phone-first prototype built with **plain HTML, CSS and JavaScript**: no framework, no
-packages, no build step. Dark only, tuned to the Figma references: near-black surfaces,
-per-room accent colours, circular dials, amber energy rings and a "pan to set" temperature
-control.
+packages, no build step. It follows the Figma design system: Albert Sans, a slate page with
+light cards, Kohler Blue buttons and a floating pill nav, Heroicons, and a "pan to set"
+temperature control.
 
 Scope (mock data and motion, no backend, nothing is saved):
 
 - **Onboarding** — Let's Konnect → Create account → Connect Kohler devices → Connect other devices
-- **Devices** — room switcher at the top (Bathroom | Kitchen), devices as tiles; a device page with the
+- **Devices** — room switcher at the top (Bathroom | Kitchen), devices as cards; a device page with the
   product photo, tappable feature callouts and the value stepper; routines
 - **Health** — five areas, each with a living visual driven by its score (flower, horse, water ripples,
   water vessel, candle flame), then Today | Over time with charts and what they mean
@@ -36,7 +36,7 @@ On a desktop browser the app is shown as a phone-sized column.
 index.html            page shell: screen area, tab bar, script tags
 css/tokens.css        design tokens (colours, spacing, radius, motion)
 css/base.css          reset, type scale, app frame, enter animations
-css/components.css    card, button, chip, ring, bar chart, temperature control, top bar, tab bar
+css/components.css    card, button, switcher, chip, ring, bar chart, temperature control, device card, tab bar
 css/visuals.css       motion and colour of the Health visuals
 css/screens.css       layout that belongs to one screen
 js/data.js            all mock data
@@ -68,5 +68,9 @@ This repo started as an Expo / React Native iOS prototype. That version is kept 
 
 ## Credits
 
-Icons are from [Ionicons](https://ionic.io/ionicons) (MIT License, © Ionic). Only the glyphs in
-use are copied into `js/icons.js`.
+Icons are from [Heroicons](https://heroicons.com) (MIT License, © Tailwind Labs). Only the glyphs
+in use are copied into `js/icons.js`. The Apple and Google marks on the sign-in buttons are drawings
+from [Phosphor Icons](https://phosphoricons.com) (MIT License).
+
+Fonts: [Albert Sans](https://fonts.google.com/specimen/Albert+Sans) and
+[Inter](https://rsms.me/inter/), both under the SIL Open Font License, self-hosted in `fonts/`.
