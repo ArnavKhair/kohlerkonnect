@@ -140,6 +140,12 @@
   color: var(--c-on-primary);
 }
 
+/* In a row that shows where you are (the health areas), the current one is the light pill. */
+.icon-btn[aria-current='true'] {
+  background: var(--c-surface);
+  color: var(--c-primary);
+}
+
 /* ── Headers ───────────────────────────────────────────────────────── */
 /* Tab root: eyebrow + title on the left, one optional action on the right. */
 .page-header {
@@ -543,7 +549,7 @@
   inset: 0;
 }
 
-/* ── Callout (feature marker on a photo; a toggle) ─────────────────── */
+/* ── Callout (a setting marked on a photo; one is selected at a time) ── */
 .callout {
   position: absolute;
   display: flex;

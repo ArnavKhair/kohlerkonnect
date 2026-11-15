@@ -3,8 +3,14 @@
  * All values are local: there is no backend in this build.
  * `icon` values are glyph names from js/icons.js.
  * A product's `image` is the address of a photo on Kohler's image server (linked, not copied; empty shows
- * the icon fallback). Its `quick` controls are drawn as callouts at `x` / `y`, in percent of the photo box
- * on the device page (4:3, so the square photos lose 12.5% at the top and bottom).
+ * the icon fallback). Its `quick` list is the settings you can change on the device page. Each is drawn as
+ * a callout at `x` / `y`, in percent of the photo box (4:3, so the square photos lose 12.5% at the top and
+ * bottom). One is selected at a time and the stepper below the photo edits it:
+ *   steps  the values to choose from, lowest first (numbers, or words such as 'Off', 'Low', 'High')
+ *   value  the current one (must be in `steps`)
+ *   unit   written after a number ('°C', '%'); leave out for words
+ *   scale  what the values are when there is no unit ('Volume', 'Strength'), shown in the control heading
+ * The first entry is the product's main setting and is selected when the page opens.
  */
 (function () {
   'use strict';
@@ -46,14 +52,10 @@
       name: 'Anthem+ Shower',
       blurb: 'Bathroom · Quick controls',
       icon: 'beaker',
-      unit: '°C',
-      min: 34,
-      max: 46,
-      steps: [34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46],
       quick: [
-        { id: 'fill', label: 'PerfectFill', icon: 'beaker', on: true, x: 30, y: 73 },
-        { id: 'sound', label: 'SoundTile', icon: 'speaker-wave', on: false, x: 80, y: 27 },
-        { id: 'warm', label: 'Warm floor', icon: 'fire', on: true, x: 60, y: 87 },
+        { id: 'fill', label: 'PerfectFill', icon: 'beaker', x: 30, y: 73, unit: '°C', steps: [34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46], value: 39 },
+        { id: 'sound', label: 'SoundTile', icon: 'speaker-wave', x: 80, y: 27, scale: 'Volume', steps: [0, 2, 4, 6, 8, 10], value: 0 },
+        { id: 'warm', label: 'Warm floor', icon: 'fire', x: 60, y: 87, unit: '°C', steps: [20, 22, 24, 26, 28, 30], value: 26 },
       ],
     },
     tub: {
@@ -64,14 +66,10 @@
       name: 'Shore Bathtub',
       blurb: 'Bathroom · Soak & recovery',
       icon: 'sparkles',
-      unit: '°C',
-      min: 35,
-      max: 44,
-      steps: [35, 36, 37, 38, 39, 40, 41, 42, 43, 44],
       quick: [
-        { id: 'soak', label: 'Restore soak', icon: 'sparkles', on: false, x: 40, y: 46 },
-        { id: 'heat', label: 'Warm floor', icon: 'fire', on: true, x: 66, y: 91 },
-        { id: 'scent', label: 'Scent', icon: 'cloud', on: false, x: 70, y: 25 },
+        { id: 'soak', label: 'Restore soak', icon: 'sparkles', x: 40, y: 46, unit: '°C', steps: [35, 36, 37, 38, 39, 40, 41, 42, 43, 44], value: 39 },
+        { id: 'heat', label: 'Warm floor', icon: 'fire', x: 66, y: 91, unit: '°C', steps: [20, 22, 24, 26, 28, 30], value: 26 },
+        { id: 'scent', label: 'Scent', icon: 'cloud', x: 70, y: 25, scale: 'Strength', steps: ['Off', 'Light', 'Medium', 'Strong'], value: 'Off' },
       ],
     },
     vanity: {
@@ -82,14 +80,10 @@
       name: 'Smart Wall · Vanity',
       blurb: 'Bathroom · Light & sense',
       icon: 'light-bulb',
-      unit: '%',
-      min: 10,
-      max: 100,
-      steps: [10, 25, 40, 55, 70, 85, 100],
       quick: [
-        { id: 'glow', label: 'Mirror glow', icon: 'light-bulb', on: true, x: 34, y: 15 },
-        { id: 'seam', label: 'Circadian seam', icon: 'sun', on: true, x: 70, y: 34 },
-        { id: 'sense', label: 'Vanity Sense', icon: 'signal', on: false, x: 34, y: 60 },
+        { id: 'glow', label: 'Mirror glow', icon: 'light-bulb', x: 34, y: 15, unit: '%', steps: [10, 25, 40, 55, 70, 85, 100], value: 70 },
+        { id: 'seam', label: 'Circadian seam', icon: 'sun', x: 70, y: 34, scale: 'Tone', steps: ['Off', 'Warm', 'Neutral', 'Cool', 'Auto'], value: 'Auto' },
+        { id: 'sense', label: 'Vanity Sense', icon: 'signal', x: 34, y: 60, scale: 'Sensing', steps: ['Off', 'On'], value: 'Off' },
       ],
     },
     toilet: {
@@ -100,13 +94,9 @@
       name: 'PureWarmth Toilet',
       blurb: 'Bathroom · Comfort',
       icon: 'home',
-      unit: '°',
-      min: 0,
-      max: 3,
-      steps: [0, 1, 2, 3],
       quick: [
-        { id: 'seat', label: 'Seat warmth', icon: 'fire', on: true, x: 44, y: 36 },
-        { id: 'stand', label: 'Sit-to-stand', icon: 'arrow-up-circle', on: false, x: 62, y: 70 },
+        { id: 'seat', label: 'Seat warmth', icon: 'fire', x: 44, y: 36, scale: 'Level', steps: ['Off', 'Low', 'Medium', 'High'], value: 'Medium' },
+        { id: 'stand', label: 'Sit-to-stand', icon: 'arrow-up-circle', x: 62, y: 70, scale: 'Assist', steps: ['Off', 'Light', 'Full'], value: 'Off' },
       ],
     },
     faucet: {
@@ -117,13 +107,9 @@
       name: 'Smart Faucet',
       blurb: 'Kitchen · Water',
       icon: 'wrench-screwdriver',
-      unit: '°C',
-      min: 20,
-      max: 60,
-      steps: [20, 30, 40, 50, 60],
       quick: [
-        { id: 'save', label: 'Flow saver', icon: 'beaker', on: true, x: 63, y: 58 },
-        { id: 'hot', label: 'Instant hot', icon: 'fire', on: false, x: 38, y: 86 },
+        { id: 'hot', label: 'Instant hot', icon: 'fire', x: 38, y: 86, unit: '°C', steps: [30, 36, 42, 48, 54, 60], value: 42 },
+        { id: 'save', label: 'Flow saver', icon: 'beaker', x: 63, y: 58, unit: '%', steps: [40, 55, 70, 85, 100], value: 70 },
       ],
     },
   };

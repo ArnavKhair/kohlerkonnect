@@ -85,7 +85,8 @@
   margin: var(--sp-2) 0 var(--sp-3);
 }
 
-.product__control {
+.product__control,
+.product__control-body {
   display: flex;
   flex-direction: column;
   gap: var(--sp-2);
@@ -161,13 +162,35 @@
 }
 
 /* ── Health ────────────────────────────────────────────────────────── */
+/* One card per area, side by side; swipe sideways and it snaps to a card. */
+.health-carousel {
+  display: flex;
+  gap: var(--sp-2);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: var(--r-md);
+}
+
+.health-carousel::-webkit-scrollbar {
+  display: none;
+}
+
 .health-hero {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--sp-1);
   text-align: center;
-  animation: kk-fade var(--dur-fade) ease-out both;
+}
+
+/* Only the card in view moves. */
+.health-hero:not(.is-current) .visual * {
+  animation-play-state: paused;
 }
 
 .health-hero__visual {
@@ -185,8 +208,13 @@
   margin-top: var(--sp-2);
 }
 
+/* The page indicator: one icon button per area, the current one light. */
 .health__areas {
-  margin: var(--sp-3) 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 290px;
+  margin: var(--sp-3) auto;
 }
 
 .health__panel {

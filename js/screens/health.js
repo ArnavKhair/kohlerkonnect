@@ -1,7 +1,8 @@
 /*
  * Health tab: /health (and /health/:area to open on a given area).
- * One living visual on a navy stage for the selected area, a switcher for the area,
- * then Today | Over time with a chart and what it means.
+ * One card per area, each with its living visual on a navy stage: swipe sideways between
+ * them. The row of icon buttons under the cards shows which one is in view and jumps to
+ * another. Below that, Today | Over time with a chart and what it means, for the area in view.
  */
 (function () {
   'use strict';
@@ -64,11 +65,11 @@
     );
   }
 
-  // ── The parts that change with the selected area ──
-  function heroHtml(area) {
+  /** One swipe card. `current` marks the card in view (only its visual moves). */
+  function heroHtml(area, current) {
     var moving = area.delta.indexOf('Up') === 0 || area.delta.indexOf('Down') === 0;
     return (
-      '<div class="stage health-hero">' +
+      '<div class="stage health-hero' + (current ? ' is-current' : '') + '" data-area="' + KK.esc(area.id) + '" role="group" aria-roledescription="slide" aria-label="' + KK.esc(area.name) + '">' +
         '<div class="health-hero__visual" role="img" aria-label="' + KK.esc(area.visualCaption) + '">' + KK.visual(area.visual, levelOf(area)) + '</div>' +
         '<div class="t-13 tone-secondary">' + KK.esc(area.name) + '</div>' +
         '<div class="t-61">' + area.value + (area.unit ? '<span class="t-25 tone-secondary"> ' + KK.esc(area.unit) + '</span>' : '') + '</div>' +
@@ -79,6 +80,7 @@
     );
   }
 
+  // ── The parts that change with the area in view ──
   function panelHtml(area, state) {
     if (state.tab === 'today') {
       return (
@@ -129,14 +131,13 @@
           title: 'Today',
           trailingHtml: '<span class="tone-secondary">' + KK.icon('shield-check', 20) + '</span>',
         }) +
-        '<div id="health-hero">' + heroHtml(area) + '</div>' +
-        '<div class="health__areas" id="health-areas">' +
-          ui.segment({
-            name: 'area',
-            label: 'Health area',
-            active: area.id,
-            items: KK.data.health.map(function (a) { return { id: a.id, label: a.name, icon: a.icon }; }),
-          }) +
+        '<div class="health-carousel" id="health-carousel" role="group" aria-roledescription="carousel" aria-label="Health areas">' +
+          KK.data.health.map(function (a) { return heroHtml(a, a.id === area.id); }).join('') +
+        '</div>' +
+        '<div class="health__areas" id="health-areas" role="group" aria-label="Health area">' +
+          KK.data.health.map(function (a) {
+            return ui.iconButton({ icon: a.icon, label: a.name, attrs: { 'data-area': a.id, 'aria-current': a.id === area.id ? 'true' : false } });
+          }).join('') +
         '</div>' +
         '<div id="health-detail">' + detailHtml(area, state) + '</div>' +
         ui.sectionLabel('Daily insight') +
@@ -150,21 +151,97 @@
 
   function mount(root, ctx) {
     var state = ctx.state;
-    var hero = root.querySelector('#health-hero');
+    var carousel = root.querySelector('#health-carousel');
     var areas = root.querySelector('#health-areas');
     var detail = root.querySelector('#health-detail');
+    var slides = Array.prototype.slice.call(carousel.children);
+    var buttons = Array.prototype.slice.call(areas.querySelectorAll('[data-area]'));
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var marked = state.area; // the area shown as current on the cards and buttons
+    var jumpTo = null;       // index a button press is scrolling to; swipe tracking waits for it
+    var jumpTimer = 0;
+    var settleTimer = 0;
 
-    // Opening on a later area (/health/stress): bring its toggle into view.
-    ui.setSegment(areas, 'area', state.area);
+    function indexOfArea(id) {
+      return KK.data.health.map(function (a) { return a.id; }).indexOf(id);
+    }
 
+    function slideLeft(i) {
+      return slides[i].offsetLeft - slides[0].offsetLeft;
+    }
+
+    /** Index of the card closest to the middle of the view. */
+    function indexInView() {
+      var best = 0;
+      slides.forEach(function (s, i) {
+        if (Math.abs(slideLeft(i) - carousel.scrollLeft) < Math.abs(slideLeft(best) - carousel.scrollLeft)) best = i;
+      });
+      return best;
+    }
+
+    /** Show `id` as the current card and button (cheap: runs while the finger is still moving). */
+    function mark(id) {
+      if (id === marked) return;
+      marked = id;
+      slides.forEach(function (s) {
+        s.classList.toggle('is-current', s.getAttribute('data-area') === id);
+      });
+      buttons.forEach(function (b) {
+        if (b.getAttribute('data-area') === id) b.setAttribute('aria-current', 'true');
+        else b.removeAttribute('aria-current');
+      });
+    }
+
+    /** Make `id` the selected area: the chart and notes below follow. */
+    function select(id) {
+      mark(id);
+      if (id === state.area) return;
+      state.area = id;
+      detail.innerHTML = detailHtml(findArea(id), state);
+    }
+
+    // Opening on a later area (/health/stress): start on its card.
+    carousel.scrollLeft = slideLeft(indexOfArea(state.area));
+
+    // Swipe: the card in view becomes the current one; the detail follows once the swipe settles.
+    function track() {
+      var i = indexInView();
+      if (jumpTo !== null) {
+        if (i === jumpTo) jumpTo = null;
+        return;
+      }
+      var id = slides[i].getAttribute('data-area');
+      mark(id);
+      clearTimeout(settleTimer);
+      if (id !== state.area) {
+        settleTimer = setTimeout(function () {
+          select(id);
+        }, 120);
+      }
+    }
+
+    carousel.addEventListener('scroll', track);
+
+    // A finger on the cards takes over from a jump that is still scrolling.
+    carousel.addEventListener('pointerdown', function () {
+      jumpTo = null;
+    });
+
+    // Tap an icon button: select that area and bring its card into view.
     areas.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-seg="area"]');
-      if (!btn || btn.getAttribute('data-value') === state.area) return;
-      state.area = btn.getAttribute('data-value');
-      ui.setSegment(areas, 'area', state.area);
-      var area = findArea(state.area);
-      hero.innerHTML = heroHtml(area);
-      detail.innerHTML = detailHtml(area, state);
+      var btn = e.target.closest('[data-area]');
+      if (!btn || btn.getAttribute('data-area') === state.area) return;
+      var id = btn.getAttribute('data-area');
+      clearTimeout(settleTimer);
+      clearTimeout(jumpTimer);
+      jumpTo = indexOfArea(id);
+      // If the jump is interrupted or never reports its end, fall back to the card that is in view.
+      jumpTimer = setTimeout(function () {
+        jumpTo = null;
+        track();
+      }, 1000);
+      select(id);
+      carousel.scrollTo({ left: slideLeft(jumpTo), behavior: reduced ? 'auto' : 'smooth' });
       KK.haptic('light');
     });
 

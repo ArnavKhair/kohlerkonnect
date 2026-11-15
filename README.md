@@ -9,9 +9,9 @@ Scope (mock data and motion, no backend, nothing is saved):
 
 - **Onboarding** — Let's Konnect → Create account → Connect Kohler devices → Connect other devices
 - **Devices** — room switcher at the top (Bathroom | Kitchen), devices as cards; a device page with the
-  product photo, tappable feature callouts and the value stepper; routines
-- **Health** — five areas, each with a living visual driven by its score (flower, horse, water ripples,
-  water vessel, candle flame), then Today | Over time with charts and what they mean
+  product photo, where you pick one setting on the photo and the stepper below changes it; routines
+- **Health** — five areas to swipe between, each with a living visual driven by its score (flower, horse,
+  water ripples, water vessel, candle flame), then Today | Over time with charts and what they mean
 - **Account** — privacy, products, devices, services (plus start over and a component gallery)
 
 ## Run it
@@ -56,8 +56,8 @@ Routes: `#/onboarding`, `#/onboarding/account`, `#/onboarding/connect`, `#/onboa
 
 Each product in `js/data.js` has an `image` field. Paste the address of a photo on Kohler's image server
 (on kohler.com: right-click the photo → Copy image address). The photo is linked, not copied into this
-repo. Each quick control has `x` / `y` (percent of the photo) for where its callout sits; adjust them
-to the photo.
+repo. Each setting in a product's `quick` list has `x` / `y` (percent of the photo) for where its
+callout sits (adjust them to the photo), and its own `steps`, `value` and `unit` or `scale`.
 
 `CLAUDE.md` has the conventions for adding a screen, component or token.
 

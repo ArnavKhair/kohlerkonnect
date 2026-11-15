@@ -2,6 +2,7 @@
  * Vertical "pan to set" value stepper (the Figma Thermostat frame).
  * A column of values: drag up/down, tap a value, or use the arrow keys.
  * The value in the middle is the selected one; on release it snaps with a spring.
+ * `steps` are the values, lowest first: numbers (34, 35, …) or words ('Off', 'Low', 'High').
  *
  *   html:  KK.tempControl.html({ steps, value, label, compact })   compact = 3 rows tall
  *   wire:  KK.tempControl.mount(element, { steps, value, onChange })
@@ -30,8 +31,20 @@
     return ys[ys.length - 1];
   }
 
+  /**
+   * The slider's value for screen readers. Numbers are reported as they are; words are
+   * reported as a position (0..last) with the word itself as the spoken text.
+   */
+  function ariaValue(steps, index) {
+    var numeric = steps.every(function (step) { return typeof step === 'number'; });
+    return numeric
+      ? { min: steps[0], max: steps[steps.length - 1], now: steps[index], text: null }
+      : { min: 0, max: steps.length - 1, now: index, text: String(steps[index]) };
+  }
+
   function html(opts) {
     var index = Math.max(0, opts.steps.indexOf(opts.value));
+    var aria = ariaValue(opts.steps, index);
     var items = opts.steps
       .map(function (step, i) {
         return '<div class="tempctl__item" data-index="' + i + '">' + KK.esc(step) + '</div>';
@@ -40,8 +53,8 @@
     return (
       '<div class="tempctl' + (opts.compact ? ' tempctl--compact' : '') + '" role="slider" tabindex="0" aria-orientation="vertical"' +
       ' aria-label="' + KK.esc(opts.label || 'Value') + '"' +
-      ' aria-valuemin="' + opts.steps[0] + '" aria-valuemax="' + opts.steps[opts.steps.length - 1] + '"' +
-      ' aria-valuenow="' + opts.steps[index] + '">' + items + '</div>'
+      ' aria-valuemin="' + aria.min + '" aria-valuemax="' + aria.max + '" aria-valuenow="' + aria.now + '"' +
+      (aria.text !== null ? ' aria-valuetext="' + KK.esc(aria.text) + '"' : '') + '>' + items + '</div>'
     );
   }
 
@@ -105,7 +118,9 @@
     function commit(index, cfg) {
       var target = clamp(index, 0, last);
       springTo(target, cfg || SNAP);
-      el.setAttribute('aria-valuenow', steps[target]);
+      var aria = ariaValue(steps, target);
+      el.setAttribute('aria-valuenow', aria.now);
+      if (aria.text !== null) el.setAttribute('aria-valuetext', aria.text);
       if (target !== committed) {
         committed = target;
         KK.haptic('light');
@@ -176,7 +191,9 @@
         var i = steps.indexOf(value);
         if (i < 0 || i === committed) return;
         committed = i;
-        el.setAttribute('aria-valuenow', steps[i]);
+        var aria = ariaValue(steps, i);
+        el.setAttribute('aria-valuenow', aria.now);
+        if (aria.text !== null) el.setAttribute('aria-valuetext', aria.text);
         springTo(i, GENTLE);
       },
     };

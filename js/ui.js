@@ -70,6 +70,7 @@
   /**
    * Icon-only button. opts: icon, label (for screen readers), then one of
    * href (a link), back (a Back button; the value is the fallback route) or neither (a plain button); cls, attrs.
+   * With attrs { 'aria-current': 'true' } it shows as the current one of a row (the light pill).
    */
   ui.iconButton = function (opts) {
     var cls = 'icon-btn' + (opts.cls ? ' ' + opts.cls : '');
@@ -258,8 +259,9 @@
   };
 
   /**
-   * Feature callout on a photo: a dot at x / y (percent) joined by a short line to a label.
-   * It is a toggle (aria-pressed). The label sits on whichever side has more room.
+   * Callout on a photo: a dot at x / y (percent) joined by a short line to a label.
+   * `on` marks the selected one (aria-pressed); the screen keeps exactly one selected.
+   * The label sits on whichever side has more room.
    * opts: id, label, icon, on, x, y.
    */
   ui.callout = function (opts) {

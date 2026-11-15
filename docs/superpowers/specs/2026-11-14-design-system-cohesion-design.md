@@ -261,3 +261,26 @@ Open for Arnav (a third item beside the two under "Challenges to your direction"
   dividers are Blue 20 on a Blue 10 card (1.17:1). They read indoors and will be faint in
   bright light. One step darker in the card ink context (`--c-control` / `--c-stroke`) is
   the change if wanted.
+
+## Round 2 (Arnav, 2026-11-14, after seeing the build)
+
+- **Health areas.** The area switcher no longer looks like the global nav. The five area
+  cards sit side by side and are swiped (native sideways scroll with snap). Under them, one
+  row of icon-only Figma buttons is both the page indicator and a way to jump: the current
+  one is the light pill, the others blue. Arnav chose one row over labelled buttons plus
+  separate dots. Only the card in view animates. The chart and notes below follow the card
+  once a swipe settles; the Today / Over time choice is kept across areas.
+- **Device page.** The callouts on the photo are single-select for every product ("I can
+  only change one setting at a time"), and the stepper below edits the selected setting with
+  that setting's own values and unit. Each `quick` entry in `js/data.js` now has `steps`,
+  `value` and `unit` or `scale`; "off" is a value. The product-level set point is folded
+  into the most natural setting, which is first in the list and selected when the page opens
+  (Arnav's choice over a fourth callout): PerfectFill, Restore soak, Mirror glow, Seat
+  warmth, Instant hot. The line under the photo shows the selected setting and its value.
+- Claude's calls: mock values per setting (change freely in `js/data.js`); the stepper
+  accepts word values and reports them to screen readers as text; a button jump that is
+  interrupted falls back to the card in view after a second.
+- Not exercised by the automated run: the smooth scroll of a button jump and the stepper's
+  spring (headless Chrome draws no frames, so the tests take the reduced-motion path of the
+  same code). Both are on the phone checklist.
+

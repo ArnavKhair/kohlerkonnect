@@ -139,6 +139,7 @@
                 ui.iconButton({ icon: 'chevron-left', label: 'Back (demo)' }) +
                 ui.iconButton({ icon: 'cog-6-tooth', label: 'Settings (demo)' }) +
                 ui.iconButton({ icon: 'plus', label: 'Add (demo)' }) +
+                ui.iconButton({ icon: 'heart', label: 'Current of a row (demo)', attrs: { 'aria-current': 'true' } }) +
               '</div>' +
             '</div>') +
           block('Buttons on a card', '<div class="card stack">' + buttons() + '</div>') +
@@ -189,12 +190,12 @@
               ui.deviceCard(KK.data.products.shower) +
               ui.deviceCard(KK.data.products.toilet, { status: 'Bathroom · Updating…', tone: 'warning' }) +
             '</div>') +
-          block('Photo with feature callouts',
+          block('Photo with callouts (one selected)',
             '<div class="callout-stage on-light">' +
               ui.photo({ icon: 'beaker', iconSize: 100 }) +
               '<div class="callout-stage__layer" id="gallery-callouts">' +
-                ui.callout({ id: 'on', label: 'On', icon: 'beaker', on: true, x: 22, y: 30 }) +
-                ui.callout({ id: 'off', label: 'Off', on: false, x: 78, y: 72 }) +
+                ui.callout({ id: 'a', label: 'Selected', icon: 'beaker', on: true, x: 22, y: 30 }) +
+                ui.callout({ id: 'b', label: 'Other', icon: 'fire', on: false, x: 78, y: 72 }) +
               '</div>' +
             '</div>') +
           block('Health visuals (low · mid · high)',
@@ -218,7 +219,10 @@
       });
       root.querySelector('#gallery-callouts').addEventListener('click', function (e) {
         var callout = e.target.closest('.callout');
-        if (callout) callout.setAttribute('aria-pressed', callout.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+        if (!callout) return;
+        Array.prototype.forEach.call(root.querySelectorAll('#gallery-callouts .callout'), function (c) {
+          c.setAttribute('aria-pressed', c === callout ? 'true' : 'false');
+        });
       });
       root.querySelector('#gallery-chips').addEventListener('click', function (e) {
         var chip = e.target.closest('.chip');

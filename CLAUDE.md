@@ -118,7 +118,7 @@ Hand-rolled. Each helper returns an HTML string; its look lives in `components.c
 | Helper | Purpose |
 |---|---|
 | `ui.button({label, icon, variant, block, disabled, href, replace, cls, attrs})` | The Figma button. `primary` (blue-70), `secondary` (quiet fill), `ghost` (outlined). With `href` it is a link. |
-| `ui.iconButton({icon, label, href, back, cls, attrs})` | Icon-only button, 50px round. `back` makes it a Back button (`ui.backButton(fallback)` is the shortcut). |
+| `ui.iconButton({icon, label, href, back, cls, attrs})` | Icon-only button, 50px round. `back` makes it a Back button (`ui.backButton(fallback)` is the shortcut). In a row that shows where you are (the health areas), `attrs: {'aria-current': 'true'}` gives the current one the light pill. |
 | `ui.deviceCard(product, {status, tone, href})` | The Figma Card: 120px photo on the left, name (20), status line (16). `tone` adds a state dot; `href` makes it a link. Use it wherever a device is listed. |
 | `ui.segment({name, items: [{id, label, icon}], active, label})` + `ui.setSegment(root, name, value)` | Every switcher: the Figma nav toggle in a pill track. Icons above the labels are optional. Scrolls sideways when it does not fit. Buttons carry `data-seg` / `data-value`. |
 | `ui.chip({label, icon, on, attrs})` | Multi-select toggle; state is `aria-pressed`. Use on a light surface. |
@@ -130,9 +130,9 @@ Hand-rolled. Each helper returns an HTML string; its look lives in `components.c
 | `ui.ring({size, stroke, progress, tone, innerHtml})`, `ui.statRing({label, icon, progress, tone})` | SVG progress ring; `statRing` adds an icon inside and a caption. `tone` is a state colour, omit for blue. |
 | `ui.barChart({data, height, activeIndex})` | Bars grow in via CSS. |
 | `ui.photo({src, alt, icon, cls, iconSize})` | Product photo with built-in icon fallback. |
-| `ui.callout({id, label, icon, on, x, y})` | Feature marker on a photo at `x` / `y` percent; a toggle. Put it in `.callout-stage.on-light` > `.callout-stage__layer`. |
+| `ui.callout({id, label, icon, on, x, y})` | A setting marked on a photo at `x` / `y` percent. `on` marks the selected one; the screen keeps exactly one selected. Put it in `.callout-stage.on-light` > `.callout-stage__layer`. |
 | `KK.visual(kind, level)` | Health visual (`flower`, `horse`, `ripples`, `vessel`, `flame`); `level` 0..1, 1 = healthy (`js/healthVisuals.js`, `css/visuals.css`). Drawn for a `.stage`. |
-| `KK.tempControl.html({steps, value, label, compact})` + `.mount(el, {steps, value, onChange})` | Drag / tap / arrow-key value stepper (`js/tempControl.js`). Rows are 65px: `ROW` in the script and the heights in `components.css` change together. |
+| `KK.tempControl.html({steps, value, label, compact})` + `.mount(el, {steps, value, onChange})` | Drag / tap / arrow-key value stepper (`js/tempControl.js`). `steps` are numbers or words (`'Off'`, `'Low'`, `'High'`), lowest first. Rows are 65px: `ROW` in the script and the heights in `components.css` change together. |
 | `KK.icon(name, size, color)` | Inline SVG icon (`js/icons.js`). |
 
 CSS-only pieces: `.card`, `.stage`, `.row`, `.stack` (column with a 10px gap), `.action-pair`,
@@ -143,7 +143,12 @@ CSS-only pieces: `.card`, `.stage`, `.row`, `.stack` (column with a 10px gap), `
   `ui.js` with its styles in `components.css`; layout that belongs to one screen goes in
   `css/screens.css`.
 - Selected = the nav toggle look (light pill, blue-70 ink, on a blue-70 track). Action = the
-  button look (blue-70 pill, light ink). Do not invent a third.
+  button look (blue-70 pill, light ink). Do not invent a third. Use `ui.segment` for a choice
+  between views of one page (rooms, Today / Over time); a row of buttons for moving between
+  things (the health areas are icon buttons, the current one light).
+- A device setting is one entry of `products[*].quick` in `js/data.js` with its own `steps`,
+  `value` and `unit` or `scale`. The device page selects one at a time and the stepper edits
+  it; "off" is a value, not a separate switch.
 - One pressed state for everything pressable (scale 0.98 + opacity 0.9), defined once at the
   top of `components.css`. Add new pressable classes to that list.
 - Keep helpers presentational; state and event wiring live in the screen's `mount`.
@@ -235,9 +240,10 @@ KK.route('/devices/room/:id', {
 ## 4. Current state
 
 Implemented (mock data, no backend, nothing persisted): **Onboarding**, **Devices** (room
-switcher, device cards, device page with photo callouts and stepper, routines), **Health**
-(five areas with living visuals on a navy stage, Today / Over time charts and
-interpretation), **Account** (start over, component gallery). Bottom nav: Devices / Health /
+switcher, device cards, device page where one setting is selected on the photo and the
+stepper edits it with that setting's own values, routines), **Health** (five swipeable
+cards with living visuals on a navy stage, a row of icon buttons as the page indicator,
+Today / Over time charts and interpretation), **Account** (start over, component gallery). Bottom nav: Devices / Health /
 Account. All screens follow the Figma design system as of 2026-11-14.
 
 The five product photos are linked from Kohler's image server (addresses in `js/data.js`,
