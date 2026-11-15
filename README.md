@@ -16,8 +16,8 @@ Scope (mock data and motion, no backend, nothing is saved):
 
 ## Run it
 
-Open `index.html` in a browser. That is all. (Product photos, once their addresses are filled in, load
-from Kohler's image server and need an internet connection; without one the app shows an icon instead.)
+Open `index.html` in a browser. That is all. (Product photos load from Kohler's image server and
+need an internet connection; without one the app shows an icon instead.)
 
 To try it on a phone, serve the folder and open the address from the phone on the same network:
 

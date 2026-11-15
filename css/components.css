@@ -444,7 +444,7 @@
 }
 
 .field::placeholder {
-  color: var(--c-text-muted);
+  color: var(--c-text-secondary);
 }
 
 /* ── List row (label left, value right, divider between rows) ──────── */
@@ -601,6 +601,7 @@
 .tabbar {
   flex: none;
   display: flex;
+  justify-content: space-between;
   margin: var(--sp-2) var(--sp-4) max(var(--sp-5), env(safe-area-inset-bottom));
   padding: var(--sp-1);
   border-radius: var(--r-full);
@@ -612,7 +613,7 @@
 }
 
 .tabbar__item {
-  flex: 1;
+  flex: 0 1 105px; /* the Figma toggle is 105 wide; it may shrink on a narrow phone */
   display: flex;
   flex-direction: column;
   align-items: center;

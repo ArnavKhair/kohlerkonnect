@@ -62,7 +62,7 @@
     var cls = 'btn' + (variant !== 'primary' ? ' btn--' + variant : '') + (opts.block ? ' btn--block' : '') + (opts.cls ? ' ' + opts.cls : '');
     var inner = (opts.icon ? KK.icon(opts.icon, 20) : '') + '<span>' + KK.esc(opts.label) + '</span>';
     if (opts.href) {
-      return '<a class="' + cls + '" href="#' + opts.href + '"' + (opts.replace ? ' data-replace' : '') + attrs(opts.attrs) + '>' + inner + '</a>';
+      return '<a class="' + cls + '" href="#' + KK.esc(opts.href) + '"' + (opts.replace ? ' data-replace' : '') + attrs(opts.attrs) + '>' + inner + '</a>';
     }
     return '<button type="button" class="' + cls + '"' + (opts.disabled ? ' disabled' : '') + attrs(opts.attrs) + '>' + inner + '</button>';
   };
@@ -76,7 +76,7 @@
     var inner = KK.icon(opts.icon, 20);
     var label = ' aria-label="' + KK.esc(opts.label) + '"';
     if (opts.href) {
-      return '<a class="' + cls + '" href="#' + opts.href + '"' + label + attrs(opts.attrs) + '>' + inner + '</a>';
+      return '<a class="' + cls + '" href="#' + KK.esc(opts.href) + '"' + label + attrs(opts.attrs) + '>' + inner + '</a>';
     }
     return (
       '<button type="button" class="' + cls + '"' + (opts.back ? ' data-back="' + KK.esc(opts.back) + '"' : '') + label + attrs(opts.attrs) + '>' +
@@ -212,9 +212,12 @@
   ui.setSegment = function (root, name, value) {
     Array.prototype.forEach.call(root.querySelectorAll('[data-seg="' + name + '"]'), function (btn) {
       var on = btn.getAttribute('data-value') === value;
+      var track = btn.parentNode;
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-      if (on && btn.parentNode.scrollWidth > btn.parentNode.clientWidth) {
-        btn.parentNode.scrollLeft = btn.offsetLeft - (btn.parentNode.clientWidth - btn.offsetWidth) / 2;
+      if (on && track.scrollWidth > track.clientWidth) {
+        var b = btn.getBoundingClientRect();
+        var t = track.getBoundingClientRect();
+        track.scrollLeft += b.left + b.width / 2 - (t.left + t.width / 2);
       }
     });
   };
@@ -250,7 +253,7 @@
     var inner =
       ui.photo({ src: product.image, alt: product.name, icon: product.icon, cls: 'device-card__photo' }) +
       '<div class="device-card__text"><div class="t-20">' + KK.esc(product.name) + '</div>' + statusHtml + '</div>';
-    if (opts.href) return '<a class="card device-card pressable" href="#' + opts.href + '">' + inner + '</a>';
+    if (opts.href) return '<a class="card device-card pressable" href="#' + KK.esc(opts.href) + '">' + inner + '</a>';
     return '<div class="card device-card">' + inner + '</div>';
   };
 

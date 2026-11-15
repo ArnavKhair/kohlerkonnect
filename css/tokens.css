@@ -1,7 +1,8 @@
 /*
  * Kohler Konnect design tokens. Mirrors the Design System page in Figma (see CLAUDE.md).
- * The two ramps are the only place a UI colour is written as a hex. Everything else points
- * at a ramp step. Change values here, never hard-code a colour, radius or spacing elsewhere.
+ * The two ramps are the only place an interface colour is written as a hex; surfaces, fills
+ * and ink point at a ramp step. The state marks and the health illustration colours are the
+ * only other hexes. Change values here, never hard-code a colour, radius or spacing elsewhere.
  */
 :root {
   /* ── Kohler Blue (Figma "App style", 217:7532) ── */

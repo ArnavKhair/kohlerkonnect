@@ -19,7 +19,8 @@
         s.items
           .map(function (item) {
             var product = KK.data.products[item.product];
-            return ui.deviceCard(product, { status: item.value, tone: toneOf(item.value), href: '/devices/product/' + product.id });
+            var status = item.badge ? item.value + ' · ' + item.badge : item.value;
+            return ui.deviceCard(product, { status: status, tone: toneOf(item.value), href: '/devices/product/' + product.id });
           })
           .join('') +
         '</div>';
@@ -125,6 +126,12 @@
           block('Type',
             '<div class="stack">' +
               TYPE.map(function (t) { return '<div class="' + t[0] + '">' + t[1] + '</div>'; }).join('') +
+            '</div>') +
+          block('Headers and onboarding pieces',
+            '<div class="stack">' +
+              ui.pageHeader({ eyebrow: 'Eyebrow', title: 'Page title', trailingHtml: ui.iconButton({ icon: 'cog-6-tooth', label: 'Action (demo)' }) }) +
+              ui.stepBar({ step: 2, total: 4 }) +
+              '<div class="row gallery__centre">' + ui.heroMark({ icon: 'sparkles' }) + '</div>' +
             '</div>') +
           block('Buttons on the page',
             '<div class="stack">' + buttons() +

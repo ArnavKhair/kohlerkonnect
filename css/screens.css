@@ -34,11 +34,6 @@
 }
 
 /* ── Devices ───────────────────────────────────────────────────────── */
-.devices {
-  /* room for the add button under the last card */
-  padding-bottom: calc(var(--sp-4) * 2 + var(--sp-6) + var(--sp-2));
-}
-
 .devices__body {
   margin-top: var(--sp-3);
 }
@@ -68,13 +63,16 @@
 }
 
 .devices__hint {
-  margin-top: var(--sp-4);
+  margin: var(--sp-4) 0 var(--sp-3);
 }
 
+/* Stays at the bottom-right of the view while the list scrolls; at the end of the page it
+   rests under the last card instead of covering it. */
 .devices__add {
-  position: absolute;
-  right: var(--sp-4);
+  position: sticky;
   bottom: var(--sp-4);
+  align-self: flex-end;
+  margin-top: auto;
 }
 
 /* ── Device page ───────────────────────────────────────────────────── */
@@ -271,6 +269,10 @@
 .gallery__wrap {
   flex-wrap: wrap;
   gap: var(--sp-2);
+}
+
+.gallery__centre {
+  justify-content: center;
 }
 
 .gallery__ramp {

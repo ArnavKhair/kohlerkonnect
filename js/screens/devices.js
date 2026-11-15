@@ -22,7 +22,7 @@
       .join('');
     return (
       '<div class="card room-summary enter-up">' +
-        '<div class="dial"><span class="t-20">' + room.value + '</span><span class="t-13">' + KK.esc(room.unit) + '</span></div>' +
+        '<div class="dial"><span class="t-25">' + room.value + '</span><span class="t-13">' + KK.esc(room.unit) + '</span></div>' +
         '<div class="room-summary__text"><div class="t-20">' + KK.esc(room.headline) + '</div>' +
         '<div class="t-16 tone-secondary">' + ids.length + ' device' + (ids.length === 1 ? '' : 's') + '</div></div>' +
         ui.statRing({ label: room.energyLabel, icon: 'bolt', progress: room.energy }) +

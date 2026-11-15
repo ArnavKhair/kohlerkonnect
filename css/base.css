@@ -50,6 +50,13 @@ a {
   outline-offset: 2px;
 }
 
+/* A card that is itself focusable draws its ring inside: outside, the ring would sit on the
+   page, where the card's ink is too dim to see. */
+a.card:focus-visible,
+button.card:focus-visible {
+  outline-offset: -2px;
+}
+
 .icon {
   display: block;
   flex: none;

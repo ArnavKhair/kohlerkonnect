@@ -11,7 +11,8 @@
  *   KK.visual('flower', 0.78) -> '<div class="visual visual--flower">...</div>'
  *
  * Shapes are computed here; looping motion is CSS (css/visuals.css) fed by custom properties.
- * The container sets the size and `color` (used as the visual's accent via currentColor).
+ * The container sets the size; each kind's colour comes from its --c-visual-* token
+ * (css/visuals.css), drawn for a navy .stage.
  */
 (function () {
   'use strict';
