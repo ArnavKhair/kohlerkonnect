@@ -225,3 +225,39 @@ Built as designed in Figma; noted so they are a choice, not a surprise:
 ## Approval
 
 Arnav approved this design and its build plan on 2026-11-14 (plan mode approval in Claude Code).
+
+## As built (differences from this design)
+
+`CLAUDE.md` describes the system as it is in the code. Where the build differs from the text
+above, these were Claude's calls during the build (2026-11-14), each small and reversible:
+
+- `ui.tile` was removed: Account sections use a section label above a card of rows, so
+  nothing used it. `accountSections[*].icon` left the data with it.
+- The Account header has the eyebrow "Your profile" so all three tab headers match.
+- Onboarding step 3 uses `t-31` for its title (a list page); steps 1, 2 and 4 use `t-39`.
+- The scent callout uses `cloud` (the tub photo already has a `sparkles` callout).
+- Callouts: the dot is hollow when off and filled when on; the label is blue-20 / blue-80
+  when off (visible on a white photo without a border); its icon is 15px.
+- The photo-with-callouts wrapper is `.callout-stage` in `components.css` (the gallery
+  reuses it).
+- The hero mark is a solid blue-70 disc with a light icon.
+- Tab bar: 10px top margin so content never touches it; toggles are 105px wide as in Figma
+  and may shrink on phones narrower than 393px (padding 5 / 10).
+- The Devices add button is sticky at the bottom-right of the view rather than fixed, so at
+  the end of the page it rests under the last card.
+- The Set button on the device page is built in the screen (its content changes after a
+  press) with the same classes as `ui.button`.
+- Ring colour variable is `--tone`. Extra tokens: `--c-photo`, `--c-quiet`, `--c-on-quiet`;
+  extra class `.on-dark`.
+- Tasks 3 to 6 landed as one commit, because the helpers and the screens that call them
+  cannot load cleanly apart.
+
+Added after the independent review: a focusable card draws its focus ring inside itself;
+the field placeholder uses the secondary ink.
+
+Open for Arnav (a third item beside the two under "Challenges to your direction"):
+
+- **Quiet fills on a card.** Idle chart bars, ring tracks, the unchecked routine circle and
+  dividers are Blue 20 on a Blue 10 card (1.17:1). They read indoors and will be faint in
+  bright light. One step darker in the card ink context (`--c-control` / `--c-stroke`) is
+  the change if wanted.
