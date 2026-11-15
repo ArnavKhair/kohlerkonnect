@@ -8,14 +8,14 @@
     return Object.keys(state.chosen).filter(function (id) { return state.chosen[id]; }).length;
   }
 
-  function recommendedHtml(accent) {
+  function recommendedHtml() {
     return (
-      '<div class="rec-card" id="routine-rec">' +
-        '<div class="row rec-card__header">' + KK.icon('sparkles', 18, KK.c('energy')) + '<span class="t-13 tone-secondary caps">Recommended</span></div>' +
-        '<h3 class="t-20 rec-card__title">Calm evenings</h3>' +
-        '<p class="t-16 tone-secondary rec-card__desc">Restore soak, dim the mirror, warm the seat — suggested from your last 7 nights.</p>' +
+      '<div class="card rec-card" id="routine-rec">' +
+        '<div class="row rec-card__header tone-accent">' + KK.icon('sparkles', 20) + '<span class="t-13">Recommended</span></div>' +
+        '<h3 class="t-20">Calm evenings</h3>' +
+        '<p class="t-16 tone-secondary">Restore soak, dim the mirror, warm the seat — suggested from your last 7 nights.</p>' +
         '<div class="action-pair">' +
-          ui.button({ label: 'Approve', tint: accent, attrs: { 'data-action': 'approve' } }) +
+          ui.button({ label: 'Approve', attrs: { 'data-action': 'approve' } }) +
           ui.button({ label: 'Dismiss', variant: 'secondary', attrs: { 'data-action': 'dismiss' } }) +
         '</div>' +
       '</div>'
@@ -23,7 +23,7 @@
   }
 
   /** The bottom of the creator card: either the Preview button or the preview itself. */
-  function creatorFootHtml(state, accent) {
+  function creatorFootHtml(state) {
     if (!state.previewing) {
       return ui.button({ label: 'Preview routine', icon: 'eye', variant: 'secondary', block: true, attrs: { 'data-action': 'preview' } });
     }
@@ -32,7 +32,7 @@
       '<div class="creator__preview">' +
         '<p class="t-16 tone-secondary">“' + KK.esc(state.name) + '” — ' + n + ' action' + (n === 1 ? '' : 's') + ' scheduled daily.</p>' +
         '<div class="action-pair">' +
-          ui.button({ label: 'Approve', tint: accent, attrs: { 'data-action': 'approve' } }) +
+          ui.button({ label: 'Approve', attrs: { 'data-action': 'approve' } }) +
           ui.button({ label: 'Edit', variant: 'secondary', attrs: { 'data-action': 'edit' } }) +
         '</div>' +
       '</div>'
@@ -57,16 +57,14 @@
         state.previewing = false;
       }
 
-      var accent = KK.c(product.accent);
-
       var rows = KK.data.routines
         .map(function (r, i) {
           return (
-            '<div class="enter-up" style="--d:' + i * 55 + 'ms">' +
-              '<button type="button" class="routine-row" data-routine="' + r.id + '" aria-pressed="' + (state.active[r.id] ? 'true' : 'false') + '" style="--tint:' + accent + '">' +
-                '<span class="routine-row__swatch">' + KK.icon('check', 16) + '</span>' +
-                '<span class="routine-row__body"><span class="t-20" style="display:block">' + KK.esc(r.name) + '</span>' +
-                '<span class="t-16 tone-secondary" style="display:block">' + KK.esc(r.when + ' · ' + r.desc) + '</span></span>' +
+            '<div class="enter-up" style="--d:' + i + '">' +
+              '<button type="button" class="card pressable routine-row" data-routine="' + r.id + '" aria-pressed="' + (state.active[r.id] ? 'true' : 'false') + '">' +
+                '<span class="routine-row__check">' + KK.icon('check', 20) + '</span>' +
+                '<span class="routine-row__body"><span class="t-20">' + KK.esc(r.name) + '</span>' +
+                '<span class="t-16 tone-secondary">' + KK.esc(r.when + ' · ' + r.desc) + '</span></span>' +
               '</button>' +
             '</div>'
           );
@@ -75,7 +73,7 @@
 
       var steps = KK.data.routineSteps
         .map(function (s) {
-          return ui.chip({ label: s.label, icon: s.icon, on: !!state.chosen[s.id], tint: accent, attrs: { 'data-step': s.id } });
+          return ui.chip({ label: s.label, icon: s.icon, on: !!state.chosen[s.id], attrs: { 'data-step': s.id } });
         })
         .join('');
 
@@ -83,25 +81,22 @@
         '<section class="screen routines">' +
           ui.topBar({ back: '/devices/product/' + product.id, title: 'Routines · ' + product.name }) +
           ui.sectionLabel('Current routines') +
-          '<div class="routines__list">' + rows + '</div>' +
-          (state.recommended ? recommendedHtml(accent) : '') +
+          '<div class="stack">' + rows + (state.recommended ? recommendedHtml() : '') + '</div>' +
           ui.sectionLabel('Create my own') +
           '<div class="card creator">' +
-            '<input class="creator__input" id="routine-name" type="text" autocomplete="off" aria-label="Routine name" placeholder="Name your routine" value="' + KK.esc(state.name) + '">' +
+            '<input class="field" id="routine-name" type="text" autocomplete="off" aria-label="Routine name" placeholder="Name your routine" value="' + KK.esc(state.name) + '">' +
             '<div class="row creator__steps">' + steps + '</div>' +
-            '<div id="creator-foot">' + creatorFootHtml(state, accent) + '</div>' +
+            '<div id="creator-foot">' + creatorFootHtml(state) + '</div>' +
           '</div>' +
         '</section>'
       );
     },
     mount: function (root, ctx) {
-      var product = KK.data.products[ctx.params.id];
       var state = ctx.state;
-      var accent = KK.c(product.accent);
       var foot = root.querySelector('#creator-foot');
 
       function drawFoot() {
-        foot.innerHTML = creatorFootHtml(state, accent);
+        foot.innerHTML = creatorFootHtml(state);
       }
 
       root.querySelector('#routine-name').addEventListener('input', function (e) {

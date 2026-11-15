@@ -1,6 +1,8 @@
 /*
  * Template helpers. Each returns an HTML string styled by css/components.css.
  * Text passed in is escaped unless the option name ends in "Html".
+ * Helpers take no colours: fills are the brand blue and ink follows the surface the
+ * component sits on (see the ink contexts in css/tokens.css).
  */
 (function () {
   'use strict';
@@ -18,7 +20,10 @@
 
   var colorCache = {};
 
-  /** Resolve a colour token from css/tokens.css to its hex value, e.g. KK.c('primary'). */
+  /**
+   * Resolve a colour token from css/tokens.css to its value, e.g. KK.c('primary').
+   * Only for values that must be computed in JS; ink and fills belong in CSS.
+   */
   KK.c = function (token) {
     if (!(token in colorCache)) {
       var value = getComputedStyle(document.documentElement).getPropertyValue('--c-' + token).trim();
@@ -26,11 +31,6 @@
       colorCache[token] = value;
     }
     return colorCache[token];
-  };
-
-  /** Append a two-digit hex alpha to a 6-digit hex colour: KK.alpha('#4a6ba9', '1F'). */
-  KK.alpha = function (hex, aa) {
-    return hex + aa;
   };
 
   /** Light feedback where the browser supports it (Android); a no-op elsewhere. */
@@ -54,53 +54,67 @@
   }
 
   /**
-   * Button. opts: label, icon, variant ('primary' | 'secondary' | 'ghost'), tint, block,
-   * disabled, href (renders a link: '/devices'), replace (link replaces history), cls, attrs.
+   * Button. opts: label, icon, variant ('primary' | 'secondary' | 'ghost'), block, disabled,
+   * href (renders a link: '/devices'), replace (link replaces history), cls, attrs.
    */
   ui.button = function (opts) {
     var variant = opts.variant || 'primary';
     var cls = 'btn' + (variant !== 'primary' ? ' btn--' + variant : '') + (opts.block ? ' btn--block' : '') + (opts.cls ? ' ' + opts.cls : '');
-    var style = opts.tint ? ' style="--tint:' + opts.tint + '"' : '';
     var inner = (opts.icon ? KK.icon(opts.icon, 20) : '') + '<span>' + KK.esc(opts.label) + '</span>';
     if (opts.href) {
-      return '<a class="' + cls + '"' + style + ' href="#' + opts.href + '"' + (opts.replace ? ' data-replace' : '') + attrs(opts.attrs) + '>' + inner + '</a>';
+      return '<a class="' + cls + '" href="#' + opts.href + '"' + (opts.replace ? ' data-replace' : '') + attrs(opts.attrs) + '>' + inner + '</a>';
     }
-    return '<button type="button" class="' + cls + '"' + style + (opts.disabled ? ' disabled' : '') + attrs(opts.attrs) + '>' + inner + '</button>';
+    return '<button type="button" class="' + cls + '"' + (opts.disabled ? ' disabled' : '') + attrs(opts.attrs) + '>' + inner + '</button>';
   };
 
-  /** Chip toggle. opts: label, icon, on, tint, attrs. */
-  ui.chip = function (opts) {
+  /**
+   * Icon-only button. opts: icon, label (for screen readers), then one of
+   * href (a link), back (a Back button; the value is the fallback route) or neither (a plain button); cls, attrs.
+   */
+  ui.iconButton = function (opts) {
+    var cls = 'icon-btn' + (opts.cls ? ' ' + opts.cls : '');
+    var inner = KK.icon(opts.icon, 20);
+    var label = ' aria-label="' + KK.esc(opts.label) + '"';
+    if (opts.href) {
+      return '<a class="' + cls + '" href="#' + opts.href + '"' + label + attrs(opts.attrs) + '>' + inner + '</a>';
+    }
     return (
-      '<button type="button" class="chip" aria-pressed="' + (opts.on ? 'true' : 'false') + '"' +
-      (opts.tint ? ' style="--tint:' + opts.tint + '"' : '') + attrs(opts.attrs) + '>' +
-      (opts.icon ? KK.icon(opts.icon, 16) : '') + '<span>' + KK.esc(opts.label) + '</span></button>'
-    );
-  };
-
-  /** Icon on a tinted square. opts: icon, color, size (px), radius (px), iconSize, alpha. */
-  ui.tile = function (opts) {
-    var size = opts.size || 44;
-    return (
-      '<div class="tile" style="--size:' + size + 'px;' + (opts.radius ? '--radius:' + opts.radius + 'px;' : '') +
-      'background:' + KK.alpha(opts.color, opts.alpha || '1F') + '">' + KK.icon(opts.icon, opts.iconSize || 22, opts.color) + '</div>'
+      '<button type="button" class="' + cls + '"' + (opts.back ? ' data-back="' + KK.esc(opts.back) + '"' : '') + label + attrs(opts.attrs) + '>' +
+      inner + '</button>'
     );
   };
 
   /** Round back button. `fallback` is the route used when there is no in-app history. */
-  ui.backButton = function (fallback, color) {
+  ui.backButton = function (fallback) {
+    return ui.iconButton({ icon: 'chevron-left', label: 'Back', back: fallback });
+  };
+
+  /** Chip toggle. opts: label, icon, on, attrs. */
+  ui.chip = function (opts) {
     return (
-      '<button type="button" class="icon-btn" data-back="' + KK.esc(fallback) + '" aria-label="Back">' +
-      KK.icon('chevron-left', 22, color || KK.c('text')) + '</button>'
+      '<button type="button" class="chip" aria-pressed="' + (opts.on ? 'true' : 'false') + '"' + attrs(opts.attrs) + '>' +
+      (opts.icon ? KK.icon(opts.icon, 20) : '') + '<span>' + KK.esc(opts.label) + '</span></button>'
     );
   };
 
-  /** Header bar. opts: title, accent, back (fallback route), trailingHtml. */
+  /** Header of a tab's root page. opts: eyebrow, title, trailingHtml. */
+  ui.pageHeader = function (opts) {
+    return (
+      '<header class="page-header"><div>' +
+      (opts.eyebrow ? '<div class="t-13 tone-secondary">' + KK.esc(opts.eyebrow) + '</div>' : '') +
+      '<h1 class="t-31 page-header__title">' + KK.esc(opts.title) + '</h1></div>' +
+      (opts.trailingHtml || '') +
+      '</header>'
+    );
+  };
+
+  /** Header of a drill-down page. opts: title, back (fallback route), trailingHtml. */
   ui.topBar = function (opts) {
     var spacer = '<div class="topbar__spacer"></div>';
     return (
       '<header class="topbar">' +
-      (opts.back ? ui.backButton(opts.back, opts.accent) : '') +
-      (opts.title ? '<h1 class="topbar__title"' + (opts.accent ? ' style="color:' + opts.accent + '"' : '') + '>' + KK.esc(opts.title) + '</h1>' : spacer) +
+      (opts.back ? ui.backButton(opts.back) : spacer) +
+      '<h1 class="topbar__title t-20">' + KK.esc(opts.title || '') + '</h1>' +
       (opts.trailingHtml || spacer) +
       '</header>'
     );
@@ -117,37 +131,42 @@
     );
   };
 
-  /** Icon in an accent ring. opts: icon, tint, size. */
+  /** Large icon on a brand-blue disc. opts: icon. */
   ui.heroMark = function (opts) {
-    var tint = opts.tint || KK.c('primary');
-    var size = opts.size || 120;
-    return (
-      '<div class="hero-mark" style="width:' + size + 'px;height:' + size + 'px;border-color:' + tint + ';background:' + KK.alpha(tint, '1A') + '">' +
-      KK.icon(opts.icon, Math.round(size * 0.42), tint) + '</div>'
-    );
+    return '<div class="hero-mark">' + KK.icon(opts.icon, 50) + '</div>';
   };
 
-  /** Circular progress ring. opts: size, stroke, progress (0..1), color, track, innerHtml. */
+  /**
+   * Circular progress ring. opts: size, stroke, progress (0..1),
+   * tone ('success' | 'warning' | 'danger'; omit for the brand blue), innerHtml.
+   */
   ui.ring = function (opts) {
-    var size = opts.size || 64;
-    var stroke = opts.stroke || 6;
-    var color = opts.color || KK.c('energy');
-    var track = opts.track || KK.c('ring-track');
+    var size = opts.size || 60;
+    var stroke = opts.stroke || 5;
     var r = (size - stroke) / 2;
     var c = 2 * Math.PI * r;
     var clamped = Math.max(0, Math.min(1, opts.progress || 0));
     var half = size / 2;
     return (
-      '<div class="ring" style="width:' + size + 'px;height:' + size + 'px">' +
+      '<div class="ring' + (opts.tone ? ' ring--' + opts.tone : '') + '" style="width:' + size + 'px;height:' + size + 'px">' +
       '<svg class="ring__svg" width="' + size + '" height="' + size + '" aria-hidden="true">' +
-      '<circle cx="' + half + '" cy="' + half + '" r="' + r + '" stroke="' + track + '" stroke-width="' + stroke + '" fill="none"/>' +
-      '<circle cx="' + half + '" cy="' + half + '" r="' + r + '" stroke="' + color + '" stroke-width="' + stroke + '" fill="none" stroke-linecap="round"' +
+      '<circle class="ring__track" cx="' + half + '" cy="' + half + '" r="' + r + '" stroke-width="' + stroke + '" fill="none"/>' +
+      '<circle class="ring__value" cx="' + half + '" cy="' + half + '" r="' + r + '" stroke-width="' + stroke + '" fill="none" stroke-linecap="round"' +
       ' stroke-dasharray="' + c + ' ' + c + '" stroke-dashoffset="' + c * (1 - clamped) + '" transform="rotate(-90 ' + half + ' ' + half + ')"/>' +
       '</svg>' + (opts.innerHtml || '') + '</div>'
     );
   };
 
-  /** Bar chart. opts: data [{label, value}], height, color, activeIndex. Bars grow in on render. */
+  /** Ring with an icon inside and a caption under it. opts: label, icon, progress, tone, size. */
+  ui.statRing = function (opts) {
+    return (
+      '<div class="stat-ring">' +
+      ui.ring({ size: opts.size || 50, stroke: 5, progress: opts.progress, tone: opts.tone, innerHtml: KK.icon(opts.icon, 20) }) +
+      '<span class="t-13 tone-secondary">' + KK.esc(opts.label) + '</span></div>'
+    );
+  };
+
+  /** Bar chart. opts: data [{label, value}], height, activeIndex. Bars grow in on render. */
   ui.barChart = function (opts) {
     var data = opts.data;
     var max = Math.max.apply(null, data.map(function (d) { return d.value; }).concat([1]));
@@ -157,54 +176,59 @@
       var active = i === opts.activeIndex;
       var h = Math.max(0.06, d.value / max) * 100;
       bars += '<div class="barchart__wrap"><div class="barchart__bar' + (active ? ' is-active' : '') + '" style="height:' + h + '%;--i:' + i + '"></div></div>';
-      labels += '<span class="barchart__label' + (active ? ' is-active' : '') + '">' + KK.esc(d.label) + '</span>';
+      labels += '<span class="barchart__label t-13' + (active ? ' is-active' : '') + '">' + KK.esc(d.label) + '</span>';
     });
     var summary = data.map(function (d) { return d.label + ' ' + d.value; }).join(', ');
     return (
-      '<div class="barchart" role="img" aria-label="' + KK.esc('Bar chart: ' + summary) + '" style="--tint:' + (opts.color || KK.c('primary')) + '">' +
+      '<div class="barchart" role="img" aria-label="' + KK.esc('Bar chart: ' + summary) + '">' +
       '<div class="barchart__bars" style="height:' + (opts.height || 150) + 'px">' + bars + '</div>' +
       '<div class="barchart__labels" aria-hidden="true">' + labels + '</div></div>'
     );
   };
 
   /**
-   * Segmented switch (room switcher, Today / Over time, chart range).
-   * opts: name, items [{id, label}], active (id), label (for screen readers), tint, nav (larger, tinted style).
+   * Segmented switch (room switcher, health areas, Today / Over time, chart range): the nav toggle in a pill track.
+   * opts: name, items [{id, label, icon}], active (id), label (for screen readers).
    * Buttons carry data-seg="<name>" and data-value="<id>"; move the selection with ui.setSegment.
+   * It scrolls sideways when the items do not fit.
    */
   ui.segment = function (opts) {
+    var icons = opts.items.some(function (item) { return item.icon; });
     var buttons = opts.items
       .map(function (item) {
         return (
-          '<button type="button" class="segment__btn t-16" data-seg="' + KK.esc(opts.name) + '" data-value="' + KK.esc(item.id) + '"' +
-          ' aria-pressed="' + (item.id === opts.active ? 'true' : 'false') + '">' + KK.esc(item.label) + '</button>'
+          '<button type="button" class="segment__btn" data-seg="' + KK.esc(opts.name) + '" data-value="' + KK.esc(item.id) + '"' +
+          ' aria-pressed="' + (item.id === opts.active ? 'true' : 'false') + '">' +
+          (item.icon ? KK.icon(item.icon, 20) : '') + '<span>' + KK.esc(item.label) + '</span></button>'
         );
       })
       .join('');
     return (
-      '<div class="segment' + (opts.nav ? ' segment--nav' : '') + '" role="group" aria-label="' + KK.esc(opts.label || opts.name) + '"' +
-      (opts.tint ? ' style="--tint:' + opts.tint + '"' : '') + '>' + buttons + '</div>'
+      '<div class="segment' + (icons ? ' segment--icons' : '') + '" role="group" aria-label="' + KK.esc(opts.label || opts.name) + '">' + buttons + '</div>'
     );
   };
 
-  /** Mark `value` as the pressed button of the segment named `name` inside `root`. */
+  /** Mark `value` as the pressed button of the segment named `name` inside `root`, and bring it into view. */
   ui.setSegment = function (root, name, value) {
     Array.prototype.forEach.call(root.querySelectorAll('[data-seg="' + name + '"]'), function (btn) {
-      btn.setAttribute('aria-pressed', btn.getAttribute('data-value') === value ? 'true' : 'false');
+      var on = btn.getAttribute('data-value') === value;
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (on && btn.parentNode.scrollWidth > btn.parentNode.clientWidth) {
+        btn.parentNode.scrollLeft = btn.offsetLeft - (btn.parentNode.clientWidth - btn.offsetWidth) / 2;
+      }
     });
   };
 
   /**
-   * Product photo with a built-in fallback (the device icon on a tinted panel).
+   * Product photo with a built-in fallback (the device icon on the photo panel).
    * The fallback always renders; the image covers it once loaded and removes itself if it fails,
    * so a missing address, no network or a moved image never shows a broken picture.
-   * opts: src, alt, icon, color, cls, iconSize.
+   * opts: src, alt, icon, cls, iconSize.
    */
   ui.photo = function (opts) {
-    var color = opts.color || KK.c('primary');
     return (
-      '<div class="photo' + (opts.cls ? ' ' + opts.cls : '') + '" style="--tint:' + color + '">' +
-      '<div class="photo__fallback">' + KK.icon(opts.icon || 'home', opts.iconSize || 44, color) + '</div>' +
+      '<div class="photo' + (opts.cls ? ' ' + opts.cls : '') + '">' +
+      '<div class="photo__fallback">' + KK.icon(opts.icon || 'home', opts.iconSize || 40) + '</div>' +
       (opts.src
         ? '<img class="photo__img" src="' + KK.esc(opts.src) + '" alt="' + KK.esc(opts.alt || '') + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">'
         : '') +
@@ -212,30 +236,47 @@
     );
   };
 
-  /** Device tile for the Devices grid: photo, name, status line. Links to the device page. */
-  ui.deviceTile = function (product) {
-    var accent = KK.c(product.accent);
-    return (
-      '<a class="pressable device-tile card" href="#/devices/product/' + KK.esc(product.id) + '">' +
-      ui.photo({ src: product.image, alt: product.name, icon: product.icon, color: accent, cls: 'device-tile__photo' }) +
-      '<div class="device-tile__text"><div class="device-tile__name">' + KK.esc(product.name) + '</div>' +
-      '<div class="t-16 tone-secondary">' + KK.esc(product.status || '') + '</div></div>' +
-      '</a>'
-    );
+  /**
+   * Device card (the Figma Card): photo on the left, name, status line.
+   * opts: status (text; defaults to the product's own), tone (adds a state dot: 'success' | 'warning' | 'danger' | 'idle'),
+   * href (makes the card a link, e.g. '/devices/product/shower').
+   */
+  ui.deviceCard = function (product, opts) {
+    opts = opts || {};
+    var status = opts.status != null ? opts.status : product.status || '';
+    var statusHtml = opts.tone
+      ? ui.status({ label: status, tone: opts.tone, cls: 't-16 tone-secondary' })
+      : '<div class="t-16 tone-secondary">' + KK.esc(status) + '</div>';
+    var inner =
+      ui.photo({ src: product.image, alt: product.name, icon: product.icon, cls: 'device-card__photo' }) +
+      '<div class="device-card__text"><div class="t-20">' + KK.esc(product.name) + '</div>' + statusHtml + '</div>';
+    if (opts.href) return '<a class="card device-card pressable" href="#' + opts.href + '">' + inner + '</a>';
+    return '<div class="card device-card">' + inner + '</div>';
   };
 
   /**
    * Feature callout on a photo: a dot at x / y (percent) joined by a short line to a label.
    * It is a toggle (aria-pressed). The label sits on whichever side has more room.
-   * opts: id, label, icon, on, x, y, tint.
+   * opts: id, label, icon, on, x, y.
    */
   ui.callout = function (opts) {
     return (
       '<button type="button" class="callout' + (opts.x > 50 ? ' callout--left' : '') + '" data-callout="' + KK.esc(opts.id) + '"' +
-      ' aria-pressed="' + (opts.on ? 'true' : 'false') + '" style="left:' + opts.x + '%;top:' + opts.y + '%;--tint:' + (opts.tint || KK.c('primary')) + '">' +
+      ' aria-pressed="' + (opts.on ? 'true' : 'false') + '" style="left:' + opts.x + '%;top:' + opts.y + '%">' +
       '<span class="callout__dot"></span><span class="callout__line"></span>' +
-      '<span class="callout__label">' + (opts.icon ? KK.icon(opts.icon, 14) : '') + '<span>' + KK.esc(opts.label) + '</span></span>' +
+      '<span class="callout__label t-13">' + (opts.icon ? KK.icon(opts.icon, 15) : '') + '<span>' + KK.esc(opts.label) + '</span></span>' +
       '</button>'
+    );
+  };
+
+  /**
+   * State label: a coloured dot and text. The dot carries the colour; the text stays ink.
+   * opts: label, tone ('success' default | 'warning' | 'danger' | 'idle'), cls (type classes; default small label).
+   */
+  ui.status = function (opts) {
+    var tone = opts.tone && opts.tone !== 'success' ? ' status--' + opts.tone : '';
+    return (
+      '<span class="status' + tone + ' ' + (opts.cls || 't-13 tone-secondary') + '"><span class="status__dot"></span><span>' + KK.esc(opts.label) + '</span></span>'
     );
   };
 

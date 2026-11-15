@@ -1,20 +1,21 @@
 /*
  * Reusable components. Markup for these comes from the helpers in js/ui.js.
- * A component takes its accent from the --tint custom property.
+ * Colours come from the tokens; a surface class (.card, .stage) sets the ink context.
+ * Fills are always Kohler Blue 70 with light ink; toggles follow the Figma nav toggle.
  */
 
 /* ── Screen ────────────────────────────────────────────────────────── */
 .screen {
   position: relative;
   min-height: 100%;
-  padding: var(--pad, var(--sp-4));
+  padding: var(--sp-4);
   display: flex;
   flex-direction: column;
 }
 
 /* Full-screen flows without a tab bar keep clear of the home indicator. */
 .screen--inset-bottom {
-  padding-bottom: calc(var(--pad, var(--sp-4)) + env(safe-area-inset-bottom));
+  padding-bottom: calc(var(--sp-4) + env(safe-area-inset-bottom));
 }
 
 /* ── Layout helpers ────────────────────────────────────────────────── */
@@ -24,140 +25,96 @@
   align-items: center;
 }
 
-.pressable {
-  display: block;
-  width: 100%;
-  transition: transform 120ms ease-out, opacity 120ms ease-out;
+/* A column of cards or rows. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
 }
 
-.pressable:active {
-  transform: scale(0.985);
+/* Two buttons side by side, equal width. */
+.action-pair {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.action-pair > .btn {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Pressed feedback: the same for everything that can be pressed ─── */
+.pressable,
+.btn,
+.icon-btn,
+.chip,
+.segment__btn,
+.tabbar__item,
+.callout__label {
+  transition:
+    transform var(--dur-press) ease-out,
+    opacity var(--dur-press) ease-out,
+    background-color var(--dur-state) ease-out,
+    color var(--dur-state) ease-out;
+}
+
+.pressable:active,
+.btn:active,
+.icon-btn:active,
+.chip:active,
+.segment__btn:active,
+.tabbar__item:active,
+.callout:active .callout__label {
+  transform: scale(0.98);
   opacity: 0.9;
 }
 
-/* ── Card ──────────────────────────────────────────────────────────── */
+.pressable {
+  display: block;
+  width: 100%;
+}
+
+/* ── Card (Figma 217:7603) and stage ───────────────────────────────── */
 .card {
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
   background: var(--c-surface);
-  border: 1px solid var(--c-surface-stroke);
-  border-radius: var(--r-card); /* DS Card radius = 10px (Figma 217:7603); dark fill kept per the locked near-black decision */
+  color: var(--c-text);
 }
 
-/* ── Icon tile (icon on a tinted square) ───────────────────────────── */
-.tile {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--size, 44px);
-  height: var(--size, 44px);
-  border-radius: var(--radius, var(--r-md));
+/* Navy feature panel: holds an illustration. Light ink, like the page. */
+.stage {
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--c-stage);
+  color: var(--c-text);
 }
 
-/* ── Round icon button (back, gear) ────────────────────────────────── */
-.icon-btn {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--r-full);
-  background: var(--c-control-inactive);
-  transition: opacity 120ms ease-out;
-}
-
-.icon-btn:active {
-  opacity: 0.5;
-}
-
-/* ── Top bar ───────────────────────────────────────────────────────── */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 44px;
-  margin-bottom: var(--sp-3);
-}
-
-.topbar__title {
-  flex: 1;
-  margin: 0;
-  text-align: center;
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: 600;
-}
-
-.topbar__spacer {
-  flex: none;
-  width: 40px;
-}
-
-/* ── Onboarding step bar + hero mark ───────────────────────────────── */
-.stepbar {
-  margin-bottom: var(--sp-4);
-}
-
-.stepbar__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--sp-2);
-  min-height: 40px;
-}
-
-.stepbar__track {
-  height: 4px;
-  border-radius: var(--r-full);
-  background: var(--c-control-inactive);
-  overflow: hidden;
-}
-
-.stepbar__fill {
-  height: 4px;
-  border-radius: var(--r-full);
-  background: var(--c-primary);
-}
-
-.hero-mark {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid;
-  border-radius: var(--r-full);
-}
-
-/* ── Button ────────────────────────────────────────────────────────── */
+/* ── Button (Figma 217:7563) ───────────────────────────────────────── */
 .btn {
-  --tint: var(--c-primary);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 15px;
+  gap: var(--sp-1);
+  padding: var(--sp-3);
   border-radius: var(--r-full);
-  background: var(--tint);
-  color: var(--c-text);
+  background: var(--c-primary);
+  color: var(--c-on-primary);
   font-size: 16px;
   line-height: 1.2;
   font-weight: 500;
   white-space: nowrap;
-  transition: transform 120ms ease-out, opacity 120ms ease-out;
-}
-
-.btn:active {
-  transform: scale(0.98);
 }
 
 .btn--secondary {
-  background: var(--c-surface-raised);
-  color: var(--c-text);
+  background: var(--c-quiet);
+  color: var(--c-on-quiet);
 }
 
 .btn--ghost {
   background: transparent;
-  color: var(--tint);
-  border: 1px solid var(--c-surface-stroke);
+  color: var(--c-accent-ink);
+  box-shadow: inset 0 0 0 1px var(--c-stroke);
 }
 
 .btn--block {
@@ -171,69 +128,176 @@
   pointer-events: none;
 }
 
-/* ── Chip (small toggle) ───────────────────────────────────────────── */
-.chip {
-  --tint: var(--c-primary);
+/* Icon-only button: the same pill, 50px round (back, settings, add). */
+.icon-btn {
+  flex: none;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 10px 14px;
+  justify-content: center;
+  padding: var(--sp-3);
   border-radius: var(--r-full);
-  border: 1px solid var(--c-surface-stroke);
-  background: var(--c-control-inactive);
-  color: var(--c-text-secondary);
-  font-size: 14px;
-  line-height: 19px;
-  font-weight: 600;
-  transition: transform 120ms ease-out, background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out;
+  background: var(--c-primary);
+  color: var(--c-on-primary);
 }
 
-.chip:active {
-  transform: scale(0.97);
+/* ── Headers ───────────────────────────────────────────────────────── */
+/* Tab root: eyebrow + title on the left, one optional action on the right. */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+.page-header__title {
+  margin-top: var(--sp-1);
+}
+
+/* Drill-down: back, centred title, one optional action. */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  min-height: 50px;
+  margin-bottom: var(--sp-4);
+}
+
+.topbar__title {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+
+.topbar__spacer {
+  flex: none;
+  width: 50px;
+}
+
+.section-label {
+  margin: var(--sp-5) 0 var(--sp-2);
+}
+
+.topbar + .section-label,
+.page-header + .section-label {
+  margin-top: 0;
+}
+
+/* ── Onboarding step bar + hero mark ───────────────────────────────── */
+.stepbar {
+  margin-bottom: var(--sp-4);
+}
+
+.stepbar__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+  margin-bottom: var(--sp-2);
+}
+
+.stepbar__track {
+  height: 5px;
+  border-radius: var(--r-full);
+  background: var(--c-control);
+  overflow: hidden;
+}
+
+.stepbar__fill {
+  height: 100%;
+  border-radius: var(--r-full);
+  background: var(--c-accent-ink);
+}
+
+.hero-mark {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size, 120px);
+  height: var(--size, 120px);
+  border-radius: var(--r-full);
+  background: var(--c-primary);
+  color: var(--c-on-primary);
+}
+
+/* ── Chip (multi-select toggle; lives on light surfaces) ───────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-full);
+  background: var(--c-quiet);
+  color: var(--c-on-quiet);
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 500;
 }
 
 .chip[aria-pressed='true'] {
-  background: var(--tint);
-  border-color: var(--tint);
-  color: var(--c-text);
+  background: var(--c-primary);
+  color: var(--c-on-primary);
 }
 
-/* ── Pill / badge ──────────────────────────────────────────────────── */
-.pill {
+/* ── Status (a state dot + label; the dot carries the colour) ──────── */
+.status {
+  --tone: var(--c-success);
   display: inline-flex;
   align-items: center;
-  padding: 6px 10px;
-  border: 1px solid;
-  border-radius: var(--r-full);
+  gap: var(--sp-1);
+  min-width: 0;
 }
 
-.pill__dot {
-  width: 6px;
-  height: 6px;
-  margin-right: 6px;
-  border-radius: 3px;
-  background: currentColor;
+.status__dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--r-full);
+  background: var(--tone);
 }
 
-.badge {
-  display: inline-flex;
-  padding: 3px 8px;
-  border: 1px solid;
-  border-radius: var(--r-full);
-}
+.status--warning { --tone: var(--c-warning); }
+.status--danger { --tone: var(--c-danger); }
+.status--idle { --tone: var(--c-text-muted); }
 
 /* ── Ring ──────────────────────────────────────────────────────────── */
 .ring {
+  --tone: var(--c-primary);
   position: relative;
   flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--c-accent-ink);
 }
 
 .ring > svg.ring__svg {
   position: absolute;
   inset: 0;
+}
+
+.ring__track {
+  stroke: var(--c-control);
+}
+
+.ring__value {
+  stroke: var(--tone);
+}
+
+.ring--success { --tone: var(--c-success); }
+.ring--warning { --tone: var(--c-warning); }
+.ring--danger { --tone: var(--c-danger); }
+
+/* Ring with an icon inside and a caption under it. */
+.stat-ring {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  text-align: center;
 }
 
 /* ── Bar chart ─────────────────────────────────────────────────────── */
@@ -244,8 +308,8 @@
 .barchart__bars {
   display: flex;
   align-items: flex-end;
-  gap: 10px;
-  padding: 6px 0;
+  gap: var(--sp-2);
+  padding: var(--sp-1) 0;
 }
 
 .barchart__wrap {
@@ -257,41 +321,37 @@
 
 .barchart__bar {
   width: 100%;
-  border-radius: 5px;
-  background: var(--c-control-inactive);
-  animation: kk-bar-grow 650ms ease-out both;
-  animation-delay: calc(var(--i) * 45ms);
+  border-radius: var(--r-sm);
+  background: var(--c-control);
+  animation: kk-bar-grow var(--dur-gentle) ease-out both;
+  animation-delay: calc(var(--i) * var(--stagger) / 2);
 }
 
 .barchart__bar.is-active {
-  background: var(--tint, var(--c-primary));
+  background: var(--c-primary);
 }
 
 .barchart__labels {
   display: flex;
-  gap: 10px;
-  margin-top: 8px;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
 }
 
 .barchart__label {
   flex: 1;
   text-align: center;
-  font-size: 11px;
-  line-height: 14px;
-  font-weight: 500;
   color: var(--c-text-muted);
 }
 
 .barchart__label.is-active {
-  color: var(--c-text-secondary);
+  color: var(--c-text);
 }
 
 /* ── Temperature control ("pan to set" stepper) ────────────────────── */
 .tempctl {
-  --tint: var(--c-primary);
   position: relative;
   width: 100%;
-  height: 330px; /* 5 rows of 66px */
+  height: 325px; /* 5 rows of 65px; ROW in js/tempControl.js must match */
   overflow: hidden;
   touch-action: none;
   user-select: none;
@@ -309,77 +369,123 @@
   left: 0;
   right: 0;
   top: 50%;
-  height: 66px;
-  margin-top: -33px;
+  height: 65px;
+  margin-top: -32.5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 46px;
-  line-height: 52px;
-  font-weight: 300;
-  color: var(--c-text-secondary);
+  font-size: 49px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--c-text-muted);
   will-change: transform, opacity;
 }
 
 .tempctl__item.is-active {
-  color: var(--tint);
+  color: var(--c-primary);
 }
 
-/* ── Segmented control ─────────────────────────────────────────────── */
+/* Shorter stepper (3 rows) for pages that share the screen with other content. */
+.tempctl--compact {
+  height: 195px;
+}
+
+/* ── Segmented switch: the Figma nav toggle (217:7611 / 217:7613) in a pill track ── */
 .segment {
   display: flex;
-  padding: 4px;
-  border-radius: 12px;
-  background: var(--c-surface);
+  padding: var(--sp-1);
+  border-radius: var(--r-full);
+  background: var(--c-primary);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.segment::-webkit-scrollbar {
+  display: none;
 }
 
 .segment__btn {
-  flex: 1;
-  padding: 10px 0;
-  border-radius: 9px;
-  text-align: center;
-  color: var(--c-text-secondary);
-  transition: background-color 160ms ease-out, color 160ms ease-out, opacity 120ms ease-out;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-full);
+  color: var(--c-on-primary);
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-.segment__btn:active {
-  opacity: 0.7;
+/* With an icon above the label the toggle is the nav toggle exactly. */
+.segment--icons .segment__btn {
+  padding: var(--sp-1) var(--sp-4);
 }
 
 .segment__btn[aria-pressed='true'] {
-  background: var(--c-surface-raised);
-  color: var(--c-text);
+  background: var(--c-surface);
+  color: var(--c-primary);
 }
 
-/* Larger variant used as a page's local navigation (room switcher). */
-.segment--nav {
-  --tint: var(--c-primary);
-  padding: 5px;
+/* ── Field (text input) ────────────────────────────────────────────── */
+.field {
+  width: 100%;
+  padding: var(--sp-3);
+  border: 0;
   border-radius: var(--r-md);
-  border: 1px solid var(--c-surface-stroke);
-}
-
-.segment--nav .segment__btn {
-  padding: 12px 0;
-  border-radius: 13px;
-  font-size: 16px;
-  line-height: 22px;
-  font-weight: 600;
-}
-
-.segment--nav .segment__btn[aria-pressed='true'] {
-  background: color-mix(in srgb, var(--tint) 22%, transparent);
+  background: var(--c-control);
   color: var(--c-text);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint) 55%, transparent);
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.field::placeholder {
+  color: var(--c-text-muted);
+}
+
+/* ── List row (label left, value right, divider between rows) ──────── */
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) 0;
+}
+
+.list-row:first-child {
+  padding-top: 0;
+}
+
+.list-row:last-child {
+  padding-bottom: 0;
+}
+
+.list-row + .list-row {
+  border-top: 1px solid var(--c-stroke);
+}
+
+.list-row__label {
+  flex: 1;
+  min-width: 0;
+}
+
+.list-row__value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-1);
+  text-align: right;
 }
 
 /* ── Photo (product image with icon fallback) ──────────────────────── */
 .photo {
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--tint) 26%, transparent), transparent 70%),
-    var(--c-surface-raised);
+  background: var(--c-photo);
+  color: var(--c-primary);
 }
 
 .photo__fallback {
@@ -398,118 +504,107 @@
   object-fit: cover;
 }
 
-/* Small square version for list rows. */
-.photo--thumb {
-  flex: none;
-  width: var(--size, 44px);
-  height: var(--size, 44px);
-  border-radius: var(--radius, var(--r-sm));
-}
-
-/* ── Device tile ───────────────────────────────────────────────────── */
-.device-tile {
+/* ── Device card (the Figma Card: photo left, name, status) ────────── */
+.device-card {
   display: flex;
-  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
   overflow: hidden;
 }
 
-.device-tile__photo {
-  aspect-ratio: 4 / 3;
+.device-card__photo {
+  flex: none;
+  width: 120px;
+  height: 120px;
 }
 
-.device-tile__text {
-  padding: 12px 14px 14px;
+.device-card__text {
+  flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--sp-1);
+  padding: var(--sp-3);
 }
 
-.device-tile__name {
-  font-size: 15px;
-  line-height: 20px;
-  font-weight: 600;
+/* ── Callout stage: a photo with feature callouts laid over it ─────── */
+.callout-stage {
+  position: relative;
 }
 
-/* ── Callout (feature marker on a photo) ───────────────────────────── */
+.callout-stage > .photo {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-md);
+}
+
+.callout-stage__layer {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── Callout (feature marker on a photo; a toggle) ─────────────────── */
 .callout {
-  --tint: var(--c-primary);
   position: absolute;
   display: flex;
   align-items: center;
-  height: 32px;
-  margin-top: -16px;
-  margin-left: -7px; /* centres the 14px dot on the x / y point */
-  color: var(--c-text);
+  height: 30px;
+  margin-top: -15px;
+  margin-left: -7.5px; /* centres the 15px dot on the x / y point */
 }
 
 .callout--left {
   flex-direction: row-reverse;
-  margin-left: 7px;
+  margin-left: 7.5px;
   transform: translateX(-100%);
 }
 
+/* Hollow when off, filled when on. */
 .callout__dot {
   flex: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 7px;
-  border: 2px solid #fff;
-  background: var(--c-control-inactive);
-  box-shadow: 0 0 0 2px #00000073, 0 2px 6px #00000059; /* stays visible on light photos */
-  transition: background-color 160ms ease-out;
+  width: 15px;
+  height: 15px;
+  border-radius: var(--r-full);
+  border: 2px solid var(--c-primary);
+  background: var(--c-photo);
+  transition: background-color var(--dur-state) ease-out;
 }
 
 .callout__line {
   flex: none;
-  width: 14px;
+  width: 15px;
   height: 2px;
-  background: var(--c-room-maintenance);
+  background: var(--c-primary);
 }
 
 .callout__label {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 10px;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-2);
   border-radius: var(--r-full);
-  border: 1px solid var(--c-surface-stroke);
-  background: #141417e6;
-  color: var(--c-text-secondary);
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 600;
+  background: var(--c-quiet);
+  color: var(--c-on-quiet);
   white-space: nowrap;
-  transition: background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out, transform 120ms ease-out;
-}
-
-.callout:active .callout__label {
-  transform: scale(0.96);
 }
 
 .callout[aria-pressed='true'] .callout__dot {
-  background: var(--tint);
+  background: var(--c-primary);
 }
 
 .callout[aria-pressed='true'] .callout__label {
-  background: var(--tint);
-  border-color: var(--tint);
-  color: #fff;
+  background: var(--c-primary);
+  color: var(--c-on-primary);
 }
 
-/* Shorter stepper (3 rows) for pages that share the screen with other content. */
-.tempctl--compact {
-  height: 198px;
-}
-
-/* ── Tab bar ───────────────────────────────────────────────────────── */
+/* ── Tab bar (Figma global nav, 217:7662) ──────────────────────────── */
 .tabbar {
   flex: none;
   display: flex;
-  gap: 6px;
-  margin: 6px 14px;
-  margin-bottom: calc(14px + env(safe-area-inset-bottom));
-  padding: 5px;
-  background: var(--c-primary);      /* DS global nav bar = blue-70 (Figma 217:7662) */
-  border-radius: var(--r-full);      /* floating pill */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  margin: var(--sp-2) var(--sp-4) max(var(--sp-5), env(safe-area-inset-bottom));
+  padding: var(--sp-1);
+  border-radius: var(--r-full);
+  background: var(--c-primary);
 }
 
 .tabbar[hidden] {
@@ -522,16 +617,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;                          /* DS toggle gap */
-  padding: 5px 8px;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-2);
   border-radius: var(--r-full);
-  color: var(--blue-10);            /* light on the blue bar (DS #f4f8ff) */
-  font-size: 13px;                   /* kept at the app's label step for a compact bar */
-  line-height: 16px;
+  color: var(--c-on-primary);
+  font-size: 16px;
+  line-height: 1.2;
   font-weight: 500;
 }
 
 .tabbar__item[aria-current='page'] {
-  background: var(--blue-10);        /* DS active pill = #f4f8ff */
-  color: var(--c-primary);           /* DS active text/icon = blue-70 */
+  background: var(--c-surface);
+  color: var(--c-primary);
 }

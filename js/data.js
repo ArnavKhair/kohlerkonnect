@@ -1,7 +1,6 @@
 /*
  * Mock data for the Kohler Konnect prototype.
  * All values are local: there is no backend in this build.
- * `accent` and `tone` are colour token names; resolve them with KK.c(name) (see js/ui.js).
  * `icon` values are glyph names from js/icons.js.
  * A product's `image` is the address of a photo on Kohler's image server (linked, not copied; empty shows
  * the icon fallback). Its `quick` controls are drawn as callouts at `x` / `y`, in percent of the photo box
@@ -16,7 +15,6 @@
       id: 'bathroom',
       name: 'Bathroom',
       icon: 'home',
-      accent: 'room-bathroom',
       headline: 'Warm · ready',
       value: 39,
       unit: '°C',
@@ -29,7 +27,6 @@
       id: 'kitchen',
       name: 'Kitchen',
       icon: 'wrench-screwdriver',
-      accent: 'room-kitchen',
       headline: 'Holding',
       value: 42,
       unit: '°C',
@@ -49,7 +46,6 @@
       name: 'Anthem+ Shower',
       blurb: 'Bathroom · Quick controls',
       icon: 'beaker',
-      accent: 'room-bathroom',
       unit: '°C',
       min: 34,
       max: 46,
@@ -68,7 +64,6 @@
       name: 'Shore Bathtub',
       blurb: 'Bathroom · Soak & recovery',
       icon: 'sparkles',
-      accent: 'room-bathroom',
       unit: '°C',
       min: 35,
       max: 44,
@@ -87,7 +82,6 @@
       name: 'Smart Wall · Vanity',
       blurb: 'Bathroom · Light & sense',
       icon: 'light-bulb',
-      accent: 'room-bathroom',
       unit: '%',
       min: 10,
       max: 100,
@@ -106,7 +100,6 @@
       name: 'PureWarmth Toilet',
       blurb: 'Bathroom · Comfort',
       icon: 'home',
-      accent: 'room-bathroom',
       unit: '°',
       min: 0,
       max: 3,
@@ -124,7 +117,6 @@
       name: 'Smart Faucet',
       blurb: 'Kitchen · Water',
       icon: 'wrench-screwdriver',
-      accent: 'room-kitchen',
       unit: '°C',
       min: 20,
       max: 60,
@@ -157,7 +149,7 @@
 
   /*
    * Health areas. Each has a living visual (js/healthVisuals.js) driven by its score.
-   * `color` is a colour token. `lowerIsBetter` flips the visual (a low Stress score is calm).
+   * `lowerIsBetter` flips the visual (a low Stress score is calm).
    * `series` is the last 7 days; longer ranges are derived from it (mock data).
    */
   var health = [
@@ -168,7 +160,6 @@
       visualCaption: 'The flower opens as your recovery improves.',
       value: 78,
       unit: '',
-      color: 'success',
       delta: 'Up 4 this month',
       source: 'Vanity Sense',
       icon: 'heart',
@@ -184,7 +175,6 @@
       visualCaption: 'The smoother the stride, the steadier you have been moving.',
       value: 88,
       unit: '',
-      color: 'health-mobility',
       delta: 'Up 2 this month',
       source: 'Shower wall radar',
       icon: 'user',
@@ -200,7 +190,6 @@
       visualCaption: 'Small, even ripples mean a settled gut.',
       value: 69,
       unit: '',
-      color: 'health-gut',
       delta: 'Up 5 this month',
       source: 'Dekoda',
       icon: 'sparkles',
@@ -216,7 +205,6 @@
       visualCaption: 'The water level is today’s hydration.',
       value: 64,
       unit: '%',
-      color: 'primary',
       delta: 'Steady this month',
       source: 'Vanity Sense + Dekoda',
       icon: 'beaker',
@@ -232,7 +220,6 @@
       visualCaption: 'A tall, steady flame means a calm day.',
       value: 31,
       unit: '',
-      color: 'energy',
       lowerIsBetter: true,
       delta: 'Down 6 this month',
       source: 'Vanity Sense (HRV)',
@@ -248,7 +235,6 @@
     {
       id: 'privacy',
       title: 'Privacy',
-      icon: 'shield-check',
       items: [
         { label: 'Sensing', value: 'On', badge: 'Active' },
         { label: 'Cameras', value: 'None — touch sensors only' },
@@ -258,7 +244,6 @@
     {
       id: 'products',
       title: 'Kohler products',
-      icon: 'home',
       items: [
         { label: 'Anthem+ Shower', value: 'Connected', product: 'shower' },
         { label: 'Shore Bathtub', value: 'Connected', product: 'tub' },
@@ -268,7 +253,6 @@
     {
       id: 'devices',
       title: 'Connected devices',
-      icon: 'device-phone-mobile',
       items: [
         { label: 'Apple Watch', value: 'Paired' },
         { label: 'iPhone 15', value: 'Paired' },
@@ -278,7 +262,6 @@
     {
       id: 'services',
       title: 'Other services from Kohler',
-      icon: 'sparkles',
       items: [
         { label: 'Kohler bathroom design', value: 'Available' },
         { label: 'Kohler Kare', value: 'Member' },
@@ -289,11 +272,11 @@
 
   /* Devices listed on the onboarding "Connect" step. */
   var onboardingDevices = [
-    { icon: 'beaker', name: 'Anthem+ Shower', product: 'shower', room: 'Bathroom', state: 'connected' },
-    { icon: 'sparkles', name: 'Shore Bathtub', product: 'tub', room: 'Bathroom', state: 'connected' },
-    { icon: 'home', name: 'Smart Wall · Mirror', product: 'vanity', room: 'Bathroom', state: 'connected' },
-    { icon: 'fire', name: 'PureWarmth Toilet', product: 'toilet', room: 'Bathroom', state: 'updating' },
-    { icon: 'wrench-screwdriver', name: 'Smart Faucet', product: 'faucet', room: 'Kitchen', state: 'connected' },
+    { product: 'shower', room: 'Bathroom', state: 'connected' },
+    { product: 'tub', room: 'Bathroom', state: 'connected' },
+    { product: 'vanity', room: 'Bathroom', state: 'connected' },
+    { product: 'toilet', room: 'Bathroom', state: 'updating' },
+    { product: 'faucet', room: 'Kitchen', state: 'connected' },
   ];
 
   KK.data = {

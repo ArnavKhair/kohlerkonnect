@@ -3,14 +3,14 @@
  * A column of values: drag up/down, tap a value, or use the arrow keys.
  * The value in the middle is the selected one; on release it snaps with a spring.
  *
- *   html:  KK.tempControl.html({ steps, value, accent, label, compact })   compact = 3 rows tall
+ *   html:  KK.tempControl.html({ steps, value, label, compact })   compact = 3 rows tall
  *   wire:  KK.tempControl.mount(element, { steps, value, onChange })
  */
 (function () {
   'use strict';
   var KK = (window.KK = window.KK || {});
 
-  var ROW = 66; // px between steps
+  var ROW = 65; // px between steps; matches .tempctl__item in css/components.css
   var SNAP = { stiffness: 260, damping: 15, mass: 0.7 }; // "snappy" preset of the native build
   var GENTLE = { stiffness: 120, damping: 20, mass: 0.9 };
 
@@ -41,8 +41,7 @@
       '<div class="tempctl' + (opts.compact ? ' tempctl--compact' : '') + '" role="slider" tabindex="0" aria-orientation="vertical"' +
       ' aria-label="' + KK.esc(opts.label || 'Value') + '"' +
       ' aria-valuemin="' + opts.steps[0] + '" aria-valuemax="' + opts.steps[opts.steps.length - 1] + '"' +
-      ' aria-valuenow="' + opts.steps[index] + '"' +
-      (opts.accent ? ' style="--tint:' + opts.accent + '"' : '') + '>' + items + '</div>'
+      ' aria-valuenow="' + opts.steps[index] + '">' + items + '</div>'
     );
   }
 

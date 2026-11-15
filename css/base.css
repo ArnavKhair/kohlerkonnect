@@ -142,7 +142,7 @@ a {
 .enter-up,
 .enter-down {
   animation: kk-fade-in-up var(--dur-standard) var(--ease-standard) both;
-  animation-delay: var(--d, 0ms);
+  animation-delay: calc(var(--d, 0) * var(--stagger));
 }
 
 .enter-down {

@@ -8,7 +8,7 @@
   var ui = KK.ui;
 
   function setButtonInner(justSet) {
-    return (justSet ? KK.icon('check', 18) : '') + '<span>' + (justSet ? 'Set ✓' : 'Set') + '</span>';
+    return (justSet ? KK.icon('check', 20) : '') + '<span>Set</span>';
   }
 
   function featureSummary(product, state) {
@@ -32,12 +32,11 @@
       }
 
       var room = KK.data.rooms.filter(function (r) { return r.id === product.roomId; })[0];
-      var accent = KK.c(product.accent);
       var label = product.unit === '%' ? 'Brightness' : 'Set point';
 
       var callouts = product.quick
         .map(function (q) {
-          return ui.callout({ id: q.id, label: q.label, icon: q.icon, on: state.quick[q.id], x: q.x, y: q.y, tint: accent });
+          return ui.callout({ id: q.id, label: q.label, icon: q.icon, on: state.quick[q.id], x: q.x, y: q.y });
         })
         .join('');
 
@@ -46,24 +45,22 @@
           ui.topBar({
             back: '/devices/room/' + product.roomId,
             title: product.name,
-            trailingHtml:
-              '<a class="icon-btn" href="#/devices/routines/' + product.id + '" aria-label="Routines">' +
-              KK.icon('list-bullet', 22, KK.c('text-secondary')) + '</a>',
+            trailingHtml: ui.iconButton({ icon: 'list-bullet', label: 'Routines', href: '/devices/routines/' + product.id }),
           }) +
-          '<div class="product__stage enter-up">' +
-            ui.photo({ src: product.image, alt: product.name, icon: product.icon, color: accent, cls: 'product__photo', iconSize: 96 }) +
-            '<div class="product__callouts" id="product-callouts">' + callouts + '</div>' +
+          '<div class="callout-stage on-light enter-up">' +
+            ui.photo({ src: product.image, alt: product.name, icon: product.icon, iconSize: 100 }) +
+            '<div class="callout-stage__layer" id="product-callouts">' + callouts + '</div>' +
           '</div>' +
           '<div class="product__meta">' +
             '<span class="t-16 tone-secondary">' + KK.esc((room ? room.name + ' · ' : '') + (product.status || '')) + '</span>' +
             '<span class="t-16 tone-muted" id="product-features">' + featureSummary(product, state) + '</span>' +
           '</div>' +
-          '<div class="card product__control enter-up" style="--d:80ms">' +
-            '<p class="product__control-label t-13 tone-secondary">' + label.toUpperCase() + ' · ' + KK.esc(product.unit) + '</p>' +
-            KK.tempControl.html({ steps: product.steps, value: state.value, accent: accent, label: label + ' (' + product.unit + ')', compact: true }) +
-            '<button type="button" class="btn btn--block product__set" id="product-set" style="--tint:' + accent + '">' + setButtonInner(false) + '</button>' +
+          '<div class="card product__control enter-up" style="--d:1">' +
+            '<p class="t-13 tone-secondary center">' + KK.esc(label + ' · ' + product.unit) + '</p>' +
+            KK.tempControl.html({ steps: product.steps, value: state.value, label: label + ' (' + product.unit + ')', compact: true }) +
+            '<button type="button" class="btn btn--block" id="product-set">' + setButtonInner(false) + '</button>' +
           '</div>' +
-          '<p class="product__hint t-16 tone-muted">Tap a feature on the photo to switch it on or off.</p>' +
+          '<p class="product__hint t-16 tone-muted center">Tap a feature on the photo to switch it on or off.</p>' +
         '</section>'
       );
     },
@@ -90,6 +87,7 @@
         KK.haptic('light');
       });
 
+      // The button's content changes for a moment after a press, so it is built here rather than by ui.button.
       var setBtn = root.querySelector('#product-set');
       var timer = 0;
       setBtn.addEventListener('click', function () {

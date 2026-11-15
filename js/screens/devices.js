@@ -1,5 +1,5 @@
 /*
- * Devices tab: /devices. A room switcher at the top, then that room's devices as tiles.
+ * Devices tab: /devices. A room switcher at the top, then that room's devices as cards.
  * /devices/room/:id opens the page on a given room. Older /home paths redirect here.
  */
 (function () {
@@ -11,34 +11,24 @@
     return KK.data.rooms.filter(function (r) { return r.id === id; })[0];
   }
 
-  function ringStat(label, icon, progress, color) {
-    return (
-      '<div class="ring-stat">' +
-        ui.ring({ size: 44, stroke: 4, progress: progress, color: color, innerHtml: KK.icon(icon, 18, color) }) +
-        '<span class="t-13 tone-secondary">' + KK.esc(label) + '</span>' +
-      '</div>'
-    );
-  }
-
-  /** Everything below the switcher: summary strip and device tiles for one room. */
+  /** Everything below the switcher: summary strip and device cards for one room. */
   function roomHtml(room) {
-    var accent = KK.c(room.accent);
     var ids = KK.data.roomProducts[room.id] || [];
-    var tiles = ids
+    var cards = ids
       .map(function (pid, i) {
         var p = KK.data.products[pid];
-        return p ? '<div class="enter-up" style="--d:' + (40 + i * 60) + 'ms">' + ui.deviceTile(p) + '</div>' : '';
+        return p ? '<div class="enter-up" style="--d:' + (i + 1) + '">' + ui.deviceCard(p, { href: '/devices/product/' + p.id }) + '</div>' : '';
       })
       .join('');
     return (
       '<div class="card room-summary enter-up">' +
-        '<div class="dial" style="background:' + accent + '"><span class="dial__value">' + room.value + '</span><span class="dial__unit">' + KK.esc(room.unit) + '</span></div>' +
+        '<div class="dial"><span class="t-20">' + room.value + '</span><span class="t-13">' + KK.esc(room.unit) + '</span></div>' +
         '<div class="room-summary__text"><div class="t-20">' + KK.esc(room.headline) + '</div>' +
         '<div class="t-16 tone-secondary">' + ids.length + ' device' + (ids.length === 1 ? '' : 's') + '</div></div>' +
-        ringStat(room.energyLabel, 'bolt', room.energy, KK.c('energy')) +
-        ringStat(room.status, room.statusIcon, 1, KK.c('text')) +
+        ui.statRing({ label: room.energyLabel, icon: 'bolt', progress: room.energy }) +
+        ui.statRing({ label: room.status, icon: room.statusIcon, progress: 1 }) +
       '</div>' +
-      '<div class="devices__grid">' + tiles + '</div>'
+      '<div class="stack">' + cards + '</div>'
     );
   }
 
@@ -48,30 +38,28 @@
     var room = findRoom(state.room);
     return (
       '<section class="screen devices">' +
-        '<header class="page-header">' +
-          '<div><div class="t-13 tone-secondary">YOUR HOME</div><h1 class="t-31">Devices</h1></div>' +
-          '<a class="icon-btn gear" href="#/account" aria-label="Account">' + KK.icon('cog-6-tooth', 22, KK.c('text-secondary')) + '</a>' +
-        '</header>' +
+        ui.pageHeader({
+          eyebrow: 'Your home',
+          title: 'Devices',
+          trailingHtml: ui.iconButton({ icon: 'cog-6-tooth', label: 'Account', href: '/account' }),
+        }) +
         '<div id="room-switch">' +
           ui.segment({
             name: 'room',
-            nav: true,
             label: 'Room',
             active: room.id,
-            tint: KK.c(room.accent),
             items: KK.data.rooms.map(function (r) { return { id: r.id, label: r.name }; }),
           }) +
         '</div>' +
-        '<div id="room-body" class="devices__body">' + roomHtml(room) + '</div>' +
-        '<p class="devices__hint t-16 tone-muted">Tap a device to open its controls and routines.</p>' +
-        '<button type="button" class="fab" id="device-add" aria-label="Add a device">' + KK.icon('plus', 26) + '</button>' +
+        '<div id="room-body" class="stack devices__body">' + roomHtml(room) + '</div>' +
+        '<p class="devices__hint t-16 tone-muted center">Tap a device to open its controls and routines.</p>' +
+        ui.iconButton({ icon: 'plus', label: 'Add a device', cls: 'devices__add', attrs: { id: 'device-add' } }) +
       '</section>'
     );
   }
 
   function mount(root, ctx) {
     var body = root.querySelector('#room-body');
-    var nav = root.querySelector('.segment');
 
     root.querySelector('#room-switch').addEventListener('click', function (e) {
       var btn = e.target.closest('[data-seg="room"]');
@@ -80,7 +68,6 @@
       if (!room || room.id === ctx.state.room) return;
       ctx.state.room = room.id;
       ui.setSegment(root, 'room', room.id);
-      nav.style.setProperty('--tint', KK.c(room.accent));
       body.innerHTML = roomHtml(room);
     });
 

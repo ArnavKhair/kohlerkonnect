@@ -1,6 +1,6 @@
 /*
  * Health tab: /health (and /health/:area to open on a given area).
- * One living visual at the top for the selected area, chips to switch area,
+ * One living visual on a navy stage for the selected area, a switcher for the area,
  * then Today | Over time with a chart and what it means.
  */
 (function () {
@@ -43,76 +43,73 @@
     return Math.round(values.reduce(function (a, b) { return a + b; }, 0) / values.length);
   }
 
-  function chart(values, labels, color) {
+  function chart(title, values, labels) {
     var data = values.map(function (v, i) {
       return { label: labels[i] || '', value: v };
     });
-    return ui.barChart({ data: data, height: 140, color: color, activeIndex: data.length - 1 });
+    return (
+      '<div class="card"><div class="t-13 tone-secondary health__chart-title">' + KK.esc(title) + '</div>' +
+      ui.barChart({ data: data, height: 140, activeIndex: data.length - 1 }) + '</div>'
+    );
   }
 
   function mini(label, value) {
-    return '<div class="mini"><span class="mini__value">' + value + '</span><span class="mini__label t-13 tone-secondary">' + label + '</span></div>';
+    return '<div class="mini"><span class="t-25">' + value + '</span><span class="t-13 tone-secondary">' + label + '</span></div>';
   }
 
-  function meaning(text, color) {
+  function meaning(text) {
     return (
-      '<div class="meaning">' + KK.icon('check-circle', 18, color) +
-      '<div><div class="t-13 tone-secondary caps">What this means</div><p class="t-16 meaning__text">' + KK.esc(text) + '</p></div></div>'
+      '<div class="card meaning"><span class="tone-accent">' + KK.icon('check-circle', 20) + '</span>' +
+      '<div><div class="t-13 tone-secondary">What this means</div><p class="t-16 meaning__text">' + KK.esc(text) + '</p></div></div>'
     );
   }
 
   // ── The parts that change with the selected area ──
   function heroHtml(area) {
-    var color = KK.c(area.color);
     var moving = area.delta.indexOf('Up') === 0 || area.delta.indexOf('Down') === 0;
     return (
-      '<div class="health-hero card" style="--tint:' + color + '">' +
+      '<div class="stage health-hero">' +
         '<div class="health-hero__visual" role="img" aria-label="' + KK.esc(area.visualCaption) + '">' + KK.visual(area.visual, levelOf(area)) + '</div>' +
-        '<div class="health-hero__read">' +
-          '<div class="t-13 tone-secondary caps">' + KK.esc(area.name) + '</div>' +
-          '<div class="health-hero__value" style="color:' + color + '">' + area.value +
-            (area.unit ? '<span class="health-hero__unit"> ' + KK.esc(area.unit) + '</span>' : '') + '</div>' +
-          '<div class="row health-hero__delta">' + KK.icon(moving ? 'arrow-trending-up' : 'minus', 14, color) +
-            '<span class="t-16" style="color:' + color + '">' + KK.esc(area.delta) + '</span></div>' +
-        '</div>' +
-        '<p class="health-hero__caption t-16 tone-secondary">' + KK.esc(area.visualCaption) + '</p>' +
+        '<div class="t-13 tone-secondary">' + KK.esc(area.name) + '</div>' +
+        '<div class="t-61">' + area.value + (area.unit ? '<span class="t-25 tone-secondary"> ' + KK.esc(area.unit) + '</span>' : '') + '</div>' +
+        '<div class="row health-hero__delta tone-accent">' + KK.icon(moving ? 'arrow-trending-up' : 'minus', 20) +
+          '<span class="t-16">' + KK.esc(area.delta) + '</span></div>' +
+        '<p class="t-16 tone-secondary health-hero__caption">' + KK.esc(area.visualCaption) + '</p>' +
       '</div>'
     );
   }
 
   function panelHtml(area, state) {
-    var color = KK.c(area.color);
     if (state.tab === 'today') {
       return (
-        '<div class="card health-chart"><div class="t-13 tone-secondary health-chart__title">This week</div>' + chart(area.series, WEEK, color) + '</div>' +
-        '<div class="row stat__minis">' +
+        chart('This week', area.series, WEEK) +
+        '<div class="card row health__minis">' +
           mini('Today', area.series[area.series.length - 1]) + '<div class="mini-divider"></div>' +
           mini('7-day avg', average(area.series)) + '<div class="mini-divider"></div>' +
           mini('30-day avg', average(expandSeries(area.series, 30))) +
         '</div>' +
-        meaning(area.todayNote, color)
+        meaning(area.todayNote)
       );
     }
     var range = LONG[state.range];
     return (
       ui.segment({ name: 'range', label: 'Range', active: state.range, items: [{ id: '30D', label: '30 days' }, { id: '90D', label: '90 days' }] }) +
-      '<div class="card health-chart"><div class="t-13 tone-secondary health-chart__title">' + range.title + '</div>' +
-        chart(expandSeries(area.series, range.count), range.labels, color) + '</div>' +
-      meaning(area.trendNote, color)
+      chart(range.title, expandSeries(area.series, range.count), range.labels) +
+      meaning(area.trendNote)
     );
   }
 
   function detailHtml(area, state) {
     var sources = area.sources
       .map(function (s) {
-        return '<div class="row source-row">' + KK.icon('square-3-stack-3d', 16, KK.c('text-secondary')) + '<span class="t-16 tone-secondary">' + KK.esc(s) + '</span></div>';
+        return '<div class="list-row"><span class="tone-secondary">' + KK.icon('square-3-stack-3d', 20) + '</span><span class="t-16 list-row__label">' + KK.esc(s) + '</span></div>';
       })
       .join('');
     return (
       ui.segment({ name: 'tab', label: 'View', active: state.tab, items: [{ id: 'today', label: 'Today' }, { id: 'time', label: 'Over time' }] }) +
-      '<div id="health-panel" class="health__panel">' + panelHtml(area, state) + '</div>' +
+      '<div id="health-panel" class="stack health__panel">' + panelHtml(area, state) + '</div>' +
       ui.sectionLabel('How this is measured') +
-      '<div class="card sources">' + sources + '</div>'
+      '<div class="card">' + sources + '</div>'
     );
   }
 
@@ -125,25 +122,27 @@
     }
     var area = findArea(state.area);
 
-    var chips = KK.data.health
-      .map(function (a) {
-        return ui.chip({ label: a.name, icon: a.icon, on: a.id === area.id, tint: KK.c(a.color), attrs: { 'data-area': a.id } });
-      })
-      .join('');
-
     return (
       '<section class="screen health">' +
-        '<header class="page-header">' +
-          '<div><div class="t-13 tone-secondary">YOUR HEALTH</div><h1 class="t-31">Today</h1></div>' +
-          KK.icon('shield-check', 24, KK.c('text-secondary')) +
-        '</header>' +
+        ui.pageHeader({
+          eyebrow: 'Your health',
+          title: 'Today',
+          trailingHtml: '<span class="tone-secondary">' + KK.icon('shield-check', 20) + '</span>',
+        }) +
         '<div id="health-hero">' + heroHtml(area) + '</div>' +
-        '<div class="health__chips" id="health-chips" role="group" aria-label="Health area">' + chips + '</div>' +
-        '<div id="health-detail" class="health__detail">' + detailHtml(area, state) + '</div>' +
+        '<div class="health__areas" id="health-areas">' +
+          ui.segment({
+            name: 'area',
+            label: 'Health area',
+            active: area.id,
+            items: KK.data.health.map(function (a) { return { id: a.id, label: a.name, icon: a.icon }; }),
+          }) +
+        '</div>' +
+        '<div id="health-detail">' + detailHtml(area, state) + '</div>' +
         ui.sectionLabel('Daily insight') +
         '<div class="card insight">' +
-          '<p class="t-16 tone-secondary">Your recovery is trending up. A calm evening — Restore soak and a warm floor — matches your best mornings.</p>' +
-          ui.button({ label: 'Try Restore tonight', icon: 'sparkles', tint: KK.c('success') }) +
+          '<p class="t-16">Your recovery is trending up. A calm evening — Restore soak and a warm floor — matches your best mornings.</p>' +
+          ui.button({ label: 'Try Restore tonight', icon: 'sparkles' }) +
         '</div>' +
       '</section>'
     );
@@ -152,15 +151,17 @@
   function mount(root, ctx) {
     var state = ctx.state;
     var hero = root.querySelector('#health-hero');
+    var areas = root.querySelector('#health-areas');
     var detail = root.querySelector('#health-detail');
 
-    root.querySelector('#health-chips').addEventListener('click', function (e) {
-      var chip = e.target.closest('[data-area]');
-      if (!chip || chip.getAttribute('data-area') === state.area) return;
-      state.area = chip.getAttribute('data-area');
-      Array.prototype.forEach.call(root.querySelectorAll('[data-area]'), function (c) {
-        c.setAttribute('aria-pressed', c === chip ? 'true' : 'false');
-      });
+    // Opening on a later area (/health/stress): bring its toggle into view.
+    ui.setSegment(areas, 'area', state.area);
+
+    areas.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-seg="area"]');
+      if (!btn || btn.getAttribute('data-value') === state.area) return;
+      state.area = btn.getAttribute('data-value');
+      ui.setSegment(areas, 'area', state.area);
       var area = findArea(state.area);
       hero.innerHTML = heroHtml(area);
       detail.innerHTML = detailHtml(area, state);

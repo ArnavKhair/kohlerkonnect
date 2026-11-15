@@ -4,8 +4,19 @@
   var KK = window.KK;
   var ui = KK.ui;
 
-  function screen(inner, cls) {
-    return '<section class="screen screen--slide screen--inset-bottom ' + (cls || '') + '" style="--pad:28px">' + inner + '</section>';
+  function screen(inner) {
+    return '<section class="screen screen--slide screen--inset-bottom onboarding">' + inner + '</section>';
+  }
+
+  /** Centred mark, headline and one paragraph: the middle of steps 1, 2 and 4. */
+  function hero(icon, title, copy) {
+    return (
+      '<div class="onb__hero enter-up" style="--d:1">' +
+        ui.heroMark({ icon: icon }) +
+        '<h1 class="t-39">' + title + '</h1>' +
+        '<p class="t-16 tone-secondary">' + copy + '</p>' +
+      '</div>'
+    );
   }
 
   // The app opens on onboarding.
@@ -20,13 +31,9 @@
     render: function () {
       return screen(
         '<div class="onb">' +
-          '<div class="enter-down">' + ui.stepBar({ step: 1, total: 4 }) + '</div>' +
-          '<div class="onb__hero enter-up" style="--d:90ms">' +
-            ui.heroMark({ icon: 'sparkles' }) +
-            '<h1 class="t-31 center" style="margin-top:24px">Let’s Konnect</h1>' +
-            '<p class="t-16 tone-secondary center" style="margin-top:10px">One home for your Kohler bathroom — control, comfort, and the health signal it senses, all in your pocket.</p>' +
-          '</div>' +
-          '<div class="enter-up" style="--d:180ms">' + ui.button({ label: 'Continue', block: true, href: '/onboarding/account' }) + '</div>' +
+          ui.stepBar({ step: 1, total: 4 }) +
+          hero('sparkles', 'Let’s Konnect', 'One home for your Kohler bathroom — control, comfort, and the health signal it senses, all in your pocket.') +
+          '<div class="stack enter-up" style="--d:2">' + ui.button({ label: 'Continue', block: true, href: '/onboarding/account' }) + '</div>' +
         '</div>'
       );
     },
@@ -39,17 +46,13 @@
       return screen(
         '<div class="onb">' +
           ui.stepBar({ step: 2, total: 4, back: '/onboarding' }) +
-          '<div class="onb__hero enter-up">' +
-            ui.heroMark({ icon: 'user-circle', size: 96 }) +
-            '<h1 class="t-31" style="margin-top:16px">Create your account</h1>' +
-            '<p class="t-16 tone-secondary" style="margin-top:10px">Sign in with Apple or Google, or continue as a guest to explore the prototype.</p>' +
-          '</div>' +
-          '<div class="enter-up" style="--d:90ms"><div class="onb__actions">' +
+          hero('user-circle', 'Create your account', 'Sign in with Apple or Google, or continue as a guest to explore the prototype.') +
+          '<div class="stack enter-up" style="--d:2">' +
             ui.button({ label: 'Continue with Apple', icon: 'logo-apple', variant: 'secondary', block: true, href: next }) +
             ui.button({ label: 'Continue with Google', icon: 'logo-google', variant: 'secondary', block: true, href: next }) +
             ui.button({ label: 'Continue as guest', variant: 'ghost', block: true, href: next }) +
-          '</div></div>' +
-          '<p class="onb__footnote t-13 tone-muted">Prototype only — no real account or data is created.</p>' +
+            '<p class="t-13 tone-muted center onb__footnote">Prototype only — no real account or data is created.</p>' +
+          '</div>' +
         '</div>'
       );
     },
@@ -58,28 +61,23 @@
   // 3 of 4: Connect your Kohler devices
   KK.route('/onboarding/connect', {
     render: function () {
-      var primary = KK.c('primary');
       var devices = KK.data.onboardingDevices
         .map(function (d, i) {
+          var product = KK.data.products[d.product];
           var on = d.state === 'connected';
-          var color = KK.c(on ? 'success' : 'energy');
           return (
-            '<div class="enter-up" style="--d:' + i * 60 + 'ms"><div class="card device">' +
-              ui.photo({ src: (KK.data.products[d.product] || {}).image, icon: d.icon, color: primary, cls: 'photo--thumb', iconSize: 22 }) +
-              '<div class="device__text"><div class="t-20">' + KK.esc(d.name) + '</div>' +
-              '<div class="t-16 tone-secondary">' + KK.esc(d.room) + '</div></div>' +
-              '<span class="pill t-13" style="color:' + color + ';border-color:' + color + ';background:' + KK.alpha(color, '1F') + '">' +
-              '<span class="pill__dot"></span>' + (on ? 'Connected' : 'Updating…') + '</span>' +
-            '</div></div>'
+            '<div class="enter-up" style="--d:' + i + '">' +
+            ui.deviceCard(product, { status: d.room + ' · ' + (on ? 'Connected' : 'Updating…'), tone: on ? 'success' : 'warning' }) +
+            '</div>'
           );
         })
         .join('');
       return screen(
         ui.stepBar({ step: 3, total: 4, back: '/onboarding/account' }) +
-        '<h1 class="t-31 connect__title">Connect your Kohler devices</h1>' +
+        '<h1 class="t-31">Connect your Kohler devices</h1>' +
         '<p class="t-16 tone-secondary connect__copy">We found these near your network. Everything is shown as ready for this prototype.</p>' +
-        '<div class="connect__list">' + devices + '</div>' +
-        '<div class="onb__actions" style="gap:12px">' +
+        '<div class="stack connect__list">' + devices + '</div>' +
+        '<div class="stack">' +
           ui.button({ label: 'Scan for more', icon: 'viewfinder-circle', variant: 'secondary', block: true }) +
           ui.button({ label: 'Continue', block: true, href: '/onboarding/other' }) +
         '</div>'
@@ -93,16 +91,12 @@
       return screen(
         '<div class="onb">' +
           ui.stepBar({ step: 4, total: 4, back: '/onboarding/connect' }) +
-          '<div class="onb__hero enter-up">' +
-            ui.heroMark({ icon: 'clock', size: 116 }) +
-            '<h1 class="t-31 center" style="margin-top:20px">Connect other devices?</h1>' +
-            '<p class="t-16 tone-secondary center" style="margin-top:10px">Add an Apple Watch or another health device to enrich your Health insights. You can always do this later from Account.</p>' +
-          '</div>' +
-          '<div class="enter-up" style="--d:90ms"><div class="onb__actions">' +
+          hero('clock', 'Connect other devices?', 'Add an Apple Watch or another health device to enrich your Health insights. You can always do this later from Account.') +
+          '<div class="stack enter-up" style="--d:2">' +
             // Both finish onboarding; "replace" so Back from Devices does not return here.
             ui.button({ label: 'Yes, connect later', block: true, href: '/devices', replace: true }) +
             ui.button({ label: 'Skip for now', variant: 'secondary', block: true, href: '/devices', replace: true }) +
-          '</div></div>' +
+          '</div>' +
         '</div>'
       );
     },

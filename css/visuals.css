@@ -1,13 +1,19 @@
 /*
  * Motion and colour for the Health visuals drawn by js/healthVisuals.js.
- * The container sets the size and `color`; the SVG fills it. Per-visual numbers
- * (--swing, --dur, --flick, ...) are set inline by the script from the level.
+ * The container sets the size; the SVG fills it. Each kind has its own natural colour
+ * (--c-visual-* in tokens.css), independent of the interface blue. They are drawn for the
+ * navy stage (.stage). Per-visual numbers (--swing, --dur, --flick, ...) are set inline by
+ * the script from the level.
  */
 .visual {
   width: 100%;
   height: 100%;
-  color: var(--tint, var(--c-primary));
 }
+
+.visual--horse { color: var(--c-visual-horse); }
+.visual--ripples { color: var(--c-visual-ripples); }
+.visual--vessel { color: var(--c-visual-vessel); }
+.visual--flame { color: var(--c-visual-flame); }
 
 .visual svg {
   display: block;
@@ -33,18 +39,18 @@
 
 .flower__stem {
   fill: none;
-  stroke: var(--c-success);
+  stroke: var(--c-visual-leaf);
   stroke-width: 4;
   stroke-linecap: round;
 }
 
 .flower__leaf {
-  fill: var(--c-success);
+  fill: var(--c-visual-leaf);
 }
 
 .flower__petal {
-  fill: var(--c-petal);
-  stroke: var(--c-background);
+  fill: var(--c-visual-petal);
+  stroke: var(--c-stage);
   stroke-width: 0.8;
   transform-origin: 100px 96px;
   animation: kk-petal-open 900ms var(--ease-gentle) both;
@@ -52,11 +58,11 @@
 }
 
 .flower__petal--inner {
-  fill: var(--c-petal-light);
+  fill: var(--c-visual-petal-light);
 }
 
 .flower__eye {
-  fill: var(--c-energy);
+  fill: var(--c-visual-eye);
 }
 
 /* ── Vessel ────────────────────────────────────────────────────────── */
@@ -83,22 +89,22 @@
 }
 
 .vessel__bubble {
-  fill: #fff;
+  fill: var(--grey-10);
   opacity: 0;
   animation: kk-bubble 3.4s ease-in infinite;
   animation-delay: calc(var(--i) * 1.1s);
 }
 
 .vessel__glass {
-  fill: #ffffff0d;
-  stroke: #ffffff66;
+  fill: color-mix(in srgb, var(--grey-10) 5%, transparent);
+  stroke: color-mix(in srgb, var(--grey-10) 40%, transparent);
   stroke-width: 2.5;
   stroke-linejoin: round;
 }
 
 .vessel__shine {
   fill: none;
-  stroke: #ffffff40;
+  stroke: color-mix(in srgb, var(--grey-10) 25%, transparent);
   stroke-width: 3;
   stroke-linecap: round;
 }
@@ -120,20 +126,20 @@
 }
 
 .flame__core {
-  fill: var(--c-flame-core);
+  fill: var(--c-visual-flame-core);
 }
 
 .flame__wax {
-  fill: var(--c-wax);
+  fill: var(--c-visual-wax);
   opacity: 0.92;
 }
 
 .flame__pool {
-  fill: #00000022;
+  fill: color-mix(in srgb, var(--blue-100) 15%, transparent);
 }
 
 .flame__wick {
-  stroke: #2a2a30;
+  stroke: var(--grey-100);
   stroke-width: 2.5;
   stroke-linecap: round;
 }
@@ -220,7 +226,7 @@
 }
 
 .horse__hoof {
-  fill: var(--c-surface-stroke);
+  fill: var(--c-stroke);
 }
 
 .horse__torso {
@@ -239,19 +245,19 @@
 
 .horse__mane {
   fill: none;
-  stroke: var(--c-background);
+  stroke: var(--c-stage);
   stroke-opacity: 0.45;
   stroke-width: 5;
   stroke-linecap: round;
 }
 
 .horse__eye {
-  fill: var(--c-background);
+  fill: var(--c-stage);
 }
 
 .horse__ground {
   fill: none;
-  stroke: var(--c-surface-stroke);
+  stroke: var(--c-stroke);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 22 14;
